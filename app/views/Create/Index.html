@@ -1,0 +1,55 @@
+{{set . "title" "Home"}}
+{{template "header.html" .}}
+
+<header class="jumbotron" style="background-color:#A9F16C">
+  <div class="container">
+    <div class="row">
+      <h1>Create forecast</h1>
+      <p></p>
+    </div>
+  </div>
+</header>
+<script>
+
+function addOption(){
+
+  $("#forecast-form").append("<div class=\"input-group remove\"><input type=\"text\" name=\"options[]\" class=\"form-control\" placeholder=\"Enter option here...\"><span onclick=\"removeParent(this)\" class=\"input-group-addon\">delete</span></div>");
+}
+
+function removeParent(e){
+  $(e).closest('.remove').remove();
+}
+
+</script>
+
+<div class="container">
+  <div>
+
+      <form method="post" action="/create" >
+        <div class="input-group-lg">
+          <input class="form-control form-control-lg" type="text" placeholder="The AWS API was breached in Q1." name="title" />
+        </div>
+        <div class="input-group-lg">
+          <textarea class="form-control form-control-lg" type="text" placeholder="This includes all malicious access of IAM user keys, roles, or otherwising causing unauthorized behavior against AWS infrastructure. The outcome will be judged by our CERT's review of Q1 CloudTrail logs." name="description"></textarea>
+        </div>
+        <div class="input-group">
+          <input type="text" name="options[]" class="form-control" placeholder="The breach came from an IAM User credential." > <span onclick="removeParent(this)" class="input-group-addon"></span>
+        </div>
+        <div class="input-group">
+          <input type="text" name="options[]" class="form-control" placeholder="The breach came from Console Access."> <span onclick="removeParent(this)" class="input-group-addon"></span>
+        </div>
+
+        <div id="forecast-form">
+
+        </div>
+
+        <a onclick="addOption()">Click to add</a>
+        <div class="btn-group" role="group" aria-label="...">
+          <button class="btn btn-primary" type="submit">Submit form</button>
+        </div>
+      </form>
+
+  </div>
+</div>
+
+{{template "footer.html" .}}
