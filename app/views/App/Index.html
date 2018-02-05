@@ -1,0 +1,26 @@
+{{set . "title" "Home"}}
+{{template "header.html" .}}
+
+<header class="jumbotron" style="background-color:#A9F16C">
+  <div class="container">
+    <div class="row">
+      <h1>Current Forecasts</h1>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="row">
+    <div class="list-group">
+      {{range .f}}
+        <a href="/view/{{.Fid}}" class="list-group-item">
+          <h4 class="list-group-item-heading">{{.Title}}</h4>
+          <p class="list-group-item-text">{{.Description}}</p>
+        </a>
+      {{end}}
+    </div>
+  </div>
+
+</div>
+
+{{template "footer.html" .}}

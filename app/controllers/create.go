@@ -1,0 +1,21 @@
+package controllers
+
+import (
+	"github.com/revel/revel"
+	"www-forecast/app/models"
+	"fmt"
+)
+
+type Create struct {
+	*revel.Controller
+}
+
+func (c Create) Index() revel.Result {
+		return c.Render()
+}
+
+func (c Create) Create(title string, description string, options []string) revel.Result {
+		fid := models.CreateForecast(title, description, options)
+		fmt.Println(options[0])
+		return c.Redirect("/view/%s", fid )
+}
