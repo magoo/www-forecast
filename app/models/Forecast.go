@@ -12,16 +12,18 @@ import (
 type Forecast struct {
   Fid           string        `dynamodbav:"Fid"`
   Title         string        `dynamodbav:"title"`
+  Hd            string        `dynamodbav:"hd"`
   Description   string        `dynamodbav:"description"`
   Options       []string      `dynamodbav:"Options"`
 }
 
-func CreateForecast (title string, description string, options []string) (fid string){
+func CreateForecast (title string, description string, options []string, hd string) (fid string){
 
   		fuuid := uuid.New()
 
   		item := Forecast{
   				Fid: fuuid.String(),
+          Hd: hd,
   		    Title: title,
   		    Description: description,
           Options: options,
@@ -88,9 +90,11 @@ func ViewForecast (fid string) (f Forecast) {
 
 func ListForecasts () (f []Forecast) {
   //This will eventually break when scans are greater than 1mb
+  //This respects "hd" privacy
 
   input := &dynamodb.ScanInput{
     TableName:            aws.String("testing_table"),
+    Hd:                   aws.String("r10n.com"),
   }
 
   result, err := Svc.Scan(input)
