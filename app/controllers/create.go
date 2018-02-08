@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/revel/revel"
 	"www-forecast/app/models"
-	"fmt"
 )
 
 type Create struct {
@@ -16,6 +15,6 @@ func (c Create) Index() revel.Result {
 
 func (c Create) Create(title string, description string, options []string) revel.Result {
 		fid := models.CreateForecast(title, description, options, c.Session["hd"])
-		fmt.Println(options[0])
+		//fmt.Println(options[0])
 		return c.Redirect("/view/%s", fid )
 }

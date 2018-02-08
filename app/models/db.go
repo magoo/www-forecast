@@ -13,6 +13,8 @@ var sess, _ = session.NewSession(&aws.Config{
 	},
 )
 
+var dbname = "forecasting"
+
 var Svc = dynamodb.New(sess)
 
 func DbConnect(){
