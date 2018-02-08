@@ -10,6 +10,6 @@ type App struct {
 }
 
 func (c App) Index() revel.Result {
-	f := models.ListForecasts(c.Session["hd"])
+	f := models.ListScenarios(c.Session["hd"])
 	return c.Render(f)
 }

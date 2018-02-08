@@ -14,7 +14,7 @@ func (c Create) Index() revel.Result {
 }
 
 func (c Create) Create(title string, description string, options []string) revel.Result {
-		fid := models.CreateForecast(title, description, options, c.Session["hd"])
+		sid := models.CreateScenario(title, description, options, c.Session["hd"])
 		//fmt.Println(options[0])
-		return c.Redirect("/view/%s", fid )
+		return c.Redirect("/view/%s", sid )
 }

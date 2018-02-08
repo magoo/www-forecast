@@ -13,7 +13,7 @@ var sess, _ = session.NewSession(&aws.Config{
 	},
 )
 
-var dbname = "forecasting"
+var dbname = "scenarios"
 
 var Svc = dynamodb.New(sess)
 

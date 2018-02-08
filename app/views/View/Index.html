@@ -4,8 +4,8 @@
 <header class="jumbotron" style="background-color:#A9F16C">
   <div class="container">
       <h1>Scenario </h1>
-      <p>{{.f.Fid}}</p>
-      <a href="/view/{{.f.Fid}}/results">Results</a>
+      <p>{{.f.Sid}}</p>
+      <a href="/view/{{.f.Sid}}/results">Results</a>
   </div>
 </header>
 
@@ -69,7 +69,7 @@ $(document).ready(function(){
       </div>
       <div class = "row">
         <div class="btn-group" role="group" aria-label="...">
-          <input type="hidden" name="fid" value="{{.f.Fid}}"/>
+          <input type="hidden" name="sid" value="{{.f.Sid}}"/>
           <button class="btn btn-primary" type="submit">Submit Forecast</button>
         </div>
       </div>

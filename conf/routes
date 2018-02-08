@@ -12,8 +12,8 @@ GET     /                                       App.Index
 GET     /create                                 Create.Index
 POST    /create                                 Create.Create
 
-GET     /view/:fid                              View.Index
-GET     /view/:fid/results                      Results.Index
+GET     /view/:sid                              View.Index
+GET     /view/:sid/results                      Results.Index
 
 GET     /auth                                   Auth.Index
 POST    /auth                                   Auth.GoogleToken
