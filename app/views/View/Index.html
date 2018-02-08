@@ -5,6 +5,7 @@
   <div class="container">
       <h1>Scenario </h1>
       <p>{{.f.Fid}}</p>
+      <a href="/view/{{.f.Fid}}/results">Results</a>
   </div>
 </header>
 
@@ -16,7 +17,7 @@ $(document).ready(function(){
       var total = 0;
 
       console.log( "Handler for .change() called." );
-      var arr = $( " input " ).serializeArray();
+      var arr = $( " .odds " ).serializeArray();
 
       for (var i = 0, len = arr.length; i < len; i++) {
         console.log(arr[i].value);
@@ -34,7 +35,7 @@ $(document).ready(function(){
     <h2>{{.f.Title}}</h2>
     <pre>{{.f.Description}}</pre>
 
-    <form>
+    <form action="/forecast" method="post">
       {{range .f.Options}}
       <div class="row">
         <div class="col-2 input-group ">
@@ -65,6 +66,13 @@ $(document).ready(function(){
         <div class="col-8">
             <li class="list-group-item">Total (Must equal 100)</li>
         </div>
+      </div>
+      <div class = "row">
+        <div class="btn-group" role="group" aria-label="...">
+          <input type="hidden" name="fid" value="{{.f.Fid}}"/>
+          <button class="btn btn-primary" type="submit">Submit Forecast</button>
+        </div>
+      </div>
       </div>
     </form>
   </div>

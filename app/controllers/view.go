@@ -10,6 +10,6 @@ type View struct {
 }
 
 func (c View) Index(fid string) revel.Result {
-		f := models.ViewForecast(fid)
+		f := models.ViewForecast(fid, c.Session["hd"])
 		return c.Render(f)
 }

@@ -1,0 +1,47 @@
+{{set . "title" "Home"}}
+{{template "header.html" .}}
+
+<header class="jumbotron" style="background-color:#A9F16C">
+  <div class="container">
+      <h1>Results</h1>
+      <p>{{.f.Fid}}</p>
+  </div>
+</header>
+
+</script>
+
+<div class="container">
+
+    <h2>{{.f.Title}}</h2>
+    <pre>{{.f.Description}}</pre>
+
+    <div class="row">
+      <table class="table">
+      {{range .fr}}
+        <tr>
+          <th>
+            {{.User}}
+          </th>
+          {{range .Forecasts}}
+
+            <td>{{.}}</td>
+
+          {{end}}
+        </tr>
+      {{end}}
+
+      <tr>
+        <th>
+          Average
+        </th>
+      {{range .avg}}
+        <th>{{.}}</th>
+      {{end}}
+      </tr>
+      </table>
+    </div>
+
+
+</div>
+
+{{template "footer.html" .}}
