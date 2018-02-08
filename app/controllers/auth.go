@@ -43,13 +43,13 @@ func (c Auth) Index() revel.Result {
 }
 
 func (c Auth) GoogleToken(idtoken string) revel.Result {
-	fmt.Println("Received: ", idtoken)
+	//fmt.Println("Received: ", idtoken)
 
 	ti, hd, err := verifyIdToken(idtoken)
 
-	fmt.Println("verified email: ", ti.Email)
-	fmt.Println("verified domain: ", hd)
-	fmt.Printf("%+v\n", ti)
+	//fmt.Println("verified email: ", ti.Email)
+	//fmt.Println("verified domain: ", hd)
+	//fmt.Printf("%+v\n", ti)
 	if (err != nil){
 		panic("Can't verify ID token from Google: " + err.Error())
 	}
