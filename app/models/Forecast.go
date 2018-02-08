@@ -20,7 +20,6 @@ type Forecast struct {
 func CreateForecast (title string, description string, options []string, hd string) (fid string){
 
   		fuuid := uuid.New()
-
   		item := Forecast{
   				Fid: fuuid.String(),
           Hd: hd,
@@ -39,7 +38,7 @@ func CreateForecast (title string, description string, options []string, hd stri
 
   		input := &dynamodb.PutItemInput{
   	    Item: av,
-  	    TableName: aws.String("testing_table"),
+  	    TableName: aws.String(dbname),
   		}
 
   		_, err = Svc.PutItem(input)
@@ -56,14 +55,17 @@ func CreateForecast (title string, description string, options []string, hd stri
 
 }
 
-func ViewForecast (fid string) (f Forecast) {
+func ViewForecast (fid string, hd string) (f Forecast) {
   input := &dynamodb.GetItemInput{
     Key: map[string]*dynamodb.AttributeValue{
         "Fid": {
             S: aws.String(fid),
         },
+        "hd": {
+            S: aws.String(hd),
+        },
     },
-    TableName: aws.String("testing_table"),
+    TableName: aws.String(dbname),
   }
 
   result, err := Svc.GetItem(input)
@@ -88,16 +90,22 @@ func ViewForecast (fid string) (f Forecast) {
 
 }
 
-func ListForecasts () (f []Forecast) {
-  //This will eventually break when scans are greater than 1mb
-  //This respects "hd" privacy
 
-  input := &dynamodb.ScanInput{
-    TableName:            aws.String("testing_table"),
-    Hd:                   aws.String("r10n.com"),
+func ListForecasts (hd string) (f []Forecast) {
+  //This must respects "hd" privacy. Only return results from the "Hosted Domain" in Google.
+
+  input := &dynamodb.QueryInput{
+      ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+          ":v1": {
+              S: aws.String(hd),
+          },
+      },
+      KeyConditionExpression: aws.String("hd = :v1"),
+      IndexName:              aws.String("hd-index"),
+      TableName:              aws.String(dbname),
   }
 
-  result, err := Svc.Scan(input)
+  result, err := Svc.Query(input)
   if err != nil {
           fmt.Println(err.Error())
   }
