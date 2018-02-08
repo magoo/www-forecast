@@ -55,8 +55,18 @@ func (c Auth) GoogleToken(idtoken string) revel.Result {
 	}
 
 	c.Session["user"] = ti.Email
-	c.Session["hd"] = hd
 
+	// Set the hosted domain. This is our core privacy barrier.
+	// If not a gsuite customer, it's public.
+	// If gsuite customer, it's for the "hosted domain" only.
+	// Cheap and simple privacy for the time being.
+	// We change empty strings to "public" because dynamo doesn't like empty
+	// strings downstream.
+	if (hd == "") {
+		c.Session["hd"] = "public"
+	} else {
+		c.Session["hd"] = hd
+	}
 
 	return c.Render()
 }
@@ -99,7 +109,7 @@ func getHd(idToken string)(hd string){
 		fmt.Println("Reading body failed.")
     panic(err.Error())
 	}
-	
+
 	o := Oauth2{}
 
 	err = json.Unmarshal(body, &o)

@@ -12,10 +12,13 @@ GET     /                                       App.Index
 GET     /create                                 Create.Index
 POST    /create                                 Create.Create
 
-GET     /view/:fid                                  View.Index
+GET     /view/:fid                              View.Index
+GET     /view/:fid/results                      Results.Index
 
 GET     /auth                                   Auth.Index
 POST    /auth                                   Auth.GoogleToken
+
+POST    /forecast                               Forecast.Create
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
