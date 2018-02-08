@@ -3,23 +3,26 @@
 
 <header class="jumbotron" style="background-color:#A9F16C">
   <div class="container">
-    <div class="row">
+
       <h1>Current Scenarios</h1>
-    </div>
+
   </div>
 </header>
 
 <div class="container">
-  <div class="row">
+
     <div class="list-group">
       {{range .f}}
-        <a href="/view/{{.Sid}}" class="list-group-item">
+      <div class="list-group-item">
+        <a href="/view/{{.Sid}}">
           <h4 class="list-group-item-heading">{{.Title}}</h4>
+        </a>
           <p class="list-group-item-text">{{.Description}}</p>
         </a>
+      </div>
       {{end}}
     </div>
-  </div>
+
 
 </div>
 
