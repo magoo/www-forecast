@@ -9,7 +9,7 @@ type View struct {
 	*revel.Controller
 }
 
-func (c View) Index(fid string) revel.Result {
-		f := models.ViewForecast(fid, c.Session["hd"])
+func (c View) Index(sid string) revel.Result {
+		f := models.ViewScenario(sid, c.Session["hd"])
 		return c.Render(f)
 }

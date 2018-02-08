@@ -7,25 +7,31 @@ import (
   "github.com/aws/aws-sdk-go/aws"
   "os"
   "github.com/google/uuid"
+  "time"
+
 )
 
 type Forecast struct {
-  Fid           string        `dynamodbav:"Fid"`
-  Title         string        `dynamodbav:"title"`
-  Hd            string        `dynamodbav:"hd"`
-  Description   string        `dynamodbav:"description"`
-  Options       []string      `dynamodbav:"Options"`
+  Fid           string        `dynamodbav:"fid"`
+  Sid           string        `dynamodbav:"sid"`
+  Date          string        `dynamodbav:"date"`
+  User          string        `dynamodbav:"user"`
+  Forecasts     []int         `dynamodbav:"forecasts"`
 }
 
-func CreateForecast (title string, description string, options []string, hd string) (fid string){
+func CreateForecast (u string, f []int, sid string) (fid string){
+      //Must do a permission check in the future to prevent crossover forecasts. Tock day.
+      //Must do a check to make sure the array of values is equal to the array of options in the sid.
 
   		fuuid := uuid.New()
+      t := time.Now()
+      fmt.Println(sid)
   		item := Forecast{
   				Fid: fuuid.String(),
-          Hd: hd,
-  		    Title: title,
-  		    Description: description,
-          Options: options,
+          Sid: sid,
+          Date: t.String(),
+  		    User: u,
+  		    Forecasts: f,
   		}
 
   		av, err := dynamodbattribute.MarshalMap(item)
@@ -38,7 +44,7 @@ func CreateForecast (title string, description string, options []string, hd stri
 
   		input := &dynamodb.PutItemInput{
   	    Item: av,
-  	    TableName: aws.String(dbname),
+  	    TableName: aws.String("forecasts"),
   		}
 
   		_, err = Svc.PutItem(input)
@@ -51,73 +57,37 @@ func CreateForecast (title string, description string, options []string, hd stri
 
   		fmt.Println("Successfully added.")
 
+      //Return the cast id
       return fuuid.String()
 
 }
 
-func ViewForecast (fid string, hd string) (f Forecast) {
-  input := &dynamodb.GetItemInput{
-    Key: map[string]*dynamodb.AttributeValue{
-        "Fid": {
-            S: aws.String(fid),
+func ViewScenarioResults (sid string) (c []Forecast) {
+  //Need to do a HD check here to prevent IDOR.
+
+    input := &dynamodb.QueryInput{
+        ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+            ":v1": {
+                S: aws.String(sid),
+            },
         },
-        "hd": {
-            S: aws.String(hd),
-        },
-    },
-    TableName: aws.String(dbname),
-  }
+        KeyConditionExpression: aws.String("sid = :v1"),
+        IndexName:              aws.String("sid-index"),
+        TableName:              aws.String("forecasts"),
+    }
 
-  result, err := Svc.GetItem(input)
-  if err != nil {
-          fmt.Println(err.Error())
-  }
+    result, err := Svc.Query(input)
+    if err != nil {
+            fmt.Println(err.Error())
+    }
 
-  f = Forecast{}
+    c = []Forecast{}
 
-  err = dynamodbattribute.UnmarshalMap(result.Item, &f)
+    err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &c)
 
-  if err != nil {
-    panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
-  }
+    if err != nil {
+      panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+    }
 
-  if f.Fid == "" {
-      fmt.Println("Could not find that forecast.")
-      return
-  }
-
-  return f
-
-}
-
-
-func ListForecasts (hd string) (f []Forecast) {
-  //This must respects "hd" privacy. Only return results from the "Hosted Domain" in Google.
-
-  input := &dynamodb.QueryInput{
-      ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-          ":v1": {
-              S: aws.String(hd),
-          },
-      },
-      KeyConditionExpression: aws.String("hd = :v1"),
-      IndexName:              aws.String("hd-index"),
-      TableName:              aws.String(dbname),
-  }
-
-  result, err := Svc.Query(input)
-  if err != nil {
-          fmt.Println(err.Error())
-  }
-
-  f = []Forecast{}
-
-  err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &f)
-
-  if err != nil {
-    panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
-  }
-
-  return f
-
+    return c
 }
