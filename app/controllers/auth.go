@@ -38,8 +38,16 @@ type Auth struct {
 var httpClient = &http.Client{}
 
 func (c Auth) Index() revel.Result {
-	return c.Render()
 
+	c.Validation.Required(c.Session["user"])
+	c.Validation.Required(c.Session["hd"])
+
+	if c.Validation.HasErrors() {
+		//fmt.Println("We had a validation error")
+		return c.Render(Auth.Index)
+	}
+
+	return c.Redirect(List.Index)
 }
 
 func (c Auth) GoogleToken(idtoken string) revel.Result {
