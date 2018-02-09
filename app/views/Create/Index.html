@@ -4,7 +4,7 @@
 <header class="jumbotron" style="background-color:#A9F16C">
   <div class="container">
     <div class="row">
-      <h1>Create forecast</h1>
+      <h1>Create Scenario</h1>
       <p></p>
     </div>
   </div>
@@ -23,6 +23,7 @@ function removeParent(e){
 </script>
 
 <div class="container">
+  {{template "flash.html" .}}
   <div>
 
       <form method="post" action="/create" >

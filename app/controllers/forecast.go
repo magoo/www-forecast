@@ -14,6 +14,15 @@ func (c Forecast) Index() revel.Result {
 }
 
 func (c Forecast) Create(value []int, sid string) revel.Result {
+		s := 0
+		for _, v := range value {
+			s += v
+		}
+
+		if s != 100 {
+			c.Flash.Error("You need your values to equal 100%")
+			return c.Redirect("/view/%s", sid )
+		}
 
 		models.CreateForecast(c.Session["user"], value, sid)
 		//fmt.Println(options[0])

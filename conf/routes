@@ -7,7 +7,8 @@ module:testrunner
 # module:jobs
 
 
-GET     /                                       App.Index
+GET     /                                       Auth.Index
+GET     /list                                   List.Index
 
 GET     /create                                 Create.Index
 POST    /create                                 Create.Create
