@@ -3,9 +3,6 @@ package models
 import (
   "fmt"
   "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-  "github.com/aws/aws-sdk-go/service/dynamodb"
-  "github.com/aws/aws-sdk-go/aws"
-  "os"
   "github.com/google/uuid"
 )
 
@@ -28,26 +25,7 @@ func CreateScenario (title string, description string, options []string, hd stri
           Options: options,
   		}
 
-  		av, err := dynamodbattribute.MarshalMap(item)
-
-  		if err != nil {
-  			fmt.Println("Got error calling MarshalMap:")
-  			fmt.Println(err.Error())
-  			os.Exit(1)
-  		}
-
-  		input := &dynamodb.PutItemInput{
-  	    Item: av,
-  	    TableName: aws.String(dbname),
-  		}
-
-  		_, err = Svc.PutItem(input)
-
-  		if err != nil {
-  	    fmt.Println("Got error calling PutItem:")
-  	    fmt.Println(err.Error())
-  	    os.Exit(1)
-  		}
+  		PutItem(item, "scenarios")
 
   		fmt.Println("Successfully added.")
 
@@ -56,26 +34,12 @@ func CreateScenario (title string, description string, options []string, hd stri
 }
 
 func ViewScenario (sid string, hd string) (s Scenario) {
-  input := &dynamodb.GetItemInput{
-    Key: map[string]*dynamodb.AttributeValue{
-        "sid": {
-            S: aws.String(sid),
-        },
-        "hd": {
-            S: aws.String(hd),
-        },
-    },
-    TableName: aws.String(dbname),
-  }
 
-  result, err := Svc.GetItem(input)
-  if err != nil {
-          fmt.Println(err.Error())
-  }
+  result := GetCompositeKeyItem(sid, hd, "sid", "hd", "scenarios")
 
   s = Scenario{}
 
-  err = dynamodbattribute.UnmarshalMap(result.Item, &s)
+  err := dynamodbattribute.UnmarshalMap(result.Item, &s)
 
   if err != nil {
     panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
@@ -90,29 +54,14 @@ func ViewScenario (sid string, hd string) (s Scenario) {
 
 }
 
-
-func ListScenarios (hd string) (s []Scenario) {
+func ListScenarios(hd string) (s []Scenario) {
   //This must respects "hd" privacy. Only return results from the "Hosted Domain" in Google.
 
-  input := &dynamodb.QueryInput{
-      ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-          ":v1": {
-              S: aws.String(hd),
-          },
-      },
-      KeyConditionExpression: aws.String("hd = :v1"),
-      IndexName:              aws.String("hd-index"),
-      TableName:              aws.String(dbname),
-  }
-
-  result, err := Svc.Query(input)
-  if err != nil {
-          fmt.Println(err.Error())
-  }
+  result := GetPrimaryIndexItem(hd, "hd", "hd-index", "scenarios")
 
   s = []Scenario{}
 
-  err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &s)
+  err := dynamodbattribute.UnmarshalListOfMaps(result.Items, &s)
 
   if err != nil {
     panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
@@ -124,25 +73,7 @@ func ListScenarios (hd string) (s []Scenario) {
 
 func DeleteScenario(sid string, hd string) {
 
-  input := &dynamodb.DeleteItemInput{
-      Key: map[string]*dynamodb.AttributeValue{
-          "sid": {
-              S: aws.String(sid),
-          },
-          "hd": {
-              S: aws.String(hd),
-          },
-      },
-      TableName: aws.String("scenarios"),
-  }
-
-  _, err := Svc.DeleteItem(input)
-
-  if err != nil {
-      fmt.Println("Got error calling DeleteItem")
-      fmt.Println(err.Error())
-      return
-  }
+  DeleteCompositeIndexItem(sid, hd, "sid", "hd", "scenarios")
 
   fmt.Println("Deleted scenario.")
 

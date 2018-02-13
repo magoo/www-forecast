@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"www-forecast/app/models"
 	"github.com/revel/revel"
 )
 func init() {
@@ -15,7 +14,7 @@ func init() {
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Results{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Forecast{})
 
-	revel.OnAppStart(models.DbConnect)
+	//revel.OnAppStart(models.DbConnect)
 
 }
 
