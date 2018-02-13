@@ -26,7 +26,12 @@ $(document).ready(function(){
 
     })
 });
-
+</script>
+<script>
+  function del(sid){
+    $.post( "/delete", { sid: sid } );
+    window.location.replace("/list")
+  }
 </script>
 
 <div class="container">
@@ -39,6 +44,7 @@ $(document).ready(function(){
             {{.f.Description}}
           </p>
           <a href="/view/{{.f.Sid}}/results">Results</a>
+          <a onclick="del({{.f.Sid}})">Delete</a>
       </div>
   </div>
 

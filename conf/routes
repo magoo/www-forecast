@@ -21,6 +21,8 @@ POST    /auth                                   Auth.GoogleToken
 
 POST    /forecast                               Forecast.Create
 
+POST    /delete                                 Delete.DeleteScenario
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

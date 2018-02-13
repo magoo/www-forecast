@@ -121,3 +121,32 @@ func ListScenarios (hd string) (s []Scenario) {
   return s
 
 }
+
+func DeleteScenario(sid string, hd string) {
+
+  input := &dynamodb.DeleteItemInput{
+      Key: map[string]*dynamodb.AttributeValue{
+          "sid": {
+              S: aws.String(sid),
+          },
+          "hd": {
+              S: aws.String(hd),
+          },
+      },
+      TableName: aws.String("scenarios"),
+  }
+
+  _, err := Svc.DeleteItem(input)
+
+  if err != nil {
+      fmt.Println("Got error calling DeleteItem")
+      fmt.Println(err.Error())
+      return
+  }
+
+  fmt.Println("Deleted scenario.")
+
+  DeleteScenarioForecasts(sid, hd)
+
+
+}
