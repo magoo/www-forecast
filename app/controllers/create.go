@@ -3,10 +3,14 @@ package controllers
 import (
 	"github.com/revel/revel"
 	"www-forecast/app/models"
-)
+	)
 
 type Create struct {
 	*revel.Controller
+}
+
+type JSONResponse struct {
+	Code 	string 	`json:"code"`
 }
 
 func (c Create) Index() revel.Result {
