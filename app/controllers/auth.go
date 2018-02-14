@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"fmt"
 	"encoding/json"
-
 )
 
 type Oauth2 struct {
@@ -44,6 +43,7 @@ func (c Auth) Index() revel.Result {
 
 	if c.Validation.HasErrors() {
 		//fmt.Println("We had a validation error")
+		c.Flash.Error("Please log in.")
 		return c.Render(Auth.Index)
 	}
 
@@ -59,7 +59,9 @@ func (c Auth) GoogleToken(idtoken string) revel.Result {
 	//fmt.Println("verified domain: ", hd)
 	//fmt.Printf("%+v\n", ti)
 	if (err != nil){
-		panic("Can't verify ID token from Google: " + err.Error())
+		c.Flash.Error("Could not verify token from Google.")
+		fmt.Println("Can't verify hd claim from Google: " + err.Error())
+		return c.Render()
 	}
 
 	c.Session["user"] = ti.Email
@@ -81,51 +83,51 @@ func (c Auth) GoogleToken(idtoken string) revel.Result {
 
 func verifyIdToken(idToken string) (*oauth2.Tokeninfo, string, error) {
     oauth2Service, err := oauth2.New(httpClient)
+
+		if err != nil {
+			fmt.Println("Cannot create HTTP client: " + err.Error())
+		}
+
     tokenInfoCall := oauth2Service.Tokeninfo()
     tokenInfoCall.IdToken(idToken)
     tokenInfo, err := tokenInfoCall.Do()
-    if err != nil {
-        panic("Can't verify hd claim from Google: " + err.Error())
-    }
 
-		hd := getHd(idToken)
-    return tokenInfo, hd, nil
+		if err != nil {
+			fmt.Println("Cannot get OAuth data: " + err.Error())
+		}
+
+		hd, err := getHd(idToken)
+
+    return tokenInfo, hd, err
 }
 
 //This function exists because of a shortcoming in the Google oauth2 api. `hd` is not returned in verifyIdToken(). Causes a second request to google on login.
-func getHd(idToken string)(hd string){
+func getHd(idToken string) (hd string, err error) {
 	client := &http.Client{}
 	transport := &http.Transport{Proxy: http.ProxyFromEnvironment}
 	transport.DisableCompression = true
 	client.Transport = transport
 	req, err := http.NewRequest("GET", "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + idToken, nil)
   if err != nil {
-			 fmt.Println(err)
+			 fmt.Println("HTTP error crafting Google API Token Request" + err.Error())
   }
 	res, err:= client.Do(req)
 	defer res.Body.Close()
 
+	if err != nil {
+			 fmt.Println("HTTP error getting Google API ID Token" + err.Error())
+	}
+
 	fmt.Println(res)
 
-	if err != nil {
-		fmt.Println("Request failed.")
-    panic(err.Error())
-	}
-
 	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		fmt.Println("Reading body failed.")
-    panic(err.Error())
-	}
 
 	o := Oauth2{}
 
 	err = json.Unmarshal(body, &o)
-
-	if (err != nil) {
-		fmt.Println("Unmarshal failed.")
-		fmt.Println("error:", err)
-	}
-	return o.Hd
+	if err != nil {
+			 fmt.Println("Error with JSON unmarshal" + err.Error())
+  }
+	return o.Hd, err
 
 }
