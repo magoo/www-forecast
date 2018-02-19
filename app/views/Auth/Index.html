@@ -1,13 +1,8 @@
-{{set . "title" "Home"}}
+{{set . "title" "Login"}}
 {{template "header.html" .}}
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 
-<header class="jumbotron" style="background-color:#A9F16C">
-  <div class="container">
-      <h1>Login with Google</h1>
-      <p></p>
-  </div>
-</header>
+{{template "jumbotron.html" .}}
 
 
 <script>

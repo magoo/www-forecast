@@ -1,0 +1,18 @@
+h1 {
+  font-family: Roboto;
+  font-weight: 100;
+}
+
+h2, h3, h4 {
+  font-family: Roboto;
+  font-weight: 100;
+  color: rgb(33, 37, 41);
+}
+
+.navbar {
+  font-family: Roboto;
+}
+
+a:hover {
+    color: rgb(33, 37, 41);
+}
