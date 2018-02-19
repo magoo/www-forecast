@@ -20,7 +20,7 @@ var dbname = "scenarios"
 
 var Svc = dynamodb.New(sess)
 
-func PutItem(item interface{}, table string) {
+func PutItem(item interface{}, table string) (err error) {
 
 	av, err := dynamodbattribute.MarshalMap(item)
 
@@ -42,7 +42,7 @@ func PutItem(item interface{}, table string) {
 		fmt.Println(err.Error())
 
 	}
-
+	return
 }
 
 func GetPrimaryIndexItem(primaryValue string, primary string, index string, table string) (result *dynamodb.QueryOutput){

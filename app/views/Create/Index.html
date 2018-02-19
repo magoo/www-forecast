@@ -1,20 +1,15 @@
-{{set . "title" "Home"}}
+{{set . "title" "Create Scenario"}}
 {{template "header.html" .}}
 
-<header class="jumbotron" style="background-color:#A9F16C">
-  <div class="container">
-    <div class="row">
-      <h1>Create Scenario</h1>
-      <p></p>
-    </div>
-  </div>
-</header>
+{{template "jumbotron.html" .}}
 <script>
 
 function addOption(){
 
-  $("#forecast-form").append("<div class=\"input-group remove\"><input type=\"text\" name=\"options[]\" class=\"form-control\" placeholder=\"Enter option here...\"><span onclick=\"removeParent(this)\" class=\"input-group-addon\">delete</span></div>");
+  $("#forecast-form").append("<div class=\"input-group remove\"><input type=\"text\" name=\"options[]\" class=\"form-control\" placeholder=\"Enter option here...\"><div class=\"input-group-append\"><span class=\"input-group-text\" id=\"basic-addon1\" onclick=\"removeParent(this)\">Delete</span></div></div>");
 }
+
+
 
 function removeParent(e){
   $(e).closest('.remove').remove();
@@ -27,24 +22,40 @@ function removeParent(e){
   <div>
 
       <form method="post" action="/create" >
-        <div class="input-group-lg">
+
+        <div class="form-group">
+          <label>Scenario</label>
           <input class="form-control form-control-lg" type="text" placeholder="The AWS API was breached in Q1." name="title" />
+          <small class="form-text text-muted">The risk you are planning on mitigating.</small>
         </div>
-        <div class="input-group-lg">
+
+
+
+        <div class="form-group">
+          <label>Description</label>
           <textarea class="form-control form-control-lg" type="text" placeholder="This includes all malicious access of IAM user keys, roles, or otherwising causing unauthorized behavior against AWS infrastructure. The outcome will be judged by our CERT's review of Q1 CloudTrail logs." name="description"></textarea>
-        </div>
-        <div class="input-group">
-          <input type="text" name="options[]" class="form-control" placeholder="The breach came from an IAM User credential." > <span onclick="removeParent(this)" class="input-group-addon"></span>
-        </div>
-        <div class="input-group">
-          <input type="text" name="options[]" class="form-control" placeholder="The breach came from Console Access."> <span onclick="removeParent(this)" class="input-group-addon"></span>
+          <small class="form-text text-muted">The long form description of the incident. Include judgement guidelines.</small>
         </div>
 
-        <div id="forecast-form">
+        <div class="form-group">
+          <label>Outcomes</label>
+          <div class="input-group">
+            <input type="text" name="options[]" class="form-control" placeholder="The breach came from an IAM User credential." >
+          </div>
 
+          <div class="input-group">
+            <input type="text" name="options[]" class="form-control" placeholder="The breach came from Console Access.">
+          </div>
+          <div id="forecast-form">
+
+          </div>
+          <small class="form-text text-muted">The optional future outcomes. Must be specific, measurable, unique.</small>
+          <button onclick="addOption()" type="button" class="btn btn-secondary btn-sm">Add</button>
         </div>
 
-        <a onclick="addOption()">Click to add</a>
+
+
+
         <div class="btn-group" role="group" aria-label="...">
           <button class="btn btn-primary" type="submit">Submit form</button>
         </div>
