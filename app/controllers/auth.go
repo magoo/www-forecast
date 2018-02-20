@@ -44,7 +44,11 @@ func (c Auth) Index() revel.Result {
 	if c.Validation.HasErrors() {
 		//fmt.Println("We had a validation error")
 		c.Flash.Error("Please log in.")
-		return c.Render(Auth.Index)
+
+		//Google Variables for Template
+		gc := revel.Config.StringDefault("e6e.google_client", "empty")
+		gs := revel.Config.StringDefault("e6e.google_secret", "empty")
+		return c.Render(gc, gs)
 	}
 
 	return c.Redirect(List.Index)
