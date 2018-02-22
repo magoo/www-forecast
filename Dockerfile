@@ -1,12 +1,13 @@
 FROM golang:1.8
 
 RUN go get github.com/revel/cmd/revel
+RUN go get github.com/revel/cmd/revel
 
 WORKDIR $GOPATH
 
 ADD . $GOPATH/src/www-forecast
 
-RUN revel build www-forecast $GOPATH/bin/www-forecast prod
+RUN revel build www-forecast $GOPATH/bin/www-forecast
 
 RUN chmod +x $GOPATH/bin/www-forecast
 

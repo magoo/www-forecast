@@ -18,7 +18,6 @@ func init() {
 		revel.PanicFilter,             // Recover from panics and display an error page instead.
 		revel.RouterFilter,            // Use the routing table to select the right Action
 		revel.FilterConfiguringFilter, // A hook for adding or removing per-Action filters.
-		EnforceSSL,
 		revel.ParamsFilter,            // Parse parameters into Controller.Params.
 		revel.SessionFilter,           // Restore and write the session cookie.
 		revel.FlashFilter,             // Restore and write the flash cookie.
@@ -46,28 +45,7 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 	c.Response.Out.Header().Add("X-XSS-Protection", "1; mode=block")
 	c.Response.Out.Header().Add("X-Content-Type-Options", "nosniff")
 
-	if revel.DevMode == false {
-
-		c.Response.Out.Header().Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
-
-	}
-
 	fc[0](c, fc[1:]) // Execute the next filter stage.
-}
-
-var EnforceSSL = func(c *revel.Controller, fc []revel.Filter) {
-	// .. do some pre-processing ..
-
-	if revel.DevMode == false{
-		if (c.Request.URL.Scheme[0:8] == "https://") {
-			c.Result = c.Redirect("https://www.e6e.io")
-        return
-		}
-
-	}
-
-	fc[0](c, fc[1:]) // Execute the next filter stage.
-	// .. do some post-processing ..
 }
 
 //func ExampleStartupScript() {
