@@ -7,7 +7,7 @@ WORKDIR $GOPATH
 
 ADD . $GOPATH/src/www-forecast
 
-RUN revel build www-forecast $GOPATH/bin/www-forecast
+RUN revel build www-forecast $GOPATH/bin/www-forecast prod
 
 RUN chmod +x $GOPATH/bin/www-forecast
 
