@@ -16,3 +16,16 @@ h2, h3, h4 {
 a:hover {
     color: rgb(33, 37, 41);
 }
+
+.g-signin2 {
+  padding-top: 1em;
+
+}
+
+.jumbotron {
+  background-color:#4ba0b5;
+}
+
+.weak {
+  color: white;
+}
