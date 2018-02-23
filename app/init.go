@@ -24,6 +24,7 @@ func init() {
 		revel.ValidationFilter,        // Restore kept validation errors and save new ones from cookie.
 		revel.I18nFilter,              // Resolve the requested language
 		HeaderFilter,                  // Add some security based headers
+		AuthFilter,
 		revel.InterceptorFilter,       // Run interceptors around the action.
 		revel.CompressFilter,          // Compress the result.
 		revel.ActionInvoker,           // Invoke the action.
@@ -47,6 +48,14 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 	if revel.RunMode == "prod" {
 		c.Response.Out.Header().Add("Strict-Transport-Security","max-age=31536000; includeSubDomains")
 	}
+
+	fc[0](c, fc[1:]) // Execute the next filter stage.
+}
+
+var AuthFilter = func(c *revel.Controller, fc []revel.Filter) {
+
+	gc := revel.Config.StringDefault("e6e.google_client", "empty")
+	c.ViewArgs["gc"] = gc
 
 	fc[0](c, fc[1:]) // Execute the next filter stage.
 }

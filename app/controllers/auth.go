@@ -40,15 +40,13 @@ func (c Auth) Index() revel.Result {
 
 	c.Validation.Required(c.Session["user"])
 	c.Validation.Required(c.Session["hd"])
-	gc := revel.Config.StringDefault("e6e.google_client", "empty")
-
 
 	if c.Validation.HasErrors() {
 		//fmt.Println("We had a validation error")
 		c.Flash.Error("Please log in.")
 	}
 
-	return c.Render(gc)
+	return c.Render()
 }
 
 func (c Auth) GoogleToken(idtoken string) revel.Result {

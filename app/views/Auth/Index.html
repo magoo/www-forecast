@@ -1,41 +1,115 @@
-{{set . "title" "Login"}}
 {{template "header.html" .}}
-
-{{template "jumbotron.html" .}}
-
-
 <script>
-function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  //console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  //console.log('Name: ' + profile.getName());
-  //console.log('Image URL: ' + profile.getImageUrl());
-  //console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-  var id_token = googleUser.getAuthResponse().id_token;
 
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', '/auth');
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.onload = function() {
-    console.log('Signed in as: ' + xhr.responseText);
-    //Redirect to app if logged in
-    window.location = "/list"
-  }
-  xhr.send('idtoken=' + id_token);
-
+function afterSignIn(){
+  $("#loginmodalbox").append("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" onclick=\"window.location='/list'\">Next</button>");
 }
 </script>
 
-<div class="container">
-  {{template "flash.html" .}}
+<script>
+var TxtRotate = function(el, toRotate, period) {
+  this.toRotate = toRotate;
+  this.el = el;
+  this.loopNum = 0;
+  this.period = parseInt(period, 10) || 2000;
+  this.txt = '';
+  this.tick();
+  this.isDeleting = false;
+};
 
-  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+TxtRotate.prototype.tick = function() {
+  var i = this.loopNum % this.toRotate.length;
+  var fullTxt = this.toRotate[i];
 
-  <a href="#" onclick="signOut();">Sign out</a>
+  if (this.isDeleting) {
+    this.txt = fullTxt.substring(0, this.txt.length - 1);
+  } else {
+    this.txt = fullTxt.substring(0, this.txt.length + 1);
+  }
+
+  this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+
+  var that = this;
+  var delta = 300 - Math.random() * 400;
+
+  if (this.isDeleting) { delta /= 2; }
+
+  if (!this.isDeleting && this.txt === fullTxt) {
+    delta = this.period;
+    this.isDeleting = true;
+  } else if (this.isDeleting && this.txt === '') {
+    this.isDeleting = false;
+    this.loopNum++;
+    delta = 500;
+  }
+
+  setTimeout(function() {
+    that.tick();
+  }, delta);
+};
+
+window.onload = function() {
+  var elements = document.getElementsByClassName('txt-rotate');
+  for (var i=0; i<elements.length; i++) {
+    var toRotate = elements[i].getAttribute('data-rotate');
+    var period = elements[i].getAttribute('data-period');
+    if (toRotate) {
+      new TxtRotate(elements[i], JSON.parse(toRotate), period);
+    }
+  }
+  // INJECT CSS
+  var css = document.createElement("style");
+  css.type = "text/css";
+  css.innerHTML = ".txt-rotate > .wrap { border-right: 0.08em solid #666 }";
+  document.body.appendChild(css);
+};
+</script>
+
+
+
+    <header style="margin-top:12em;" class="jumbotron">
+
+
+          <h1 >e6e.io</h1>
+          <hr />
+          <h3>An estimation platform designed for <span class="txt-rotate" data-period="2000" data-rotate='[ "intelligence analysis", "business forecasting", "risk management"]'></span>.</h3>
+
+          <button type="button" class="btn btn-secondary btn-lg" data-toggle="modal" data-target="#exampleModal" style="margin-top:3em;">
+            Sign in
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Sign In</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                </div>
+                <div class="modal-footer" id="loginmodalbox">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <!-- <a href="#" onclick="signOut();">Sign out</a> -->
 
 
 
 
-</div>
+    </header>
+
+
+
+
 
 {{template "footer.html" .}}
