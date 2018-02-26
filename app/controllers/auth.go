@@ -117,7 +117,7 @@ func getHd(idToken string) (hd string, err error) {
 			 fmt.Println("HTTP error getting Google API ID Token" + err.Error())
 	}
 
-	fmt.Println(res)
+	//fmt.Println(res)
 
 	body, err := ioutil.ReadAll(res.Body)
 
