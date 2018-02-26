@@ -29,7 +29,7 @@ $(document).ready(function(){
   }
 </script>
 
-<div class="container">
+
 {{template "flash.html" .}}
   <div class="card">
       <div class="card-body">
@@ -40,8 +40,42 @@ $(document).ready(function(){
           </p>
           <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/{{.f.Sid}}/results'">Results</button>
           <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.f.Sid}})" class="btn btn-info">Delete</button>
-
+          <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
       </div>
+  </div>
+
+  <!-- Conclude Modal -->
+  <div class="modal fade" id="concludeModal" tabindex="-1" role="dialog" aria-labelledby="concludeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Conclude this scenario</h5>
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+          <form action="">
+
+              {{range $index, $option := .f.Options}}
+              <div class="form-check">
+                <input class="form-check-input" name="concludeIndex" type="radio"  value="{{$index}}">
+                <label class="form-check-label">
+                  {{$option}}
+                </label>
+              </div>
+              {{end}}
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Conclude!</button>
+        </div>
+      </div>
+    </div>
   </div>
 
     <form action="/forecast" method="post">
@@ -88,6 +122,6 @@ $(document).ready(function(){
 
 
     </form>
-  </div>
+
 
 {{template "footer.html" .}}
