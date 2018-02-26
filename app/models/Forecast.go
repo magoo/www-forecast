@@ -4,13 +4,11 @@ import (
   "fmt"
   "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
   //"os"
-  "github.com/google/uuid"
   "time"
 
 )
 
 type Forecast struct {
-  Fid           string        `dynamodbav:"fid"`
   Hd            string        `dynamodbav:"hd"`
   Sid           string        `dynamodbav:"sid"`
   Date          string        `dynamodbav:"date"`
@@ -18,15 +16,13 @@ type Forecast struct {
   Forecasts     []int         `dynamodbav:"forecasts"`
 }
 
-func CreateForecast (u string, f []int, sid string, hd string) (fid string){
+func CreateForecast (u string, f []int, sid string, hd string) {
       //Must do a permission check in the future to prevent crossover forecasts. Tock day.
       //Must do a check to make sure the array of values is equal to the array of options in the sid.
 
-  		fuuid := uuid.New()
       t := time.Now()
 
   		item := Forecast{
-  				Fid: fuuid.String(),
           Hd: hd,
           Sid: sid,
           Date: t.String(),
@@ -35,9 +31,6 @@ func CreateForecast (u string, f []int, sid string, hd string) (fid string){
   		}
 
   		PutItem(item, "forecasts")
-
-      //Return the cast id
-      return fuuid.String()
 
 }
 
@@ -63,8 +56,8 @@ func DeleteScenarioForecasts(sid string, hd string) {
 
 
     for _, v  := range fs {
-      fmt.Println("Deleting: ", v.Fid)
-      DeleteCompositeIndexItem(v.Sid, v.Fid, "sid", "fid", "forecasts")
+      fmt.Println("Deleting: ", v.Sid, v.User)
+      DeleteCompositeIndexItem(v.Sid, v.User, "sid", "user", "forecasts")
     }
 
 
