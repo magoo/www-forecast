@@ -12,6 +12,11 @@ type Scenario struct {
   Hd            string        `dynamodbav:"hd"`
   Description   string        `dynamodbav:"description"`
   Options       []string      `dynamodbav:"Options"`
+  Results       []int         `dynamodbav:"results"`
+  ResultIndex   int           `dynamodbav:"resultindex"`
+  BrierScore    float64       `dynamodbav:"brierscore"`
+  Concluded     bool          `dynamodbav:"concluded"`
+  ConcludedTime  string        `dynamodbav:"concludetime"`
 }
 
 func CreateScenario (title string, description string, options []string, hd string) (sid string){
@@ -78,6 +83,5 @@ func DeleteScenario(sid string, hd string) {
   fmt.Println("Deleted scenario.")
 
   DeleteScenarioForecasts(sid, hd)
-
 
 }
