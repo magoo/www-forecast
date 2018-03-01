@@ -2,7 +2,7 @@
 {{template "header.html" .}}
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
-
+{{template "flash.html" .}}
 <script>
 
 $(document).ready(function(){
@@ -29,8 +29,13 @@ $(document).ready(function(){
   }
 </script>
 
+{{ if .f.Concluded }}
+<div class="alert alert-success">
+	This scenario has concluded with a Brier score of <strong>{{.f.BrierScore}}</strong>. Final forecast is shown, and actual outcome is highlighted.
+</div>
+{{ end }}
 
-{{template "flash.html" .}}
+
   <div class="card">
       <div class="card-body">
         <h2>{{.f.Title}}</h2>
@@ -40,7 +45,10 @@ $(document).ready(function(){
           </p>
           <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/{{.f.Sid}}/results'">Results</button>
           <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.f.Sid}})" class="btn btn-info">Delete</button>
-          <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
+          {{if .f.Concluded}}
+          {{else}}
+            <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
+          {{end}}
       </div>
   </div>
 
@@ -56,41 +64,43 @@ $(document).ready(function(){
           </button>
         </div>
         <div class="modal-body">
-          
-          <form action="">
+
+          <form method="post" action="/view/{{.f.Sid}}/conclude">
 
               {{range $index, $option := .f.Options}}
               <div class="form-check">
-                <input class="form-check-input" name="concludeIndex" type="radio"  value="{{$index}}">
+                <input class="form-check-input" name="resultIndex" type="radio"  value="{{$index}}">
                 <label class="form-check-label">
                   {{$option}}
                 </label>
               </div>
               {{end}}
 
-          </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Conclude!</button>
+          <button type="submit" class="btn btn-primary">Conclude!</button>
         </div>
+        </form>
       </div>
     </div>
   </div>
 
     <form action="/forecast" method="post">
       <div class="form-group">
-        {{range .f.Options}}
+
+        {{range $index, $value := .f.Options}}
+
         <div class="row">
           <div class="col-2 input-group ">
-            <input name="value[]" type="text" class="form-control odds" aria-label="Percentage of possiblity">
+            <input name="value[]" value="{{if $.f.Results}}{{index $.f.Results $index}}{{end}}" type="text" class="form-control odds" {{if $.f.Results}}disabled{{end}} aria-label="Percentage of possiblity">
             <div class="input-group-append">
               <span class="input-group-text">%</span>
             </div>
           </div>
 
           <div class="col-10">
-              <li class="list-group-item">{{.}}</li>
+              <li class="list-group-item {{if $.f.Concluded}}{{if eq $.f.ResultIndex $index}}actual{{end}}{{end}}">{{$value}}</li>
           </div>
 
           <div class="col-2">
@@ -115,10 +125,13 @@ $(document).ready(function(){
 
       </div>
 
+      {{ if .f.Concluded}}
+      {{else}}
       <div class="form-group" role="group" aria-label="...">
         <input type="hidden" name="sid" value="{{.f.Sid}}"/>
         <button class="btn btn-info btn-sm" type="submit">Submit Forecast</button>
       </div>
+      {{end}}
 
 
     </form>

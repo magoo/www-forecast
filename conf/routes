@@ -15,6 +15,7 @@ POST    /create                                 Create.Create
 
 GET     /view/:sid                              View.Index
 GET     /view/:sid/results                      Results.Index
+POST    /view/:sid/conclude                     View.Conclude
 
 GET     /auth                                   Auth.Index
 POST    /auth                                   Auth.GoogleToken
