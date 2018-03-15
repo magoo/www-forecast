@@ -19,24 +19,24 @@ func (c View) Index(sid string) revel.Result {
 		//^[a-e0-9]{8}-[a-e0-9]{4}-[a-e0-9]{4}-[a-e0-9]{12}$
 
 		if c.Validation.HasErrors() {
-			c.Flash.Error("Invalid scenario ID.")
+			c.Flash.Error("Cannot view. Invalid scenario ID.")
 
 			return c.Redirect(List.Index)
 		}
 
-		f := models.ViewScenario(sid, c.Session["hd"])
+		f := models.ViewScenario(sid)
+		u :=  c.Session["user"]
 
-		return c.Render(f)
+		return c.Render(f, u)
 }
 
 func (c View) Conclude(sid string, resultIndex int) revel.Result {
 	c.Validation.Required(sid)
-	c.Validation.Required(resultIndex)
 	c.Validation.Match(sid, regexp.MustCompile("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"))
 	//^[a-e0-9]{8}-[a-e0-9]{4}-[a-e0-9]{4}-[a-e0-9]{12}$
 
 	if c.Validation.HasErrors() {
-		c.Flash.Error("Invalid scenario ID.")
+		c.Flash.Error("Cannot conclude. Invalid scenario ID.")
 
 		return c.Redirect(List.Index)
 
@@ -44,8 +44,14 @@ func (c View) Conclude(sid string, resultIndex int) revel.Result {
 
 	t := time.Now()
 
-	f := models.ViewScenario(sid, c.Session["hd"])
-	sr := models.ViewScenarioResults(sid, c.Session["hd"])
+	f := models.ViewScenario(sid)
+
+	if f.Owner != c.Session["user"] {
+		c.Flash.Error("Cannot conclude scenario you do not own.")
+		return c.Redirect(List.Index)
+	}
+
+	sr := models.ViewScenarioResults(sid)
 
 	if (len(sr)== 0) {
 		c.Flash.Error("No results to conclude!")
@@ -64,7 +70,7 @@ func (c View) Conclude(sid string, resultIndex int) revel.Result {
 	f.ResultIndex = resultIndex
 	f.BrierScore = bs
 
-	models.PutItem(f, "scenarios")
+	models.PutItem(f, "scenarios-tf")
 
 	return c.Redirect("/view/%s", sid)
 }

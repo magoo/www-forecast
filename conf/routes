@@ -10,6 +10,8 @@ module:testrunner
 GET     /                                       Auth.Index
 GET     /list                                   List.Index
 
+GET     /logout                                 Logout.Index
+
 GET     /create                                 Create.Index
 POST    /create                                 Create.Create
 
@@ -17,7 +19,7 @@ GET     /view/:sid                              View.Index
 GET     /view/:sid/results                      Results.Index
 POST    /view/:sid/conclude                     View.Conclude
 
-GET     /auth                                   Auth.Index
+# GET     /auth                                   Auth.Index
 POST    /auth                                   Auth.GoogleToken
 
 POST    /forecast                               Forecast.Create

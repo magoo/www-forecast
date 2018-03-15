@@ -17,16 +17,16 @@ func (c Results) Index(sid string) revel.Result {
 		//^[a-e0-9]{8}-[a-e0-9]{4}-[a-e0-9]{4}-[a-e0-9]{12}$
 
 		if c.Validation.HasErrors() {
-			c.Flash.Error("Invalid scenario ID.")
+			c.Flash.Error("Cannot view results, errors in submission.")
 
 			return c.Redirect(List.Index)
 		}
 
 		//This attempts to retrieve the scenario based on the hosted domain, for security.
-		s := models.ViewScenario(sid, c.Session["hd"])
+		s := models.ViewScenario(sid)
 
 		// We use the SID from the successful call using the hosted domain, instead of whatever the user gives us.
-		sr := models.ViewScenarioResults(s.Sid, c.Session["hd"])
+		sr := models.ViewScenarioResults(s.Sid)
 		if (len(sr)>0){
 			avg := getAverageForecasts(sr)
 			return c.Render(sr, s, avg)

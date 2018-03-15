@@ -21,6 +21,7 @@
       <script src="/public/{{.}}" type="text/javascript" charset="utf-8"></script>
     {{end}}
     <script>
+
     function onSignIn(googleUser) {
       var profile = googleUser.getBasicProfile();
       //console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
@@ -36,9 +37,19 @@
         console.log('Signed in as: ' + xhr.responseText);
         //Redirect to app if logged in
         //window.location = "/list"
-        afterSignIn();
+        if (window.location.pathname == "/") {
+          console.log("home")
+          afterSignIn();
+        }
       }
       xhr.send('idtoken=' + id_token);
+
+    }
+
+    function afterSignIn(){
+      //window.location="/list"
+      console.log("Signed in.")
+      $("#loginmodalbox").append("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" onclick=\"window.location='/list'\">Go!</button>");
 
     }
 
@@ -46,6 +57,7 @@
         var auth2 = gapi.auth2.getAuthInstance();
         auth2.signOut().then(function () {
           console.log('User signed out.');
+          window.location="/"
         });
       }
     </script>

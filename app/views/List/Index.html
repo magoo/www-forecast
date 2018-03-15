@@ -1,4 +1,4 @@
-{{set . "title" "Current Scenarios"}}
+{{set . "title" "Your Scenarios"}}
 {{template "header.html" .}}
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
@@ -18,6 +18,9 @@
       </div>
       {{end}}
     </div>
+    {{if .empty }}
+      {{template "introtext.html"}}
+    {{end}}
 
 
 

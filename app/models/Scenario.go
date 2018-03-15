@@ -9,6 +9,7 @@ import (
 type Scenario struct {
   Sid           string        `dynamodbav:"sid"`
   Title         string        `dynamodbav:"title"`
+  Owner         string        `dynamodbav:"ownerid"`
   Hd            string        `dynamodbav:"hd"`
   Description   string        `dynamodbav:"description"`
   Options       []string      `dynamodbav:"Options"`
@@ -19,18 +20,19 @@ type Scenario struct {
   ConcludedTime  string        `dynamodbav:"concludetime"`
 }
 
-func CreateScenario (title string, description string, options []string, hd string) (sid string){
+func CreateScenario (title string, description string, options []string, hd string, owner string) (sid string){
 
   		fuuid := uuid.New()
   		item := Scenario{
   				Sid: fuuid.String(),
+          Owner: owner,
           Hd: hd,
   		    Title: title,
   		    Description: description,
           Options: options,
   		}
 
-  		PutItem(item, "scenarios")
+  		PutItem(item, "scenarios-tf")
 
   		fmt.Println("Successfully added.")
 
@@ -38,9 +40,10 @@ func CreateScenario (title string, description string, options []string, hd stri
 
 }
 
-func ViewScenario (sid string, hd string) (s Scenario) {
+func ViewScenario (sid string) (s Scenario) {
 
-  result := GetCompositeKeyItem(sid, hd, "sid", "hd", "scenarios")
+  // I'll need to change this to make "secret link" work.
+  result := GetPrimaryItem(sid, "sid", "scenarios-tf")
 
   s = Scenario{}
 
@@ -59,10 +62,9 @@ func ViewScenario (sid string, hd string) (s Scenario) {
 
 }
 
-func ListScenarios(hd string) (s []Scenario) {
-  //This must respects "hd" privacy. Only return results from the "Hosted Domain" in Google.
+func ListScenarios(user string) (s []Scenario) {
 
-  result := GetPrimaryIndexItem(hd, "hd", "hd-index", "scenarios")
+  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "scenarios-tf")
 
   s = []Scenario{}
 
@@ -76,12 +78,12 @@ func ListScenarios(hd string) (s []Scenario) {
 
 }
 
-func DeleteScenario(sid string, hd string) {
+func DeleteScenario(sid string, owner string) {
 
-  DeleteCompositeIndexItem(sid, hd, "sid", "hd", "scenarios")
+  DeletePrimaryItem(sid, "sid", "scenarios-tf", "ownerid", owner)
 
-  fmt.Println("Deleted scenario.")
+  fmt.Println("Deleted scenario.", sid)
 
-  DeleteScenarioForecasts(sid, hd)
+  DeleteScenarioForecasts(sid)
 
 }

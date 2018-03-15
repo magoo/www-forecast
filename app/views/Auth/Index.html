@@ -1,9 +1,6 @@
 {{template "header.html" .}}
 <script>
 
-function afterSignIn(){
-  $("#loginmodalbox").append("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" onclick=\"window.location='/list'\">Next</button>");
-}
 </script>
 
 <script>
@@ -92,7 +89,6 @@ window.onload = function() {
                   <div class="g-signin2" data-onsuccess="onSignIn"></div>
                 </div>
                 <div class="modal-footer" id="loginmodalbox">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
                 </div>
               </div>
@@ -101,7 +97,6 @@ window.onload = function() {
 
 
 
-          <!-- <a href="#" onclick="signOut();">Sign out</a> -->
 
 
 
