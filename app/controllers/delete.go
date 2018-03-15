@@ -20,7 +20,7 @@ func (c Delete) DeleteScenario(sid string) revel.Result {
 		}
 
 
-		models.DeleteScenario(sid, c.Session["hd"])
+		models.DeleteScenario(sid, c.Session["user"])
 
 		res := JSONResponse{Code: "ok"}
 

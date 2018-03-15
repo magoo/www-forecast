@@ -43,14 +43,9 @@ $(document).ready(function(){
           <p class="card-text">
             {{.f.Description}}
           </p>
-          <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/{{.f.Sid}}/results'">Results</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.f.Sid}})" class="btn btn-info">Delete</button>
-          {{if .f.Concluded}}
-          {{else}}
-            <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
-          {{end}}
       </div>
   </div>
+
 
   <!-- Conclude Modal -->
   <div class="modal fade" id="concludeModal" tabindex="-1" role="dialog" aria-labelledby="concludeModalLabel" aria-hidden="true">
@@ -132,9 +127,23 @@ $(document).ready(function(){
         <button class="btn btn-info btn-sm" type="submit">Submit Forecast</button>
       </div>
       {{end}}
-
-
     </form>
+
+    {{ if eq .u .f.Owner }}
+      <div class="card">
+          <div class="card-body">
+            <h6>Moderator Options</h6>
+
+              <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/{{.f.Sid}}/results'">Results</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.f.Sid}})" class="btn btn-info">Delete</button>
+              {{if .f.Concluded}}
+              {{else}}
+                <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
+              {{end}}
+          </div>
+      </div>
+    {{end}}
+
 
 
 {{template "footer.html" .}}

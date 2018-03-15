@@ -31,7 +31,7 @@ func (c Create) Create(title string, description string, options []string) revel
 		}
 
 
-		sid := models.CreateScenario(title, description, options, c.Session["hd"])
+		sid := models.CreateScenario(title, description, options, c.Session["hd"], c.Session["user"])
 		//fmt.Println(options[0])
 		return c.Redirect("/view/%s", sid)
 }

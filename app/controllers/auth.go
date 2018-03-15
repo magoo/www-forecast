@@ -65,7 +65,7 @@ func (c Auth) GoogleToken(idtoken string) revel.Result {
 
 	c.Session["user"] = ti.Email
 
-	// Set the hosted domain. This is our core privacy barrier.
+	// Set the hosted domain. This is eventually a core privacy barrier.
 	// If not a gsuite customer, it's public.
 	// If gsuite customer, it's for the "hosted domain" only.
 	// Cheap and simple privacy for the time being.
@@ -77,7 +77,9 @@ func (c Auth) GoogleToken(idtoken string) revel.Result {
 		c.Session["hd"] = hd
 	}
 
-	return c.Render()
+	res := JSONResponse{Code: "ok"}
+
+	return c.RenderJSON(res)
 }
 
 func verifyIdToken(idToken string) (*oauth2.Tokeninfo, string, error) {

@@ -14,7 +14,7 @@ var sess, _ = session.NewSession(&aws.Config{
 	},
 )
 
-var dbname = "scenarios"
+var dbname = "scenarios-tf"
 
 var Svc = dynamodb.New(sess)
 
@@ -59,6 +59,26 @@ func GetPrimaryIndexItem(primaryValue string, primary string, index string, tabl
 	if err != nil {
 					fmt.Println(err.Error())
 	}
+
+	return
+
+}
+
+func GetPrimaryItem(primaryValue string, primary string, table string) (result *dynamodb.GetItemOutput){
+	input := &dynamodb.GetItemInput{
+    Key: map[string]*dynamodb.AttributeValue{
+        primary: {
+            S: aws.String(primaryValue),
+        },
+    },
+    TableName: aws.String(table),
+  }
+
+  result, err := Svc.GetItem(input)
+  if err != nil {
+          fmt.Println(err.Error())
+  }
+
 	return
 }
 
@@ -123,6 +143,31 @@ func DeleteCompositeIndexItem(primaryValue string, sortValue string, primary str
 					},
 			},
 			TableName: aws.String(table),
+	}
+
+	_, err := Svc.DeleteItem(deleteRequest)
+
+	if err != nil {
+						fmt.Println("Got error calling DeleteItem")
+						fmt.Println(err.Error())
+				}
+
+
+}
+
+func DeletePrimaryItem(primaryValue string, primary string, table string, attrname string, attrvalue string) {
+
+	deleteRequest := &dynamodb.DeleteItemInput{
+			Key: map[string]*dynamodb.AttributeValue{
+					primary: {
+							S: aws.String(primaryValue),
+					},
+			},
+			TableName: aws.String(table),
+			ConditionExpression: aws.String(attrname + " = :v1"),
+			ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+				":v1": { S: aws.String(attrvalue)},
+			},
 	}
 
 	_, err := Svc.DeleteItem(deleteRequest)
