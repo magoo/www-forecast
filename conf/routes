@@ -15,16 +15,26 @@ GET     /logout                                 Logout.Index
 GET     /create                                 Create.Index
 POST    /create                                 Create.Create
 
+GET     /estimate                               Estimate.Index
+POST    /estimate                               Estimate.Create
+
+GET     /view/estimate/:eid                     ViewEstimate.Index
+
 GET     /view/:sid                              View.Index
 GET     /view/:sid/results                      Results.Index
+GET     /view/estimate/:eid/results             estimateresults.Index
 POST    /view/:sid/conclude                     View.Conclude
+POST    /view/estimate/:eid/conclude            ViewEstimate.Conclude
 
 # GET     /auth                                   Auth.Index
 POST    /auth                                   Auth.GoogleToken
 
 POST    /forecast                               Forecast.Create
 
+POST    /range                                  Range.Create
+
 POST    /delete                                 Delete.DeleteScenario
+POST    /delete/estimate                        Delete.DeleteEstimate
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

@@ -1,0 +1,39 @@
+{{set . "title" "Results"}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+<div class="container">
+
+    <h2>{{.f.Title}}</h2>
+    <pre>{{.f.Description}}</pre>
+
+    <div class="row">
+      <table class="table">
+      {{range .er}}
+        <tr>
+          <th>
+            {{.UserAlias}}
+          </th>
+            <td>{{.Minimum}}</td>
+            <td>{{.Maximum}}</td>
+
+        </tr>
+      {{end}}
+
+      <tr>
+        <th>
+          Average
+        </th>
+
+        <th>{{.avgmin}}</th>
+        <th>{{.avgmax}}</th>
+
+      </tr>
+      </table>
+    </div>
+
+
+</div>
+
+{{template "footer.html" .}}

@@ -24,3 +24,13 @@ func BrierCalc (af []int, index int) (score float64) {
   return score / float64(len(af))
 
 }
+
+func BrierCalcEstimate (min float64, max float64, actual float64) float64 {
+
+  if ((actual > min) && (actual < max)){
+    return .02
+  } else {
+    return 1.62
+  }
+
+}

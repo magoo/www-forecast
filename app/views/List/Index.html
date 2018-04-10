@@ -1,4 +1,4 @@
-{{set . "title" "Your Scenarios"}}
+{{set . "title" "Your Measurements"}}
 {{template "header.html" .}}
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
@@ -8,6 +8,16 @@
   {{template "flash.html" .}}
 
     <div class="list-group">
+      {{if .f}}
+      <h1>Scenarios</h1>
+      {{else}}
+        <div class="card">
+          <div class="card-body">
+            <h6>No scenarios created.</h6>
+            <p>Create a scenario on the navigation bar above.</p>
+            </div>
+        </div>
+      {{end}}
       {{range .f}}
       <div class="list-group-item">
         <a href="/view/{{.Sid}}">
@@ -18,8 +28,30 @@
       </div>
       {{end}}
     </div>
+
+    <div class="list-group mt-3">
+      {{if .e}}
+      <h1>Estimates</h1>
+      {{else}}
+        <div class="card">
+          <div class="card-body">
+            <h6>No estimates created.</h6>
+            <p>Create a estimate on the navigation bar above.</p>
+            </div>
+        </div>
+      {{end}}
+      {{range .e}}
+      <div class="list-group-item">
+        <a href="/view/estimate/{{.Eid}}">
+          <h4 class="list-group-item-heading">{{.Title}}</h4>
+        </a>
+          <p class="list-group-item-text">{{.Description}}</p>
+        </a>
+      </div>
+      {{end}}
+    </div>
     {{if .empty }}
-      {{template "introtext.html"}}
+
     {{end}}
 
 
