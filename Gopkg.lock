@@ -37,6 +37,15 @@
   version = "v1.12.79"
 
 [[projects]]
+  name = "github.com/docker/docker"
+  packages = [
+    "pkg/namesgenerator",
+    "pkg/random"
+  ]
+  revision = "092cba3727bb9b4a2f0e922cd6c0f93ea270e363"
+  version = "v1.13.1"
+
+[[projects]]
   name = "github.com/go-ini/ini"
   packages = ["."]
   revision = "32e4c1e6bc4e7d0d8451aa6b75200d19e37a536a"
@@ -93,6 +102,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c2d1352781dacadfecbb20f74e1813faf37b7d85ddba21adc925bb3c8754272b"
+  inputs-digest = "329fe8ec12dbd88d94101ccfeca0c59af574689dec0f8771f0d99139683baa88"
   solver-name = "gps-cdcl"
   solver-version = 1

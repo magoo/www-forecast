@@ -17,13 +17,21 @@ func (c List) Index() revel.Result {
 	//fmt.Println("App controller is launching")
 	f := models.ListScenarios(c.Session["user"])
 
-	empty := false
+	empty := true
 
-	if (len(f) == 0) {
+	if (len(f) > 0) {
 
-		empty = true
+		empty = false
 
 	}
 
-	return c.Render(f, empty)
+	e := models.ListEstimates(c.Session["user"])
+
+	if (len(e) > 0) {
+
+		empty = false
+
+	}
+
+	return c.Render(f, e, empty)
 }

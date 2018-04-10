@@ -17,7 +17,7 @@ type Scenario struct {
   ResultIndex   int           `dynamodbav:"resultindex"`
   BrierScore    float64       `dynamodbav:"brierscore"`
   Concluded     bool          `dynamodbav:"concluded"`
-  ConcludedTime  string        `dynamodbav:"concludetime"`
+  ConcludedTime string        `dynamodbav:"concludetime"`
 }
 
 func CreateScenario (title string, description string, options []string, hd string, owner string) (sid string){

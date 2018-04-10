@@ -13,6 +13,9 @@ func init() {
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Create{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Results{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Forecast{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &Estimate{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &Range{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &ViewEstimate{})
 
 	//revel.OnAppStart(models.DbConnect)
 
