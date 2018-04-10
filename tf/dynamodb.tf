@@ -53,3 +53,54 @@ resource "aws_dynamodb_table" "forecasts" {
   }
 
 }
+
+resource "aws_dynamodb_table" "estimates" {
+  name           = "estimates-tf"
+  read_capacity  = 1
+  write_capacity = 1
+  hash_key       = "eid"
+
+  attribute {
+     name = "eid"
+     type = "S"
+  }
+
+  attribute {
+     name = "ownerid"
+     type = "S"
+  }
+
+  global_secondary_index {
+    name               = "ownerid-index"
+    hash_key           = "ownerid"
+    write_capacity     = 1
+    read_capacity      = 1
+    projection_type    = "ALL"
+  }
+}
+
+resource "aws_dynamodb_table" "ranges" {
+  name           = "ranges-tf"
+  read_capacity  = 1
+  write_capacity = 1
+  hash_key       = "eid"
+  range_key       = "ownerid"
+
+  attribute {
+     name = "eid"
+     type = "S"
+  }
+  attribute {
+     name = "ownerid"
+     type = "S"
+  }
+
+  global_secondary_index {
+    name               = "eid-index"
+    hash_key           = "eid"
+    write_capacity     = 1
+    read_capacity      = 1
+    projection_type    = "ALL"
+  }
+
+}
