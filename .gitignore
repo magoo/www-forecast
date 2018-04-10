@@ -1,3 +1,7 @@
 test-results/
 tmp/
 routes/
+
+*.tfstate
+
+*.backup
