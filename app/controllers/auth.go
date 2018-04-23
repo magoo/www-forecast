@@ -38,13 +38,13 @@ var httpClient = &http.Client{}
 
 func (c Auth) Index() revel.Result {
 
-	c.Validation.Required(c.Session["user"])
-	c.Validation.Required(c.Session["hd"])
+	//c.Validation.Required(c.Session["user"])
+	//c.Validation.Required(c.Session["hd"])
 
-	if c.Validation.HasErrors() {
-		//fmt.Println("We had a validation error")
-		c.Flash.Error("Please log in.")
-	}
+	//if c.Validation.HasErrors() {
+	//	fmt.Println("We had a validation error")
+		//c.Flash.Success("Please log in.")
+	//}
 
 	return c.Render()
 }

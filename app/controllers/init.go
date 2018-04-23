@@ -27,7 +27,11 @@ func checkUser(c *revel.Controller) revel.Result {
 	c.Validation.Required(c.Session["user"])
 
 	if c.Validation.HasErrors() {
-		c.Flash.Error("Please, login!")
+
+		//Redirect from unauthenticated link.
+		c.Session["redirect"] = c.Request.URL.Path
+		c.Flash.Error("Please login. You'll be redirected to the URL you were trying to visit.")
+
 		return c.Redirect(Auth.Index)
 	}
 

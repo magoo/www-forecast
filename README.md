@@ -1,8 +1,9 @@
 # e6e
 
+## Development workflow
 Dependencies before getting started:
 
-### GOPATH 
+### GOPATH
 Golang is fairly opinionated on having a structured `$GOPATH`, and my code lives within my `$GOPATH/www-forecast`.
 
 ### DynamoDB
@@ -32,24 +33,5 @@ export E6E_GOOGLE_CLIENT= (Google Client)
 ### Starting Revel
 For a local e6e server, just running `revel run .` from the main `www-forecast` directory.
 
-## Code Layout
-
-The directory structure of a generated Revel application:
-
-    conf/             Configuration directory
-        app.conf      Main app configuration file
-        routes        Routes definition file
-
-    app/              App sources
-        init.go       Interceptor registration
-        controllers/  App controllers go here
-        views/        Templates directory
-
-    messages/         Message files
-
-    public/           Public static assets
-        css/          CSS files
-        js/           Javascript files
-        images/       Image files
-
-    tests/            Test suites
+## Production
+This is currently a docker container (`Dockerfile` included) that is pushed to Fargate (An AWS service). Roles and environment are configured in production. 
