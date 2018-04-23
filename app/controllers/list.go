@@ -12,6 +12,13 @@ type List struct {
 
 func (c List) Index() revel.Result {
 
+	if (c.Session["redirect"] != "") {
+
+		redirect := c.Session["redirect"]
+		delete(c.Session, "redirect") // Removed item from session
+		return c.Redirect(redirect)
+	}
+
 	//The interceptor in init() should enforce that we have this.
 	//This protects us just in case, enforcing literally anything in the "hd" field.
 	//fmt.Println("App controller is launching")
