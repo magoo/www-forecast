@@ -5,3 +5,7 @@ routes/
 *.tfstate
 
 *.backup
+
+*.tfstate
+
+*.backup
