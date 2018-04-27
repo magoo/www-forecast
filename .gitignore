@@ -9,3 +9,7 @@ routes/
 *.tfstate
 
 *.backup
+
+tf/terraform.tfstate
+
+tf/terraform.tfstate.backup
