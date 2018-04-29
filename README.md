@@ -4,7 +4,10 @@
 Dependencies before getting started:
 
 ### GOPATH
-Golang is fairly opinionated on having a structured `$GOPATH`, and my code lives within my `$GOPATH/www-forecast`.
+Golang is fairly opinionated on having a structured `$GOPATH`, and my code lives within my `$GOPATH/src/www-forecast`.
+
+### Dep
+Install the [dep package manager for go](https://github.com/golang/dep), `brew install dep` and `ensure dep`.
 
 ### DynamoDB
 The `tf` folder contains a terraform configuration to create the DynamoDB tables needed to operate.
@@ -31,7 +34,9 @@ export E6E_GOOGLE_CLIENT= (Google Client)
 ```
 
 ### Starting Revel
-For a local e6e server, just running `revel run .` from the main `www-forecast` directory.
+Install [revel command line tool](https://revel.github.io/tutorial/gettingstarted.html).
+
+For a local e6e server, just running `revel run` from the main `www-forecast` directory.
 
 ## Production
 This is currently a docker container (`Dockerfile` included) that is pushed to Fargate (An AWS service). Roles and environment are configured in production. 
