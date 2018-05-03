@@ -1,0 +1,40 @@
+{{set . "title" "Results"}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+<div class="container">
+
+    <h2>{{.r.Title}}</h2>
+    <pre>{{.r.Description}}</pre>
+
+
+      <h3>Total Votes</h3>
+      <table class="table">
+
+            {{range .rr}}
+        <tr>
+          <th>{{.UserAlias}}</th>
+              {{range .Options}}
+                <td>{{.}}</td>
+              {{end}}
+        </tr>
+            {{end}}
+
+      </table>
+      <h3>Winning Vote</h3>
+      <table class="table">
+        {{range $index, $element := .pw}}
+          <tr>
+
+              <td>{{index $.r.Options $element.Index}}</td><td>{{$element.Votes}}</td>
+
+          </tr>
+        {{end}}
+      </table>
+    
+
+
+</div>
+
+{{template "footer.html" .}}

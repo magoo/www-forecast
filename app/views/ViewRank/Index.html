@@ -1,0 +1,135 @@
+{{set . "title" "Rank"}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+{{template "flash.html" .}}
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+$( function() {
+$( "#sortable" ).sortable(
+  {
+    connectWith: '.sortable-list',
+    update: function(event, ui) {
+      var order = $(this).sortable('toArray');
+        console.log({
+        positions: order
+      });
+    }
+});
+
+
+$( "#sortable" ).disableSelection();
+});
+</script>
+
+<script>
+  function del(rid){
+    $.post( "/delete/ranks", { rid: rid } );
+    window.location.replace("/list")
+  }
+</script>
+{{ if .r.Concluded }}
+<div class="alert alert-success">
+	This estimate has concluded with an actual value of <strong>{{.r.Actual}}</strong> and a Brier score of <strong>{{.r.BrierScore}}</strong>.
+</div>
+{{ end }}
+
+
+  <div class="card">
+      <div class="card-body">
+        <h2>{{.r.Title}}</h2>
+        <pre style="display:none">{{.r.Rid}}</pre>
+          <p class="card-text">
+            {{.r.Description}}
+          </p>
+      </div>
+  </div>
+
+  <div class="card">
+      <div class="card-body">
+        <form action="/sort" method="post">
+
+          <div class="form-group">
+
+            {{ if .r.Concluded}}
+            {{else}}
+              <h5 class="mb-3">Sort this list by preference.</h5>
+            {{end}}
+
+
+              <div class="row ">
+
+                <table class="table">
+                  <tbody id="sortable">
+                    {{range $index, $option := .r.Options}}
+                      <tr class="ui-state-default"><td><i class="fas fa-bars"></i><input type="hidden" name="options[]" value="{{$index}}" /> {{$option}}</td></tr>
+                    {{end}}
+                  </tbody>
+                </table>
+
+              </div>
+
+
+            </div>
+            <small id="emailHelp" class="form-text text-muted">You should believe that the true value falls between the Min and Max, with 90% certainty.</small>
+
+
+
+
+          <div class="form-group" role="group" aria-label="...">
+            <input type="hidden" name="rid" value="{{.r.Rid}}"/>
+            {{ if .r.Concluded}}
+            {{else}}
+            <button class="btn btn-info btn-sm" type="submit">Submit Forecast</button>
+            {{end}}
+            <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/rank/{{.r.Rid}}/results'">Results</button>
+          </div>
+        </div>
+
+          {{ if eq .u .r.Owner }}
+            <div class="card">
+                <div class="card-body">
+                  <h6>Moderator Options</h6>
+
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.r.Rid}})" class="btn btn-info">Delete</button>
+                </div>
+            </div>
+          {{end}}
+
+        </form>
+      </div>
+    </div>
+
+    <!-- Conclude Modal -->
+    <div class="modal fade" id="concludeModal" tabindex="-1" role="dialog" aria-labelledby="concludeModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Conclude this Estimate</h5>
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <form method="post" action="/view/estimate/{{.r.Rid}}/conclude">
+                <div class="form-group">
+                  <label>Final Value</label>
+                  <input class="form-control" id="resultValue" name="resultValue" type="text"  value="">
+                  <small id="emailHelp" class="form-text text-muted">The actual data that occurred in hindsight.</small>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Conclude!</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
+{{template "footer.html" .}}
