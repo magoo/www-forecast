@@ -1,0 +1,59 @@
+{{set . "title" "Create Rank"}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+  {{template "flash.html" .}}
+  <script>
+
+  function addOption(){
+
+    $("#forecast-form").append("<div class=\"input-group remove\"><input type=\"text\" name=\"options[]\" class=\"form-control\" placeholder=\"Enter option here...\"><div class=\"input-group-append\"><span class=\"input-group-text\" id=\"basic-addon1\" onclick=\"removeParent(this)\">Delete</span></div></div>");
+  }
+
+
+
+  function removeParent(e){
+    $(e).closest('.remove').remove();
+  }
+
+  </script>
+
+      <form method="post" action="/rank" >
+
+        <div class="form-group">
+          <label>Title</label>
+          <input class="form-control form-control-lg" type="text" placeholder="The candidates up for election." name="title" />
+          <small class="form-text text-muted">The value you are planning on sorting.</small>
+        </div>
+
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea class="form-control form-control-lg" type="text" placeholder="These are the eligible preferences for the upcoming vote. Final outcome is decided by an official." name="description"></textarea>
+          <small class="form-text text-muted">The longer form of the rank. Include judgement guidelines when possible.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Candidates</label>
+          <div class="input-group">
+            <input type="text" name="options[]" class="form-control" placeholder="Barack Obama" >
+          </div>
+
+          <div class="input-group">
+            <input type="text" name="options[]" class="form-control" placeholder="Donald Trump">
+          </div>
+          <div id="forecast-form">
+
+          </div>
+          <small class="form-text text-muted">The optional future outcomes. Must be specific, measurable, unique.</small>
+          <button onclick="addOption()" type="button" class="btn btn-secondary btn-sm">Add</button>
+        </div>
+
+        <div class="btn-group" role="group" aria-label="...">
+          <button class="btn btn-primary" type="submit">Submit form</button>
+        </div>
+
+      </form>
+
+{{template "footer.html" .}}

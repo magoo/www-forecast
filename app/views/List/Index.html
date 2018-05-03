@@ -3,6 +3,20 @@
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
 
+<script>
+
+function addOption(){
+
+  $("#forecast-form").append("<div class=\"input-group remove\"><input type=\"text\" name=\"options[]\" class=\"form-control\" placeholder=\"Enter option here...\"><div class=\"input-group-append\"><span class=\"input-group-text\" id=\"basic-addon1\" onclick=\"removeParent(this)\">Delete</span></div></div>");
+}
+
+
+
+function removeParent(e){
+  $(e).closest('.remove').remove();
+}
+
+</script>
 
 
   {{template "flash.html" .}}
@@ -50,6 +64,30 @@
       </div>
       {{end}}
     </div>
+
+    <div class="list-group mt-3">
+      {{if .r}}
+      <h1>Ranks</h1>
+      {{else}}
+        <div class="card">
+          <div class="card-body">
+            <h6>No ranks created.</h6>
+            <p>Create a rank on the navigation bar above.</p>
+            </div>
+        </div>
+      {{end}}
+      {{range .r}}
+      <div class="list-group-item">
+        <a href="/view/rank/{{.Rid}}">
+          <h4 class="list-group-item-heading">{{.Title}}</h4>
+        </a>
+          <p class="list-group-item-text">{{.Description}}</p>
+        </a>
+      </div>
+      {{end}}
+    </div>
+
+
     {{if .empty }}
 
     {{end}}

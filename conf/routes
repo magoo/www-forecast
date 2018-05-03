@@ -14,17 +14,21 @@ GET     /logout                                 Logout.Index
 
 GET     /create                                 Create.Index
 POST    /create                                 Create.Create
+GET     /view/:sid                              View.Index
+GET     /view/:sid/results                      Results.Index
+POST    /view/:sid/conclude                     View.Conclude
 
 GET     /estimate                               Estimate.Index
 POST    /estimate                               Estimate.Create
-
 GET     /view/estimate/:eid                     ViewEstimate.Index
-
-GET     /view/:sid                              View.Index
-GET     /view/:sid/results                      Results.Index
 GET     /view/estimate/:eid/results             estimateresults.Index
-POST    /view/:sid/conclude                     View.Conclude
 POST    /view/estimate/:eid/conclude            ViewEstimate.Conclude
+
+GET     /rank                                   Rank.Index
+POST    /rank                                   Rank.Create
+GET     /view/rank/:rid                         ViewRank.Index
+GET     /view/rank/:rid/results                 RankResults.Index
+#POST    /view/rank/:rid/conclude                ViewRank.Index
 
 # GET     /auth                                   Auth.Index
 POST    /auth                                   Auth.GoogleToken
@@ -35,6 +39,9 @@ POST    /range                                  Range.Create
 
 POST    /delete                                 Delete.DeleteScenario
 POST    /delete/estimate                        Delete.DeleteEstimate
+POST    /delete/ranks                           Delete.DeleteRank
+
+POST    /sort                                   Sort.Create
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

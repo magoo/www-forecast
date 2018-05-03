@@ -34,4 +34,7 @@ a:hover {
   background-color: #d4edda;
 }
 
+ul {
+  list-style-type: none;
+}
 /* animation */

@@ -40,5 +40,15 @@ func (c List) Index() revel.Result {
 
 	}
 
-	return c.Render(f, e, empty)
+
+	r := models.ListRanks(c.Session["user"])
+
+	if (len(e) > 0) {
+
+		empty = false
+
+	}
+
+
+	return c.Render(f, e, r, empty)
 }
