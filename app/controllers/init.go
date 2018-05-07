@@ -14,8 +14,14 @@ func init() {
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Results{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Forecast{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Estimate{})
-	revel.InterceptFunc(checkUser, revel.BEFORE, &Range{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &ViewEstimate{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &EstimateResults{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &Range{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &Rank{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &Sort{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &ViewRank{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &RankResults{})
+
 
 	//revel.OnAppStart(models.DbConnect)
 

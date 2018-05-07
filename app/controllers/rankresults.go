@@ -47,7 +47,7 @@ func (c RankResults) Index(rid string) revel.Result {
 			return c.Render(rr, r, pw)
 		} else {
 			c.Flash.Error("No results yet.")
-			return c.Redirect("/view/estimate/%s", rid)
+			return c.Redirect("/view/rank/%s", rid)
 		}
 
 }

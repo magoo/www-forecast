@@ -3,24 +3,33 @@
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
 
-<div class="container">
 
-    <h2>{{.r.Title}}</h2>
-    <pre>{{.r.Description}}</pre>
+    <div class="card">
+      <div class="card-body">
+        <h2>{{.r.Title}}</h2>
+        {{.r.Description}}
+      </div>
+   </div>
 
+   <div class="card">
+     <div class="card-body">
+         <h3>Total Votes</h3>
+         <table class="table">
 
-      <h3>Total Votes</h3>
-      <table class="table">
+               {{range .rr}}
+           <tr>
+             <th>{{.UserAlias}}</th>
+                 {{range .Options}}
+                   <td>{{.}}</td>
+                 {{end}}
+           </tr>
+               {{end}}
+        </table>
+      </div>
+    </div>
 
-            {{range .rr}}
-        <tr>
-          <th>{{.UserAlias}}</th>
-              {{range .Options}}
-                <td>{{.}}</td>
-              {{end}}
-        </tr>
-            {{end}}
-
+    <div class="card">
+      <div class="card-body">
       </table>
       <h3>Winning Vote</h3>
       <table class="table">
@@ -32,9 +41,11 @@
           </tr>
         {{end}}
       </table>
-    
+    </div>
+  </div>
 
 
-</div>
+
+
 
 {{template "footer.html" .}}

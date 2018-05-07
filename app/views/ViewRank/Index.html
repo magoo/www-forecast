@@ -48,18 +48,21 @@ $( "#sortable" ).disableSelection();
 
   <div class="card">
       <div class="card-body">
+
         <form action="/sort" method="post">
 
           <div class="form-group">
 
             {{ if .r.Concluded}}
             {{else}}
-              <h5 class="mb-3">Sort this list by preference.</h5>
+
             {{end}}
 
 
-              <div class="row ">
+              <div class="row">
 
+              </div>
+              <div class="row">
                 <table class="table">
                   <tbody id="sortable">
                     {{range $index, $option := .r.Options}}
@@ -67,12 +70,12 @@ $( "#sortable" ).disableSelection();
                     {{end}}
                   </tbody>
                 </table>
-
+<small class="form-text text-muted">Please sort this list based on your preferences, top to bottom, greatest to least.</small>
               </div>
 
 
             </div>
-            <small id="emailHelp" class="form-text text-muted">You should believe that the true value falls between the Min and Max, with 90% certainty.</small>
+
 
 
 
@@ -81,7 +84,7 @@ $( "#sortable" ).disableSelection();
             <input type="hidden" name="rid" value="{{.r.Rid}}"/>
             {{ if .r.Concluded}}
             {{else}}
-            <button class="btn btn-info btn-sm" type="submit">Submit Forecast</button>
+            <button class="btn btn-info btn-sm" type="submit">Submit ranking</button>
             {{end}}
             <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/rank/{{.r.Rid}}/results'">Results</button>
           </div>
