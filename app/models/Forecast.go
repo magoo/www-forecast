@@ -53,6 +53,17 @@ func ViewScenarioResults (sid string) (c []Forecast) {
     return c
 }
 
+func ViewUserScenarioResults (uid string, sid string) (userForecast Forecast) {
+  results := ViewScenarioResults(sid)
+  for _, result := range results {
+    if result.User == uid {
+      userForecast = result
+    }
+  }
+
+  return userForecast
+}
+
 func DeleteScenarioForecasts(sid string) {
 
     fs := ViewScenarioResults(sid)
