@@ -41,7 +41,7 @@ $(document).ready(function(){
         <h2>{{.f.Title}}</h2>
         <pre style="display:none">{{.f.Sid}}</pre>
           <p class="card-text">
-            {{.f.Description}}
+            {{nl2br .f.Description}}
           </p>
       </div>
   </div>
