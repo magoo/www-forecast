@@ -6,8 +6,7 @@
 <script>
 
 $(document).ready(function(){
-
-    $("input").change(function(){
+    function handleForecastChange() {
       var total = 0;
 
       console.log( "Handler for .change() called." );
@@ -18,8 +17,10 @@ $(document).ready(function(){
         total += parseInt(arr[i].value, 10) || 0;
       }
       $("#total").val(total);
+    }
 
-    })
+    $("input").change(handleForecastChange);
+    handleForecastChange();
 });
 </script>
 <script>
@@ -88,7 +89,7 @@ $(document).ready(function(){
 
         <div class="row">
           <div class="col-2 input-group ">
-            <input name="value[]" value="{{if $.f.Results}}{{index $.f.Results $index}}{{end}}" type="text" class="form-control odds" {{if $.f.Results}}disabled{{end}} aria-label="Percentage of possiblity">
+            <input name="value[]" value="{{if $.myForecast.Forecasts}}{{index $.myForecast.Forecasts $index}}{{end}}" type="text" class="form-control odds" {{if $.f.Results}}disabled{{end}} aria-label="Percentage of possiblity">
             <div class="input-group-append">
               <span class="input-group-text">%</span>
             </div>

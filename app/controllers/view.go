@@ -26,8 +26,9 @@ func (c View) Index(sid string) revel.Result {
 
 		f := models.ViewScenario(sid)
 		u :=  c.Session["user"]
+		myForecast := models.ViewUserScenarioResults(u, sid)
 
-		return c.Render(f, u)
+		return c.Render(f, u, myForecast)
 }
 
 func (c View) Conclude(sid string, resultIndex int) revel.Result {
