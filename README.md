@@ -49,3 +49,10 @@ For a local e6e server, just running `revel run` from the main `www-forecast` di
 
 ## Production
 This is currently a docker container (`Dockerfile` included) that is pushed to Fargate (An AWS service). Roles and environment are configured in production.
+
+1. `docker build -t scrty .`
+2. `docker tag scrty:latest 832911230879.dkr.ecr.us-east-1.amazonaws.com/scrty:latest`
+3. `aws ecr get-login --no-include-email --region us-east-1` (change profile if needed)
+4. (copy code from #3)
+5. `docker push 832911230879.dkr.ecr.us-east-1.amazonaws.com/scrty:latest`
+6. `aws ecs update-service --region us-east-1 --force-new-deployment --service e6e-service-prod --cluster e6e-cluster-prod` (change profile if needed)
