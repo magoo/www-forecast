@@ -19,3 +19,14 @@ func (c Estimate) Create(title string, description string, unit string) revel.Re
 
 		return c.Redirect("/view/estimate/%s", eid)
 }
+
+func (c Estimate) Update(eid string, title string, description string, unit string) revel.Result {
+
+		models.UpdateEstimate(eid , title, description, unit, c.Session["user"])
+
+		//Show success and redirect to the estimate w/ changes
+		c.Flash.Success("Updated.")
+
+		return c.Redirect("/view/estimate/%s", eid)
+
+}

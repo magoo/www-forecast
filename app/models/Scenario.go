@@ -2,8 +2,11 @@ package models
 
 import (
   "fmt"
+  "github.com/aws/aws-sdk-go/service/dynamodb"
   "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
   "github.com/google/uuid"
+  "github.com/aws/aws-sdk-go/aws"
+
 )
 
 type Scenario struct {
@@ -38,6 +41,42 @@ func CreateScenario (title string, description string, options []string, hd stri
 
       return fuuid.String()
 
+}
+
+func UpdateScenario (sid string, title string, description string, options []string, user string) {
+
+      //Start with the key for the table
+      key := map[string]*dynamodb.AttributeValue {
+        "sid": {
+          S: aws.String(sid),
+        },
+      }
+
+      //Changing this into a list of attributes.
+      o, _ := dynamodbattribute.MarshalList(options)
+
+      expressionattrvalues:= map[string]*dynamodb.AttributeValue {
+        ":t": {
+          S: aws.String(title),
+        },
+        ":d": {
+          S: aws.String(description),
+        },
+        ":o": {
+          L: o,
+        },
+        ":user": {
+          S: aws.String(user),
+        },
+      }
+
+      updateexpression := "SET title = :t, description = :d, Options = :o"
+      conditionexpression := "ownerid = :user"
+
+
+  		UpdateItem(key, updateexpression, expressionattrvalues, "scenarios-tf", conditionexpression)
+
+  		fmt.Println("Updated scenario.")
 }
 
 func ViewScenario (sid string) (s Scenario) {
