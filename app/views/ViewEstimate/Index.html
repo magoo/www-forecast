@@ -52,7 +52,8 @@
                 </div>
                 <div class="col-8"></div>
             </div>
-            <small id="emailHelp" class="form-text text-muted">You should believe that the true value falls between the Min and Max, with 90% certainty.</small>
+            <small class="form-text text-muted">Unit type is <strong>{{.e.Unit}}</strong></small>
+            <small class="form-text text-muted">You should believe that the true value falls between the Min and Max, with 90% certainty.</small>
 
 
           </div>
@@ -71,6 +72,7 @@
                   <h6>Moderator Options</h6>
 
                     <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.e.Eid}})" class="btn btn-info">Delete</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
                     {{if .e.Concluded}}
                     {{else}}
                       <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
@@ -80,6 +82,42 @@
           {{end}}
 
         </form>
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit this estimate</h5>
+          </div>
+          <div class="modal-body">
+            <form method="post" action="/view/estimate/{{.e.Eid}}/edit">
+
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-control" name="title" value="{{.e.Title}}" />
+              </div>
+
+              <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" class="form-control">{{.e.Description}} </textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Unit</label>
+                <input type="text" class="form-control" name="unit" value="{{.e.Unit}}" />
+              </div>
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Edit</button>
+          </div>
+          </form>
+        </div>
       </div>
     </div>
 

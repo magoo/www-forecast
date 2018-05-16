@@ -15,6 +15,7 @@ GET     /logout                                 Logout.Index
 GET     /create                                 Create.Index
 POST    /create                                 Create.Create
 GET     /view/:sid                              View.Index
+POST    /view/:sid/edit                         View.Update
 GET     /view/:sid/results                      Results.Index
 POST    /view/:sid/conclude                     View.Conclude
 
@@ -23,11 +24,13 @@ POST    /estimate                               Estimate.Create
 GET     /view/estimate/:eid                     ViewEstimate.Index
 GET     /view/estimate/:eid/results             estimateresults.Index
 POST    /view/estimate/:eid/conclude            ViewEstimate.Conclude
+POST    /view/estimate/:eid/edit                Estimate.Update
 
 GET     /rank                                   Rank.Index
 POST    /rank                                   Rank.Create
 GET     /view/rank/:rid                         ViewRank.Index
 GET     /view/rank/:rid/results                 RankResults.Index
+POST    /view/rank/:rid/edit                    Rank.Update
 #POST    /view/rank/:rid/conclude                ViewRank.Index
 
 # GET     /auth                                   Auth.Index

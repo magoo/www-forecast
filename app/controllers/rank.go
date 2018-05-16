@@ -19,3 +19,11 @@ func (c Rank) Create(title string, description string, options []string) revel.R
 
 		return c.Redirect("/view/rank/%s", rid)
 }
+
+func (c Rank) Update(rid string, title string, description string, options []string) revel.Result {
+
+	models.UpdateRank(rid, title, description, options, c.Session["user"])
+
+	c.Flash.Success("Updated rank.")
+	return c.Redirect("/view/rank/%s", rid)
+}

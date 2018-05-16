@@ -3,6 +3,8 @@ package models
 import (
   "fmt"
   "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+  "github.com/aws/aws-sdk-go/service/dynamodb"
+  "github.com/aws/aws-sdk-go/aws"
   //"os"
   "github.com/google/uuid"
 
@@ -13,7 +15,7 @@ type Estimate struct {
   Title         string        `dynamodbav:"title"`
   Owner         string        `dynamodbav:"ownerid"`
   Hd            string        `dynamodbav:"hd"`
-  Unit          string        `dynamodbav:"unit"`
+  Unit          string        `dynamodbav:"unitname"`
   Description   string        `dynamodbav:"description"`
   AvgMinimum    float64       `dynamodbav:"minimum"`
   AvgMaximum    float64       `dynamodbav:"maximum"`
@@ -36,10 +38,39 @@ func CreateEstimate (title string, description string, unit string, hd string, o
   		}
 
   		PutItem(item, "estimates-tf")
-
-  		fmt.Println("Successfully added.")
+      fmt.Println(unit)
 
       return euuid.String()
+}
+
+func UpdateEstimate (eid string, title string, description string, unit string, user string) {
+
+  //Primary key for update query
+  key := map[string]*dynamodb.AttributeValue {
+    "eid": {
+      S: aws.String(eid),
+    },
+  }
+
+  expressionattrvalues:= map[string]*dynamodb.AttributeValue {
+    ":t": {
+      S: aws.String(title),
+    },
+    ":d": {
+      S: aws.String(description),
+    },
+    ":unit": {
+      S: aws.String(unit),
+    },
+    ":user": {
+      S: aws.String(user),
+    },
+  }
+
+  updateexpression := "SET title = :t, description = :d, unitname = :unit"
+  conditionexpression := "ownerid = :user"
+
+  UpdateItem(key, updateexpression, expressionattrvalues, "estimates-tf", conditionexpression)
 
 }
 

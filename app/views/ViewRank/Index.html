@@ -94,13 +94,53 @@ $( "#sortable" ).disableSelection();
             <div class="card">
                 <div class="card-body">
                   <h6>Moderator Options</h6>
-
+                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
                     <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.r.Rid}})" class="btn btn-info">Delete</button>
                 </div>
             </div>
           {{end}}
 
         </form>
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit this Rank</h5>
+          </div>
+          <div class="modal-body">
+            <form method="post" action="/view/rank/{{.r.Rid}}/edit">
+
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-control" name="title" value="{{.r.Title}}" />
+              </div>
+
+              <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" class="form-control">{{.r.Description}} </textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Options</label>
+                {{range $index, $option := .r.Options}}
+
+                  <input type="text" class="form-control" name="options[{{$index}}]" value="{{$option}}" />
+
+                {{end}}
+              </div>
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Edit</button>
+          </div>
+          </form>
+        </div>
       </div>
     </div>
 

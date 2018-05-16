@@ -43,6 +43,32 @@ func PutItem(item interface{}, table string) (err error) {
 	return
 }
 
+func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string, expressionattrvalues map[string]*dynamodb.AttributeValue, table string, conditionexpression string ) (err error) {
+
+	input := &dynamodb.UpdateItemInput{
+    ExpressionAttributeValues: expressionattrvalues,
+    Key: key,
+    TableName:        aws.String(table),
+    UpdateExpression: aws.String(updateexpression),
+		ConditionExpression: aws.String(conditionexpression),
+	}
+
+	if err != nil {
+		fmt.Println("Got error calling MarshalMap: ")
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	_, err = Svc.UpdateItem(input)
+
+	if err != nil {
+		fmt.Println("Got error calling UpdateItem: ")
+		fmt.Println(err.Error())
+
+	}
+	return
+}
+
 func GetPrimaryIndexItem(primaryValue string, primary string, index string, table string) (result *dynamodb.QueryOutput){
 	input := &dynamodb.QueryInput{
 			ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{

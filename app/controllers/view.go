@@ -31,6 +31,15 @@ func (c View) Index(sid string) revel.Result {
 		return c.Render(f, u, myForecast)
 }
 
+func (c View) Update(sid string, title string, description string, options []string) revel.Result{
+
+	models.UpdateScenario(sid, title, description, options, c.Session["user"])
+	c.Flash.Success("Updated.")
+
+	return c.Redirect("/view/%s", sid)
+
+}
+
 func (c View) Conclude(sid string, resultIndex int) revel.Result {
 	c.Validation.Required(sid)
 	c.Validation.Match(sid, regexp.MustCompile("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"))
