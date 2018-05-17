@@ -13,3 +13,7 @@ routes/
 tf/terraform.tfstate
 
 tf/terraform.tfstate.backup
+
+*.backup
+
+*.tfstate
