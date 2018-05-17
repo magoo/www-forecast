@@ -37,6 +37,12 @@
   version = "v1.12.79"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/cbonello/revel-csrf"
+  packages = ["."]
+  revision = "4dd0f3c795bb32e987fe8eea7f13078581ada38d"
+
+[[projects]]
   name = "github.com/docker/docker"
   packages = [
     "pkg/namesgenerator",
@@ -102,6 +108,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "329fe8ec12dbd88d94101ccfeca0c59af574689dec0f8771f0d99139683baa88"
+  inputs-digest = "6a40f8efc1d14aabd5aeedbb9f5e20ed369cf64bc0da25275d534a5a891875b3"
   solver-name = "gps-cdcl"
   solver-version = 1

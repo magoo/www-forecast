@@ -50,7 +50,7 @@ $( "#sortable" ).disableSelection();
       <div class="card-body">
 
         <form action="/sort" method="post">
-
+          <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
           <div class="form-group">
 
             {{ if .r.Concluded}}
@@ -113,6 +113,7 @@ $( "#sortable" ).disableSelection();
           </div>
           <div class="modal-body">
             <form method="post" action="/view/rank/{{.r.Rid}}/edit">
+              <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
               <div class="form-group">
                 <label>Title</label>
@@ -158,6 +159,7 @@ $( "#sortable" ).disableSelection();
           <div class="modal-body">
 
             <form method="post" action="/view/estimate/{{.r.Rid}}/conclude">
+              <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
                 <div class="form-group">
                   <label>Final Value</label>
                   <input class="form-control" id="resultValue" name="resultValue" type="text"  value="">

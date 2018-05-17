@@ -22,13 +22,14 @@ func init() {
 	revel.InterceptFunc(checkUser, revel.BEFORE, &ViewRank{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &RankResults{})
 
-
 	//revel.OnAppStart(models.DbConnect)
 
 }
 
 // Check for session token
 func checkUser(c *revel.Controller) revel.Result {
+
+	revel.AppLog.Debug("AccessLog", "user", c.Session["user"], "ip", c.ClientIP, "path", c.Request.URL.Path)
 
 	c.Validation.Required(c.Session["user"])
 

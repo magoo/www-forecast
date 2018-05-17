@@ -29,6 +29,7 @@
   <div class="card">
       <div class="card-body">
         <form action="/range" method="post">
+          <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
           <div class="form-group">
 
@@ -94,6 +95,7 @@
           </div>
           <div class="modal-body">
             <form method="post" action="/view/estimate/{{.e.Eid}}/edit">
+              <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
               <div class="form-group">
                 <label>Title</label>
@@ -135,6 +137,7 @@
           <div class="modal-body">
 
             <form method="post" action="/view/estimate/{{.e.Eid}}/conclude">
+              <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
                 <div class="form-group">
                   <label>Final Value</label>
                   <input class="form-control" id="resultValue" name="resultValue" type="text"  value="">

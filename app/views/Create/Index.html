@@ -20,6 +20,7 @@ function removeParent(e){
   {{template "flash.html" .}}
 
       <form method="post" action="/create" >
+            <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
         <div class="form-group">
           <label>Scenario</label>

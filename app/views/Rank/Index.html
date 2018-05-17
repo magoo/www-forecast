@@ -20,6 +20,7 @@
   </script>
 
       <form method="post" action="/rank" >
+        <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
         <div class="form-group">
           <label>Title</label>

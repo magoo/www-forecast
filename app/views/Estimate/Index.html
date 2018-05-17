@@ -6,6 +6,7 @@
   {{template "flash.html" .}}
 
       <form method="post" action="/estimate" >
+        <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
         <div class="form-group">
           <label>Estimate</label>
