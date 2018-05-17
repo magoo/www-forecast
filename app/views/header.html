@@ -14,6 +14,15 @@
     <script src="/public/js/jquery-2.2.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69938927-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-69938927-2');
+    </script>
     {{range .moreStyles}}
       <link rel="stylesheet" type="text/css" href="/public/{{.}}">
     {{end}}
@@ -33,6 +42,7 @@
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/auth');
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader("X-CSRF-Token", {{ .csrf_token }});
       xhr.onload = function() {
         console.log('Signed in as: ' + xhr.responseText);
         //Redirect to app if logged in
