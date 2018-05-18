@@ -5,34 +5,50 @@
 
 <div class="container">
 
-    <h2>{{.f.Title}}</h2>
-    <pre>{{.f.Description}}</pre>
+  <div class="card">
+    <div class="card-body">
+      <h2>{{.e.Title}}</h2>
+      {{.e.Description}}
+    </div>
+  </div>
 
-    <div class="row">
-      <table class="table">
-      {{range .er}}
+  <div class="card">
+    <div class="card-body">
+
+        <h3>Estimated Results</h3>
+        <table class="table">
+          <tr>
+            <th>
+
+            </th>
+              <th>Minimum</th>
+              <th>Maximum</th>
+
+          </tr>
+        {{range .er}}
+          <tr>
+            <th>
+              {{.UserAlias}}
+            </th>
+              <td>{{.Minimum}}</td>
+              <td>{{.Maximum}}</td>
+
+          </tr>
+        {{end}}
+
         <tr>
           <th>
-            {{.UserAlias}}
+            Average
           </th>
-            <td>{{.Minimum}}</td>
-            <td>{{.Maximum}}</td>
+
+          <th>{{.avgmin}}</th>
+          <th>{{.avgmax}}</th>
 
         </tr>
-      {{end}}
-
-      <tr>
-        <th>
-          Average
-        </th>
-
-        <th>{{.avgmin}}</th>
-        <th>{{.avgmax}}</th>
-
-      </tr>
-      </table>
+        </table>
+      
     </div>
-
+  </div>
 
 </div>
 

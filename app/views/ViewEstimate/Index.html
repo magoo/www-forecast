@@ -5,7 +5,20 @@
 {{template "flash.html" .}}
 <script>
   function del(eid){
-    $.post( "/delete/estimate", { eid: eid } );
+    $.ajax({
+    url: '/delete/estimate',
+    type: 'post',
+    data: {
+        eid: eid
+    },
+    headers: {
+        "X-CSRF-Token": {{ .csrf_token }},   //If your header name has spaces or any other char not appropriate
+    },
+    dataType: 'json',
+    success: function (data) {
+        console.info(data);
+    }
+  });
     window.location.replace("/list")
   }
 </script>

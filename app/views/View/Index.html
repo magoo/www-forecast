@@ -25,7 +25,21 @@ $(document).ready(function(){
 </script>
 <script>
   function del(sid){
-    $.post( "/delete", { sid: sid } );
+
+      $.ajax({
+      url: '/delete',
+      type: 'post',
+      data: {
+          sid: sid
+      },
+      headers: {
+          "X-CSRF-Token": {{ .csrf_token }},   //If your header name has spaces or any other char not appropriate
+      },
+      dataType: 'json',
+      success: function (data) {
+          console.info(data);
+      }
+    });
     window.location.replace("/list")
   }
 </script>

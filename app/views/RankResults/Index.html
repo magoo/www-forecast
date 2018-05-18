@@ -13,11 +13,35 @@
 
    <div class="card">
      <div class="card-body">
+     </table>
+     <h3>Winning Vote</h3>
+     <table class="table">
+       {{range $index, $element := .pw}}
+         <tr>
+
+             <th>{{index $.r.Options $element.Index}}</th><td>{{$element.Votes}}</td>
+
+         </tr>
+       {{end}}
+     </table>
+   </div>
+ </div>
+
+   <div class="card">
+     <div class="card-body">
          <h3>Total Votes</h3>
          <table class="table">
-
-               {{range .rr}}
            <tr>
+             <th></th>
+
+                  {{range $index, $value := .r.Options}}
+                    <th>{{index $.r.Options $index}}</th>
+                  {{end}}
+
+           </tr>
+               {{range .rr}}
+
+
              <th>{{.UserAlias}}</th>
                  {{range .Options}}
                    <td>{{.}}</td>
@@ -28,21 +52,7 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-body">
-      </table>
-      <h3>Winning Vote</h3>
-      <table class="table">
-        {{range $index, $element := .pw}}
-          <tr>
 
-              <td>{{index $.r.Options $element.Index}}</td><td>{{$element.Votes}}</td>
-
-          </tr>
-        {{end}}
-      </table>
-    </div>
-  </div>
 
 
 
