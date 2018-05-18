@@ -37,4 +37,14 @@ a:hover {
 ul {
   list-style-type: none;
 }
+
+.table {
+  font-family: "Roboto";
+}
+
+td {
+  font-weight: 300;
+}
+
+
 /* animation */

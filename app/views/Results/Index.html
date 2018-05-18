@@ -16,15 +16,15 @@
 
 
         <tr>
-          <th>
+          <th class="cell">
             Scenario
           </th>
           {{range $index, $value := .sr}}
-            <th>
-              User {{ $index }}
+            <th class="cell">
+              U{{ $index }}
             </th>
           {{end}}
-          <th>
+          <th class="cell">
             Average
           </th>
         </tr>
@@ -32,12 +32,12 @@
         {{range $index, $option := .s.Options }}
         <tr>
 
-            <td>
+            <th class="cell">
               {{$option}}
-            </td>
+            </th>
 
             {{range $.sr}}
-            <td>
+            <td class="cell">
               {{index .Forecasts $index}}
             </td>
             {{end}}
