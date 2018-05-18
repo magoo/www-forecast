@@ -8,29 +8,45 @@
     <h2>{{.f.Title}}</h2>
     <pre>{{.f.Description}}</pre>
 
+
+
+
     <div class="row">
       <table class="table">
-      {{range .sr}}
+
+
         <tr>
           <th>
-            {{.UserAlias}}
+            Scenario
           </th>
-          {{range .Forecasts}}
-
-            <td>{{.}}</td>
-
+          {{range $index, $value := .sr}}
+            <th>
+              User {{ $index }}
+            </th>
           {{end}}
+          <th>
+            Average
+          </th>
         </tr>
-      {{end}}
 
-      <tr>
-        <th>
-          Average
-        </th>
-      {{range .avg}}
-        <th>{{.}}</th>
-      {{end}}
-      </tr>
+        {{range $index, $option := .s.Options }}
+        <tr>
+
+            <td>
+              {{$option}}
+            </td>
+
+            {{range $.sr}}
+            <td>
+              {{index .Forecasts $index}}
+            </td>
+            {{end}}
+
+            <th class="averageresult">
+              {{index $.avg $index}}
+            </th>
+        </tr>
+        {{end}}
       </table>
     </div>
 
