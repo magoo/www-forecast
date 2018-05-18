@@ -23,9 +23,24 @@ $( "#sortable" ).disableSelection();
 });
 </script>
 
+
+
 <script>
   function del(rid){
-    $.post( "/delete/ranks", { rid: rid } );
+    $.ajax({
+    url: '/delete/ranks',
+    type: 'post',
+    data: {
+        rid: rid
+    },
+    headers: {
+        "X-CSRF-Token": {{ .csrf_token }},   //If your header name has spaces or any other char not appropriate
+    },
+    dataType: 'json',
+    success: function (data) {
+        console.info(data);
+    }
+  });
     window.location.replace("/list")
   }
 </script>
