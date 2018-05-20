@@ -19,34 +19,36 @@
         <table class="table">
           <tr>
             <th>
-
+              Estimate
             </th>
-              <th>Minimum</th>
-              <th>Maximum</th>
-
-          </tr>
-        {{range .er}}
-          <tr>
+            {{range $index, $value := .er}}
+              <th>
+                {{ animalFaceEmoji $index }}
+              </th>
+            {{end}}
             <th>
-              {{.UserAlias}}
+              Average
             </th>
-              <td>{{.Minimum}}</td>
-              <td>{{.Maximum}}</td>
-
           </tr>
-        {{end}}
 
         <tr>
-          <th>
-            Average
-          </th>
-
-          <th>{{.avgmin}}</th>
-          <th>{{.avgmax}}</th>
-
+            <td>Min</td>
+            {{range $index, $option := .er }}
+            <td>{{.Minimum}}</td>
+            {{end}}
+            <th>{{.avgmin}}</th>
         </tr>
+
+        <tr>
+            <td>Max</td>
+            {{range $index, $option := .er }}
+            <td>{{.Maximum}}</td>
+            {{end}}
+            <th>{{.avgmax}}</th>
+        </tr>
+
         </table>
-      
+
     </div>
   </div>
 
