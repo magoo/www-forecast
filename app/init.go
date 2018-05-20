@@ -39,6 +39,19 @@ func init() {
 	// revel.OnAppStart(ExampleStartupScript)
 	// revel.OnAppStart(InitDB)
 	// revel.OnAppStart(FillCache)
+
+	revel.TemplateFuncs["animalFaceEmoji"] = func(index int) string {
+		var animalFaceEmojis = [...]rune{
+			'🐵', '🐶', '🐺', '🦊', '🐱',
+			'🦁', '🐯', '🐴', '🦄', '🐮',
+			'🐷', '🐗', '🐭', '🐹', '🐰',
+			'🐻', '🐨', '🐼', '🐔', '🐤',
+			'🐦', '🐧', '🐸', '🐲', '🐙',
+		}
+
+		// mod to allow wrap around if the index is out of bounds
+		return string(animalFaceEmojis[index%25])
+	}
 }
 
 // HeaderFilter adds common security headers
