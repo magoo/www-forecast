@@ -4,36 +4,43 @@
 {{template "jumbotron.html" .}}
 
 <div class="container">
-
     <h2>{{.f.Title}}</h2>
     <pre>{{.f.Description}}</pre>
 
     <div class="row">
       <table class="table">
-      {{range .er}}
         <tr>
           <th>
-            {{.UserAlias}}
+            Estimate
           </th>
-            <td>{{.Minimum}}</td>
-            <td>{{.Maximum}}</td>
-
+          {{range $index, $value := .er}}
+            <th>
+              {{ animalFaceEmoji $index }}
+            </th>
+          {{end}}
+          <th>
+            Average
+          </th>
         </tr>
-      {{end}}
 
       <tr>
-        <th>
-          Average
-        </th>
-
-        <th>{{.avgmin}}</th>
-        <th>{{.avgmax}}</th>
-
+          <td>Min</td>
+          {{range $index, $option := .er }}
+          <td>{{.Minimum}}</td>
+          {{end}}
+          <th>{{.avgmin}}</th>
       </tr>
+
+      <tr>
+          <td>Max</td>
+          {{range $index, $option := .er }}
+          <td>{{.Maximum}}</td>
+          {{end}}
+          <th>{{.avgmax}}</th>
+      </tr>
+
       </table>
     </div>
-
-
 </div>
 
 {{template "footer.html" .}}
