@@ -32,22 +32,26 @@
          <h3>Total Votes</h3>
          <table class="table">
            <tr>
-             <th></th>
-
-                  {{range $index, $value := .r.Options}}
-                    <th>{{index $.r.Options $index}}</th>
-                  {{end}}
-
+             <th class="cell">
+               Votes
+             </th>
+             {{range $index, $value := .rr}}
+               <th class="cell">
+                 {{ animalFaceEmoji $index }}
+               </th>
+             {{end}}
            </tr>
-               {{range .rr}}
 
-
-             <th>{{.UserAlias}}</th>
-                 {{range .Options}}
-                   <td>{{.}}</td>
-                 {{end}}
+          {{range $index, $value := .r.Options}}
+           <tr>
+             <th>{{index $.r.Options $index}}</th>
+             {{range $.rr}}
+               <th class="cell">
+                 {{ index .Options $index }}
+               </th>
+             {{end}}
            </tr>
-               {{end}}
+         {{end}}
         </table>
       </div>
     </div>
