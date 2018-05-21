@@ -29,15 +29,7 @@
 {{ end }}
 
 
-  <div class="card">
-      <div class="card-body">
-        <h2>{{.e.Title}}</h2>
-        <pre style="display:none">{{.e.Eid}}</pre>
-          <p class="card-text">
-            {{.e.Description}}
-          </p>
-      </div>
-  </div>
+{{template "titleCard.html" .e}}
 
   <div class="card">
       <div class="card-body">
