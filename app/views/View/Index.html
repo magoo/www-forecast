@@ -130,6 +130,9 @@ $(document).ready(function(){
     </div>
   </div>
 
+  <div class="card mb-3">
+      <div class="card-body">
+
     <form action="/forecast" method="post">
       <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
       <div class="form-group">
@@ -175,16 +178,17 @@ $(document).ready(function(){
       <div class="form-group" role="group" aria-label="...">
         <input type="hidden" name="sid" value="{{.f.Sid}}"/>
         <button class="btn btn-info btn-sm" type="submit">Submit Forecast</button>
+        <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/{{.f.Sid}}/results'">Results</button>
       </div>
       {{end}}
     </form>
+  </div>
+</div>
 
     {{ if eq .u .f.Owner }}
       <div class="card">
           <div class="card-body">
             <h6>Moderator Options</h6>
-
-              <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/{{.f.Sid}}/results'">Results</button>
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
               <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.f.Sid}})" class="btn btn-info">Delete</button>
               {{if .f.Concluded}}
