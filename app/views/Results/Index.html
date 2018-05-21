@@ -3,17 +3,12 @@
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
 
-<div class="container">
 {{template "titleCard.html" .s}}
 
-
-
-
-
-    <div class="row">
+ <div class="card">
+   <div class="card-body">
+       <h3>Scenario Results</h3>
       <table class="table">
-
-
         <tr>
           <th class="cell">
             Scenario
@@ -48,8 +43,6 @@
         {{end}}
       </table>
     </div>
-
-
-</div>
+  </div>
 
 {{template "footer.html" .}}

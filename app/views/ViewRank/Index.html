@@ -52,7 +52,7 @@ $( "#sortable" ).disableSelection();
 
 {{template "titleCard.html" .r}}
 
-  <div class="card">
+  <div class="card mb-3">
       <div class="card-body">
 
         <form action="/sort" method="post">
@@ -94,21 +94,20 @@ $( "#sortable" ).disableSelection();
             {{end}}
             <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/rank/{{.r.Rid}}/results'">Results</button>
           </div>
-        </div>
-
-          {{ if eq .u .r.Owner }}
-            <div class="card">
-                <div class="card-body">
-                  <h6>Moderator Options</h6>
-                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.r.Rid}})" class="btn btn-info">Delete</button>
-                </div>
-            </div>
-          {{end}}
 
         </form>
       </div>
     </div>
+
+    {{ if eq .u .r.Owner }}
+      <div class="card">
+          <div class="card-body">
+            <h6>Moderator Options</h6>
+              <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.r.Rid}})" class="btn btn-info">Delete</button>
+          </div>
+      </div>
+    {{end}}
 
     <!-- Edit Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
