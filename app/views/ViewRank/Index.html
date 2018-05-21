@@ -50,16 +50,7 @@ $( "#sortable" ).disableSelection();
 </div>
 {{ end }}
 
-
-  <div class="card">
-      <div class="card-body">
-        <h2>{{.r.Title}}</h2>
-        <pre style="display:none">{{.r.Rid}}</pre>
-          <p class="card-text">
-            {{.r.Description}}
-          </p>
-      </div>
-  </div>
+{{template "titleCard.html" .r}}
 
   <div class="card">
       <div class="card-body">

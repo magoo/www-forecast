@@ -50,16 +50,7 @@ $(document).ready(function(){
 </div>
 {{ end }}
 
-
-  <div class="card">
-      <div class="card-body">
-        <h2>{{.f.Title}}</h2>
-        <pre style="display:none">{{.f.Sid}}</pre>
-          <p class="card-text">
-            {{nl2br .f.Description}}
-          </p>
-      </div>
-  </div>
+{{template "titleCard.html" .f}}
 
   <!-- Edit Modal -->
   <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
