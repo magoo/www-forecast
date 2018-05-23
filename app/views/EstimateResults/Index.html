@@ -3,14 +3,7 @@
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
 
-<div class="container">
-
-  <div class="card">
-    <div class="card-body">
-      <h2>{{.e.Title}}</h2>
-      {{.e.Description}}
-    </div>
-  </div>
+{{template "titleCard.html" .e}}
 
   <div class="card">
     <div class="card-body">
@@ -51,7 +44,5 @@
 
     </div>
   </div>
-
-</div>
 
 {{template "footer.html" .}}
