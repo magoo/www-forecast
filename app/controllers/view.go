@@ -84,3 +84,23 @@ func (c View) Conclude(sid string, resultIndex int) revel.Result {
 
 	return c.Redirect("/view/%s", sid)
 }
+
+func (c View) AddRecord(sid string) revel.Result {
+	c.Validation.Required(sid)
+	c.Validation.Match(sid, regexp.MustCompile("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"))
+	//^[a-e0-9]{8}-[a-e0-9]{4}-[a-e0-9]{4}-[a-e0-9]{12}$
+
+	if c.Validation.HasErrors() {
+		c.Flash.Error("Cannot view. Invalid scenario ID.")
+
+		return c.Redirect(List.Index)
+	}
+
+	s := models.ViewScenario(sid)
+	u :=  c.Session["user"]
+	s.AddRecord(u)
+
+	return c.Redirect("/view/%s", sid)
+
+
+}

@@ -6,24 +6,28 @@ import (
   "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
   "github.com/google/uuid"
   "github.com/aws/aws-sdk-go/aws"
-
+  "time"
+  "strconv"
 )
 
 type Scenario struct {
-  Sid           string        `dynamodbav:"sid"`
-  Title         string        `dynamodbav:"title"`
-  Owner         string        `dynamodbav:"ownerid"`
-  Hd            string        `dynamodbav:"hd"`
-  Description   string        `dynamodbav:"description"`
-  Options       []string      `dynamodbav:"Options"`
-  Results       []int         `dynamodbav:"results"`
-  ResultIndex   int           `dynamodbav:"resultindex"`
-  BrierScore    float64       `dynamodbav:"brierscore"`
-  Concluded     bool          `dynamodbav:"concluded"`
-  ConcludedTime string        `dynamodbav:"concludetime"`
+  Sid           string           `dynamodbav:"sid"`
+  Title         string           `dynamodbav:"title"`
+  Owner         string           `dynamodbav:"ownerid"`
+  Hd            string           `dynamodbav:"hd"`
+  Description   string           `dynamodbav:"description"`
+  Options       []string         `dynamodbav:"Options"`
+  Results       []int            `dynamodbav:"results"`
+  ResultIndex   int              `dynamodbav:"resultindex"`
+  BrierScore    float64          `dynamodbav:"brierscore"`
+  Concluded     bool             `dynamodbav:"concluded"`
+  ConcludedTime string           `dynamodbav:"concludetime"`
+  Records       []string         `dynamodbav:"records"`
 }
 
-func CreateScenario (title string, description string, options []string, hd string, owner string) (sid string){
+
+
+func CreateScenario(title string, description string, options []string, hd string, owner string) (sid string){
 
   		fuuid := uuid.New()
   		item := Scenario{
@@ -43,7 +47,7 @@ func CreateScenario (title string, description string, options []string, hd stri
 
 }
 
-func UpdateScenario (sid string, title string, description string, options []string, user string) {
+func UpdateScenario(sid string, title string, description string, options []string, user string) {
 
       //Start with the key for the table
       key := map[string]*dynamodb.AttributeValue {
@@ -79,7 +83,7 @@ func UpdateScenario (sid string, title string, description string, options []str
   		fmt.Println("Updated scenario.")
 }
 
-func ViewScenario (sid string) (s Scenario) {
+func ViewScenario(sid string) (s Scenario) {
 
   // I'll need to change this to make "secret link" work.
   result := GetPrimaryItem(sid, "sid", "scenarios-tf")
@@ -124,5 +128,69 @@ func DeleteScenario(sid string, owner string) {
   fmt.Println("Deleted scenario.", sid)
 
   DeleteScenarioForecasts(sid)
+
+}
+
+func (s Scenario) GetAverageForecasts() (avg []int) {
+
+  sr := ViewScenarioResults(s.Sid)
+
+  avg = []int{}
+	size := len(sr[0].Forecasts)
+
+	for i := 0; i < size; i++ {
+		sum := 0
+			for _, v := range sr {
+					sum += v.Forecasts[i]
+					//fmt.Println("Adding forecast: ", v.Forecasts[i])
+			}
+			//fmt.Println("Adding average to array: ", sum / len(sr))
+		avg = append(avg, sum / len(sr))
+	}
+
+  return avg
+
+}
+
+func (s Scenario) AddRecord(user string) {
+
+  results := s.GetAverageForecasts()
+
+
+
+  // func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string, expressionattrvalues map[string]*dynamodb.AttributeValue, table string, conditionexpression string ) (err error) {
+  //Primary key for update query
+  key := map[string]*dynamodb.AttributeValue {
+    "sid": {
+      S: aws.String(s.Sid),
+    },
+  }
+
+  t := time.Now()
+  record := t.Format("2006-01-02") + ": Results recorded. "
+
+   x := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+  for i, v := range results {
+    record += "" + string(x[i%25]) + ". " + " " + strconv.Itoa(v) + "% "
+  }
+
+
+  item := map[string]*dynamodb.AttributeValue {
+    ":r": {
+        SS: []*string{
+          aws.String(record),
+          },
+        },
+    ":user": {
+      S: aws.String(user),
+    },
+  }
+
+  //av, err := dynamodbattribute.MarshalMap(item)
+
+  UpdateItem(key, "ADD records :r", item, "scenarios-tf", "ownerid = :user")
+
+
 
 }

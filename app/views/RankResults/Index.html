@@ -26,12 +26,12 @@
      <div class="card-body">
          <h3>Total Votes</h3>
          <table class="table">
-           <tr>
-             <th class="cell">
-               Votes
+           <tr >
+             <th style="border-right: 1px solid grey;" class="cell">
+               Options
              </th>
              {{range $index, $value := .rr}}
-               <th class="cell">
+               <th style="border-top: 1px solid grey; border-right: 1px solid grey;" class="cell">
                  {{ animalFaceEmoji $index }}
                </th>
              {{end}}
@@ -39,10 +39,10 @@
 
           {{range $index, $value := .r.Options}}
            <tr>
-             <th>{{index $.r.Options $index}}</th>
+             <th style="border-right: 1px solid grey;">{{ increment $index}}. {{index $.r.Options $index}}</th>
              {{range $.rr}}
-               <th class="cell">
-                 {{ index .Options $index }}
+               <th class="cell" style="border-top: none; border-right: 1px solid grey;">
+                 # {{ index .Options $index | increment }}
                </th>
              {{end}}
            </tr>
