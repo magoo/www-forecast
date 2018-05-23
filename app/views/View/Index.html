@@ -42,6 +42,12 @@ $(document).ready(function(){
     });
     window.location.replace("/list")
   }
+
+  var button = document.querySelector('form[name="recordForm"] > button');
+  button.addEventListener(function() {
+    document.querySelector('form[name="recordForm"]').submit();
+  });
+
 </script>
 
 {{ if .f.Concluded }}
@@ -185,15 +191,35 @@ $(document).ready(function(){
   </div>
 </div>
 
+    {{ if .f.Records }}
+    <div class="card">
+        <div class="card-body">
+          <h4>Previous measurements</h4>
+          <ul>
+          {{range .f.Records}}
+          <li>{{.}}</li>
+          {{end}}
+          </ul>
+        </div>
+    </div>
+
+    {{end}}
+
     {{ if eq .u .f.Owner }}
       <div class="card">
           <div class="card-body">
             <h6>Moderator Options</h6>
+            <small class="form-text text-muted">Record this forecast.</small>
+              <form name="recordForm" action="/view/{{.f.Sid}}/record" method="post">
+                <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
+                <button class="btn btn-light btn-sm" class="btn btn-info">Record</button>
+              </form>
+              <small class="form-text text-muted">Admin the forecast.</small>
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
               <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.f.Sid}})" class="btn btn-info">Delete</button>
               {{if .f.Concluded}}
               {{else}}
-                <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
+                <!-- <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button> -->
               {{end}}
           </div>
       </div>

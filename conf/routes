@@ -18,6 +18,7 @@ GET     /view/:sid                              View.Index
 POST    /view/:sid/edit                         View.Update
 GET     /view/:sid/results                      Results.Index
 POST    /view/:sid/conclude                     View.Conclude
+POST    /view/:sid/record                       View.AddRecord
 
 GET     /estimate                               Estimate.Index
 POST    /estimate                               Estimate.Create
@@ -31,7 +32,7 @@ POST    /rank                                   Rank.Create
 GET     /view/rank/:rid                         ViewRank.Index
 GET     /view/rank/:rid/results                 RankResults.Index
 POST    /view/rank/:rid/edit                    Rank.Update
-#POST    /view/rank/:rid/conclude                ViewRank.Index
+#POST    /view/rank/:rid/conclude               ViewRank.Index
 
 # GET     /auth                                   Auth.Index
 POST    /auth                                   Auth.GoogleToken
