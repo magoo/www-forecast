@@ -43,7 +43,7 @@ func checkUser(c *revel.Controller) revel.Result {
 		c.Session["redirect"] = c.Request.URL.Path
 		c.Flash.Error("Please login. You'll be redirected to the URL you were trying to visit.")
 
-		return c.Redirect(Auth.Index)
+		return c.Redirect(Home.Index)
 	}
 
     return nil

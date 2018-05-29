@@ -7,10 +7,12 @@ module:testrunner
 # module:jobs
 
 
-GET     /                                       Auth.Index
+GET     /                                       Home.Index
 GET     /list                                   List.Index
 
-GET     /logout                                 Logout.Index
+# Authentication routes
+POST    /auth                                   Auth.Create
+DELETE  /auth                                   Auth.Delete
 
 GET     /create                                 Create.Index
 POST    /create                                 Create.Create
@@ -33,9 +35,6 @@ GET     /view/rank/:rid                         ViewRank.Index
 GET     /view/rank/:rid/results                 RankResults.Index
 POST    /view/rank/:rid/edit                    Rank.Update
 #POST    /view/rank/:rid/conclude               ViewRank.Index
-
-# GET     /auth                                   Auth.Index
-POST    /auth                                   Auth.GoogleToken
 
 POST    /forecast                               Forecast.Create
 

@@ -30,46 +30,55 @@
       <script src="/public/{{.}}" type="text/javascript" charset="utf-8"></script>
     {{end}}
     <script>
+      function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        var id_token = googleUser.getAuthResponse().id_token;
+        var signInButton = $("#sign-in");
 
-    function onSignIn(googleUser) {
-      var profile = googleUser.getBasicProfile();
-      //console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-      //console.log('Name: ' + profile.getName());
-      //console.log('Image URL: ' + profile.getImageUrl());
-      //console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-      var id_token = googleUser.getAuthResponse().id_token;
-
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/auth');
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      xhr.setRequestHeader("X-CSRF-Token", {{ .csrf_token }});
-      xhr.onload = function() {
-        console.log('Signed in as: ' + xhr.responseText);
-        //Redirect to app if logged in
-        //window.location = "/list"
-        if (window.location.pathname == "/") {
-          console.log("home")
-          afterSignIn();
-        }
-      }
-      xhr.send('idtoken=' + id_token);
-
-    }
-
-    function afterSignIn(){
-      //window.location="/list"
-      console.log("Signed in.")
-      $("#loginmodalbox").append("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" onclick=\"window.location='/list'\">Go!</button>");
-
-    }
-
-      function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-          console.log('User signed out.');
-          //window.location="/"
+        signInButton.addClass("disabled");
+        signInButton.text("Signing in...")
+        $.ajax({
+          url: "/auth",
+          data: {
+            googleIdToken: id_token
+          },
+          method: "POST",
+        }).done(function(data) {
+          console.log('Signed in as: ', data);
+          if (window.location.pathname == "/") {
+            console.log("home")
+            signInButton.removeClass("disabled");
+            signInButton.text("Go!")
+          }
         });
       }
+
+      function onSignOut() {
+        var signOutButton = $("#sign-out");
+        signOutButton.addClass("disabled");
+        signOutButton.text("Signing out...");
+
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          console.log('Google User signed out.');
+          $.ajax({
+            url: "/auth",
+            type: 'DELETE'
+          }).done(function() {
+            console.log('User session signed out.');
+            window.location = '/';
+          });
+        });
+      }
+
+      $( document ).ready(function() {
+        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+          if(options.type !== "GET" && !options.crossDomain) {
+            jqXHR.setRequestHeader('X-CSRF-Token', {{ .csrf_token }});
+          }
+        });
+        $("#sign-out").click(onSignOut);
+      });
     </script>
   </head>
   <body>
