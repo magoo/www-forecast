@@ -62,52 +62,37 @@ window.onload = function() {
 };
 </script>
 
+  <header style="margin-top:12em;" class="jumbotron">
 
+    <h1 >e6e.io</h1>
+    <hr />
+    <h3>An estimation platform designed for <span class="txt-rotate" data-period="2000" data-rotate='[ "intelligence analysis", "business forecasting", "risk management"]'></span>.</h3>
 
-    <header style="margin-top:12em;" class="jumbotron">
+    <button type="button" class="btn btn-secondary btn-lg" data-toggle="modal" data-target="#exampleModal" style="margin-top:3em;">
+      Sign in
+    </button>
 
-
-          <h1 >e6e.io</h1>
-          <hr />
-          <h3>An estimation platform designed for <span class="txt-rotate" data-period="2000" data-rotate='[ "intelligence analysis", "business forecasting", "risk management"]'></span>.</h3>
-
-          <button type="button" class="btn btn-secondary btn-lg" data-toggle="modal" data-target="#exampleModal" style="margin-top:3em;">
-            Sign in
-          </button>
-
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Sign In</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <div class="g-signin2" data-onsuccess="onSignIn"></div>
-                </div>
-                <div class="modal-footer" id="loginmodalbox">
-                  <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-
-                </div>
-              </div>
-            </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Sign In</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
+          <div class="modal-body">
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+          </div>
+          <div class="modal-footer" id="loginmodalbox">
+            <a href="/list" id="sign-in" class="disabled btn btn-secondary">Sign into Google to continue</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-
-
-
-
-
-
-
-    </header>
-    {{template "flash.html" .}}
-
-
-
-
+  </header>
+  {{template "flash.html" .}}
 
 {{template "footer.html" .}}
