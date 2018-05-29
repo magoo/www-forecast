@@ -20,7 +20,7 @@
       </li>
 
       <li class="nav-item ">
-        <a class="nav-link" data-toggle="modal" data-target="#signOutModal">Sign Out</a>
+        <a href="#" class="nav-link" data-toggle="modal" data-target="#signOutModal">Sign Out</a>
       </li>
 
     </ul>
@@ -42,8 +42,8 @@
       <div style="display:none;" class="modal-body">
         <div class="g-signin2" data-onsuccess="onSignIn"></div>
       </div>
-      <div class="modal-footer" id="loginmodalbox">
-        <button type="button" class="btn btn-secondary" onclick="signOut();window.location='/logout'" data-dismiss="modal">Sign out</button>
+      <div class="modal-footer">
+        <button id="sign-out" type="button" class="btn btn-secondary" data-dismiss="modal">Sign out</button>
       </div>
     </div>
   </div>
