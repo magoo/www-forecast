@@ -8,6 +8,7 @@ import (
   "github.com/aws/aws-sdk-go/aws"
   "time"
   "strconv"
+  "errors"
 )
 
 type Scenario struct {
@@ -22,12 +23,14 @@ type Scenario struct {
   BrierScore    float64          `dynamodbav:"brierscore"`
   Concluded     bool             `dynamodbav:"concluded"`
   ConcludedTime string           `dynamodbav:"concludetime"`
-  Records       []string         `dynamodbav:"records"`
+  Records       []string         `dynamodbav:"records,stringset"`
 }
 
 
 
 func CreateScenario(title string, description string, options []string, hd string, owner string) (sid string){
+
+      t := time.Now()
 
   		fuuid := uuid.New()
   		item := Scenario{
@@ -37,6 +40,7 @@ func CreateScenario(title string, description string, options []string, hd strin
   		    Title: title,
   		    Description: description,
           Options: options,
+          Records: []string{t.Format("2006-01-02") + ": Created.", },
   		}
 
   		PutItem(item, "scenarios-tf")
@@ -131,9 +135,13 @@ func DeleteScenario(sid string, owner string) {
 
 }
 
-func (s Scenario) GetAverageForecasts() (avg []int) {
+func (s Scenario) GetAverageForecasts() (avg []int, err error) {
 
   sr := ViewScenarioResults(s.Sid)
+
+  if len(sr) < 1 {
+    return []int{}, errors.New("No results.")
+  }
 
   avg = []int{}
 	size := len(sr[0].Forecasts)
@@ -148,15 +156,17 @@ func (s Scenario) GetAverageForecasts() (avg []int) {
 		avg = append(avg, sum / len(sr))
 	}
 
-  return avg
+  return avg, nil
 
 }
 
 func (s Scenario) AddRecord(user string) {
 
-  results := s.GetAverageForecasts()
+  results, err := s.GetAverageForecasts()
 
-
+  if err != nil {
+    return
+  }
 
   // func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string, expressionattrvalues map[string]*dynamodb.AttributeValue, table string, conditionexpression string ) (err error) {
   //Primary key for update query
