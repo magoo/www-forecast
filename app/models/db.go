@@ -9,8 +9,9 @@ import (
 		"os"
 )
 
+//Revel config not accessible here. Using OS environment instead.
 var sess, _ = session.NewSession(&aws.Config{
-		Region: aws.String("us-west-2"),
+		Region: aws.String(os.Getenv("E6E_AWS_ENV")),
 	},
 )
 
