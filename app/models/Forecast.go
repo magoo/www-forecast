@@ -31,14 +31,14 @@ func CreateForecast (u string, f []int, sid string, hd string) {
   		    Forecasts: f,
   		}
 
-  		PutItem(item, "forecasts-tf")
+  		PutItem(item, "answers-tf")
 
 }
 
 func ViewScenarioResults (sid string) (c []Forecast) {
   //Need to do a HD check here to prevent IDOR.
 
-    result := GetPrimaryIndexItem(sid, "id", "id-index", "forecasts-tf")
+    result := GetPrimaryIndexItem(sid, "id", "id-index", "answers-tf")
 
     c = []Forecast{}
 
@@ -69,7 +69,7 @@ func DeleteScenarioForecasts(sid string) {
 
     for _, v  := range fs {
       fmt.Println("Deleting: ", v.Answer.Id, v.Answer.OwnerID)
-      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "sid", "user", "forecasts-tf")
+      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "sid", "user", "answers-tf")
     }
 
 

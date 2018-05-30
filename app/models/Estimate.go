@@ -32,14 +32,21 @@ func CreateEstimate (title string, description string, unit string, hd string, o
           		    Title: title,
           		    Description: description,
                   Records: []string{t.Format("2006-01-02") + ": Created.", },
+                  URL: "estimate/" + euuid.String(),
                 },
           Unit: unit,
   		}
 
-  		PutItem(item, "estimates-tf")
+  		PutItem(item, "questions-tf")
       fmt.Println(unit)
 
       return euuid.String()
+}
+
+func (e Estimate) GetURL() (url string) {
+
+  return "/view/estimate/" + e.Id
+
 }
 
 func UpdateEstimate (eid string, title string, description string, unit string, user string) {
@@ -69,13 +76,13 @@ func UpdateEstimate (eid string, title string, description string, unit string, 
   updateexpression := "SET title = :t, description = :d, unitname = :unit"
   conditionexpression := "ownerid = :user"
 
-  UpdateItem(key, updateexpression, expressionattrvalues, "estimates-tf", conditionexpression)
+  UpdateItem(key, updateexpression, expressionattrvalues, "questions-tf", conditionexpression)
 
 }
 
 func GetEstimate (eid string) (e Estimate) {
 
-  result := GetPrimaryItem(eid, "id", "estimates-tf")
+  result := GetPrimaryItem(eid, "id", "questions-tf")
 
   e = Estimate{}
 
@@ -96,7 +103,7 @@ func GetEstimate (eid string) (e Estimate) {
 
 func ListEstimates(user string) (e []Estimate) {
 
-  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "estimates-tf")
+  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "questions-tf")
 
   e = []Estimate{}
 
@@ -112,7 +119,7 @@ func ListEstimates(user string) (e []Estimate) {
 
 func DeleteEstimate(eid string, owner string) {
 
-  DeletePrimaryItem(eid, "id", "estimates-tf", "ownerid", owner)
+  DeletePrimaryItem(eid, "id", "questions-tf", "ownerid", owner)
 
   fmt.Println("Deleted estimate.", eid)
 
@@ -127,7 +134,7 @@ func DeleteEstimateRanges(eid string) {
 
     for _, v  := range er {
       fmt.Println("Deleting: ", v.Answer.Id, v.Answer.OwnerID)
-      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "eid", "user", "ranges-tf")
+      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "eid", "user", "answers-tf")
     }
 
 

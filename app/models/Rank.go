@@ -29,15 +29,22 @@ func CreateRank (title string, description string, options []string,  hd string,
             Title: title,
             Description: description,
             Records: []string{t.Format("2006-01-02") + ": Created.", },
+            URL: "rank/" + ruuid.String(),
           },
   				Options: options,
   		}
 
-  		PutItem(item, "ranks-tf")
+  		PutItem(item, "questions-tf")
 
   		fmt.Println("Successfully added.")
 
       return ruuid.String()
+
+}
+
+func (r Rank) GetURL() (url string) {
+
+  return "/view/rank/" + r.Id
 
 }
 
@@ -75,7 +82,7 @@ func UpdateRank (rid string, title string, description string, options []string,
   //Enforce moderator
   conditionexpression := "ownerid = :user"
 
-  UpdateItem(key, updateexpression, expressionattrvalues, "ranks-tf", conditionexpression)
+  UpdateItem(key, updateexpression, expressionattrvalues, "questions-tf", conditionexpression)
 
   fmt.Println("Updated rank.")
 
@@ -84,7 +91,7 @@ func UpdateRank (rid string, title string, description string, options []string,
 
 func GetRank (rid string) (r Rank) {
 
-  result := GetPrimaryItem(rid, "id", "ranks-tf")
+  result := GetPrimaryItem(rid, "id", "questions-tf")
 
   r = Rank{}
 
@@ -105,7 +112,7 @@ func GetRank (rid string) (r Rank) {
 
 func ListRanks(user string) (r []Rank) {
 
-  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "ranks-tf")
+  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "questions-tf")
 
   r = []Rank{}
 
@@ -121,7 +128,7 @@ func ListRanks(user string) (r []Rank) {
 
 func DeleteRank(rid string, owner string) {
 
-  DeletePrimaryItem(rid, "id", "ranks-tf", "ownerid", owner)
+  DeletePrimaryItem(rid, "id", "questions-tf", "ownerid", owner)
 
   fmt.Println("Deleted rank.", rid)
 
@@ -132,7 +139,7 @@ func DeleteRank(rid string, owner string) {
 func ViewRankResults (rid string) (s []Sort) {
   //Need to do a HD check here to prevent IDOR.
 
-    result := GetPrimaryIndexItem(rid, "id", "id-index", "sorts-tf")
+    result := GetPrimaryIndexItem(rid, "id", "id-index", "answers-tf")
 
     s = []Sort{}
 

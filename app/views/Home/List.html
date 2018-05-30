@@ -22,8 +22,8 @@ function removeParent(e){
   {{template "flash.html" .}}
 
     <div class="list-group">
-      {{if .f}}
-      <h1>Scenarios</h1>
+      {{if .qs}}
+      <h2>Questions you've created</h2>
       {{else}}
         <div class="card">
           <div class="card-body">
@@ -32,9 +32,9 @@ function removeParent(e){
             </div>
         </div>
       {{end}}
-      {{range .f}}
+      {{range .qs}}
       <div class="list-group-item">
-        <a href="/view/scenario/{{.Id}}">
+        <a href="/view/{{.URL}}">
           <h4 class="list-group-item-heading">{{.Title}}</h4>
         </a>
           <p class="list-group-item-text">{{.Description}}</p>
@@ -43,49 +43,6 @@ function removeParent(e){
       {{end}}
     </div>
 
-    <div class="list-group mt-3">
-      {{if .e}}
-      <h1>Estimates</h1>
-      {{else}}
-        <div class="card">
-          <div class="card-body">
-            <h6>No estimates created.</h6>
-            <p>Create a estimate on the navigation bar above.</p>
-            </div>
-        </div>
-      {{end}}
-      {{range .e}}
-      <div class="list-group-item">
-        <a href="/view/estimate/{{.Id}}">
-          <h4 class="list-group-item-heading">{{.Title}}</h4>
-        </a>
-          <p class="list-group-item-text">{{.Description}}</p>
-        </a>
-      </div>
-      {{end}}
-    </div>
-
-    <div class="list-group mt-3">
-      {{if .r}}
-      <h1>Ranks</h1>
-      {{else}}
-        <div class="card">
-          <div class="card-body">
-            <h6>No ranks created.</h6>
-            <p>Create a rank on the navigation bar above.</p>
-            </div>
-        </div>
-      {{end}}
-      {{range .r}}
-      <div class="list-group-item">
-        <a href="/view/rank/{{.Id}}">
-          <h4 class="list-group-item-heading">{{.Title}}</h4>
-        </a>
-          <p class="list-group-item-text">{{.Description}}</p>
-        </a>
-      </div>
-      {{end}}
-    </div>
 
 
     {{if .empty }}

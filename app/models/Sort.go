@@ -30,6 +30,6 @@ func CreateSort (u string, options []int, rid string, hd string) {
           Options: options,
   		}
 
-  		PutItem(item, "sorts-tf")
+  		PutItem(item, "answers-tf")
 
 }
