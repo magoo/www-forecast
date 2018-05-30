@@ -44,7 +44,7 @@ func (c ViewEstimate) Conclude(eid string, resultValue float64) revel.Result {
 
 	e := models.GetEstimate(eid)
 
-	if e.Owner != c.Session["user"] {
+	if e.Question.OwnerID != c.Session["user"] {
 		c.Flash.Error("Cannot conclude estimate you do not own.")
 		return c.Redirect(List.Index)
 	}

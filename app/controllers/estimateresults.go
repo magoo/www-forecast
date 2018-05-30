@@ -26,7 +26,7 @@ func (c EstimateResults) Index(eid string) revel.Result {
 		e := models.GetEstimate(eid)
 
 		// We use the SID from the successful call using the hosted domain, instead of whatever the user gives us.
-		er := models.ViewEstimateResults(e.Eid)
+		er := models.ViewEstimateResults(e.Question.Id)
 		if (len(er)>0){
 			avgmin, avgmax := getAverageRange(er)
 			return c.Render(er, e, avgmin, avgmax)

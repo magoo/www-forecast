@@ -7,33 +7,32 @@ import (
   "github.com/aws/aws-sdk-go/aws"
   //"os"
   "github.com/google/uuid"
+  "time"
 
 )
 
 type Estimate struct {
-  Eid           string        `dynamodbav:"eid"`
-  Title         string        `dynamodbav:"title"`
-  Owner         string        `dynamodbav:"ownerid"`
-  Hd            string        `dynamodbav:"hd"`
-  Unit          string        `dynamodbav:"unitname"`
-  Description   string        `dynamodbav:"description"`
+  Question
   AvgMinimum    float64       `dynamodbav:"minimum"`
   AvgMaximum    float64       `dynamodbav:"maximum"`
   Actual        float64       `dynamodbav:"actual"`
-  BrierScore    float64       `dynamodbav:"brierscore"`
-  Concluded     bool          `dynamodbav:"concluded"`
-  ConcludedTime string        `dynamodbav:"concludetime"`
+  Unit          string        `dynamodbav:"unit"`
 }
 
 func CreateEstimate (title string, description string, unit string, hd string, owner string) (eid string){
 
+      t := time.Now()
+
   		euuid := uuid.New()
   		item := Estimate{
-  				Eid: euuid.String(),
-          Owner: owner,
-          Hd: hd,
-  		    Title: title,
-  		    Description: description,
+        Question: Question{
+          				Id: euuid.String(),
+                  OwnerID: owner,
+                  Hd: hd,
+          		    Title: title,
+          		    Description: description,
+                  Records: []string{t.Format("2006-01-02") + ": Created.", },
+                },
           Unit: unit,
   		}
 
@@ -47,7 +46,7 @@ func UpdateEstimate (eid string, title string, description string, unit string, 
 
   //Primary key for update query
   key := map[string]*dynamodb.AttributeValue {
-    "eid": {
+    "id": {
       S: aws.String(eid),
     },
   }
@@ -76,7 +75,7 @@ func UpdateEstimate (eid string, title string, description string, unit string, 
 
 func GetEstimate (eid string) (e Estimate) {
 
-  result := GetPrimaryItem(eid, "eid", "estimates-tf")
+  result := GetPrimaryItem(eid, "id", "estimates-tf")
 
   e = Estimate{}
 
@@ -86,7 +85,7 @@ func GetEstimate (eid string) (e Estimate) {
     panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
   }
 
-  if e.Eid == "" {
+  if e.Question.Id == "" {
       fmt.Println("Could not find that scenario.")
       return
   }
@@ -113,7 +112,7 @@ func ListEstimates(user string) (e []Estimate) {
 
 func DeleteEstimate(eid string, owner string) {
 
-  DeletePrimaryItem(eid, "eid", "estimates-tf", "ownerid", owner)
+  DeletePrimaryItem(eid, "id", "estimates-tf", "ownerid", owner)
 
   fmt.Println("Deleted estimate.", eid)
 
@@ -123,12 +122,12 @@ func DeleteEstimate(eid string, owner string) {
 
 func DeleteEstimateRanges(eid string) {
 
-    es := ViewEstimateResults(eid)
+    er := ViewEstimateResults(eid)
 
 
-    for _, v  := range es {
-      fmt.Println("Deleting: ", v.Eid, v.User)
-      DeleteCompositeIndexItem(v.Eid, v.User, "eid", "user", "ranges-tf")
+    for _, v  := range er {
+      fmt.Println("Deleting: ", v.Answer.Id, v.Answer.OwnerID)
+      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "eid", "user", "ranges-tf")
     }
 
 
