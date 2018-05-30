@@ -115,7 +115,7 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 	}
 
 	fmt.Println("concluding results:", len(sr))
-	af := getAverageForecasts(sr)
+	af, _ := s.GetAverageForecasts()
 
 	//Calculate Brier Score
 	bs := models.BrierCalc(af, resultIndex)
@@ -169,30 +169,11 @@ func (c Scenario) Results(sid string) revel.Result {
 		// We use the SID from the successful call using the hosted domain, instead of whatever the user gives us.
 		sr := models.ViewScenarioResults(s.Question.Id)
 		if (len(sr)>0){
-			avg := getAverageForecasts(sr)
+			avg, _ := s.GetAverageForecasts()
 			return c.Render(sr, s, avg)
 		} else {
 			c.Flash.Error("No results yet.")
 			return c.Redirect("/view/%s", sid)
 		}
 
-}
-
-func getAverageForecasts(sr []models.Forecast) ([]int){
-
-
-	avg := []int{}
-	size := len(sr[0].Forecasts)
-
-	for i := 0; i < size; i++ {
-		sum := 0
-			for _, v := range sr {
-					sum += v.Forecasts[i]
-					//fmt.Println("Adding forecast: ", v.Forecasts[i])
-			}
-			//fmt.Println("Adding average to array: ", sum / len(sr))
-		avg = append(avg, sum / len(sr))
-	}
-
-	return avg
 }
