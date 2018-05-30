@@ -126,7 +126,7 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 	s.ResultIndex = resultIndex
 	s.Question.BrierScore = bs
 
-	models.PutItem(s, "scenarios-tf")
+	models.PutItem(s, "questions-tf")
 
 	return c.Redirect("/view/%s", sid)
 }

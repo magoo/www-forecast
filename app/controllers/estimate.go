@@ -81,7 +81,7 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 	e.Actual = resultValue
 	e.BrierScore = bs
 
-	models.PutItem(e, "estimates-tf")
+	models.PutItem(e, "questions-tf")
 
 	return c.Redirect("/view/estimate/%s", eid)
 }

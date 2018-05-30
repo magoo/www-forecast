@@ -32,15 +32,22 @@ func CreateScenario(title string, description string, options []string, hd strin
   		    Title: title,
   		    Description: description,
           Records: []string{t.Format("2006-01-02") + ": Created.", },
+          URL: "scenario/" + fuuid.String(),
         },
           Options: options,
   		}
 
-  		PutItem(item, "scenarios-tf")
+  		PutItem(item, "questions-tf")
 
   		fmt.Println("Successfully added.")
 
       return fuuid.String()
+
+}
+
+func (s Scenario) GetURL() (url string) {
+
+  return "/view/scenario/" + s.Id
 
 }
 
@@ -75,7 +82,7 @@ func UpdateScenario(sid string, title string, description string, options []stri
       conditionexpression := "ownerid = :user"
 
 
-  		UpdateItem(key, updateexpression, expressionattrvalues, "scenarios-tf", conditionexpression)
+  		UpdateItem(key, updateexpression, expressionattrvalues, "questions-tf", conditionexpression)
 
   		fmt.Println("Updated scenario.")
 }
@@ -83,7 +90,7 @@ func UpdateScenario(sid string, title string, description string, options []stri
 func ViewScenario(sid string) (s Scenario) {
 
   // I'll need to change this to make "secret link" work.
-  result := GetPrimaryItem(sid, "id", "scenarios-tf")
+  result := GetPrimaryItem(sid, "id", "questions-tf")
 
   s = Scenario{}
 
@@ -104,7 +111,7 @@ if s.Question.Id == "" {
 
 func ListScenarios(user string) (s []Scenario) {
 
-  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "scenarios-tf")
+  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "questions-tf")
 
   s = []Scenario{}
 
@@ -120,7 +127,7 @@ func ListScenarios(user string) (s []Scenario) {
 
 func DeleteScenario(sid string, owner string) {
 
-  DeletePrimaryItem(sid, "id", "scenarios-tf", "ownerid", owner)
+  DeletePrimaryItem(sid, "id", "questions-tf", "ownerid", owner)
 
   fmt.Println("Deleted scenario.", sid)
 
@@ -192,7 +199,7 @@ func (s Scenario) AddRecord(user string) {
 
   //av, err := dynamodbattribute.MarshalMap(item)
 
-  UpdateItem(key, "ADD records :r", item, "scenarios-tf", "ownerid = :user")
+  UpdateItem(key, "ADD records :r", item, "questions-tf", "ownerid = :user")
 
 
 

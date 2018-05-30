@@ -33,14 +33,14 @@ func CreateRange (u string, min float64, max float64, eid string, hd string) {
           Maximum: max,
   		}
 
-  		PutItem(item, "ranges-tf")
+  		PutItem(item, "answers-tf")
 
 }
 
 func ViewEstimateResults (eid string) (rs []Range) {
   //Need to do a HD check here to prevent IDOR.
 
-    result := GetPrimaryIndexItem(eid, "id", "id-index", "ranges-tf")
+    result := GetPrimaryIndexItem(eid, "id", "id-index", "answers-tf")
 
     rs = []Range{}
 

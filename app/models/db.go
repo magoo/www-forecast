@@ -15,8 +15,6 @@ var sess, _ = session.NewSession(&aws.Config{
 	},
 )
 
-var dbname = "scenarios-tf"
-
 var Svc = dynamodb.New(sess)
 
 func PutItem(item interface{}, table string) (err error) {

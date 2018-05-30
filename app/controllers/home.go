@@ -31,33 +31,22 @@ func (c Home) List() revel.Result {
 	//The interceptor in init() should enforce that we have this.
 	//This protects us just in case, enforcing literally anything in the "hd" field.
 	//fmt.Println("App controller is launching")
-	f := models.ListScenarios(c.Session["user"])
+	qs := models.ListQuestions(c.Session["user"])
 
 	empty := true
 
-	if (len(f) > 0) {
+	if (len(qs) > 0) {
 
 		empty = false
 
 	}
 
-	e := models.ListEstimates(c.Session["user"])
-
-	if (len(e) > 0) {
-
-		empty = false
-
-	}
+//Eventually show recent answers
+//	as := models.ListAnswers(c.Session["user"])
+//	if (len(as) > 0) {
+//		empty = false
+//	}
 
 
-	r := models.ListRanks(c.Session["user"])
-
-	if (len(e) > 0) {
-
-		empty = false
-
-	}
-
-
-	return c.Render(f, e, r, empty)
+	return c.Render(qs, empty)
 }
