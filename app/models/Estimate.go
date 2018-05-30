@@ -7,47 +7,53 @@ import (
   "github.com/aws/aws-sdk-go/aws"
   //"os"
   "github.com/google/uuid"
+  "time"
 
 )
 
 type Estimate struct {
-  Eid           string        `dynamodbav:"eid"`
-  Title         string        `dynamodbav:"title"`
-  Owner         string        `dynamodbav:"ownerid"`
-  Hd            string        `dynamodbav:"hd"`
-  Unit          string        `dynamodbav:"unitname"`
-  Description   string        `dynamodbav:"description"`
+  Question
   AvgMinimum    float64       `dynamodbav:"minimum"`
   AvgMaximum    float64       `dynamodbav:"maximum"`
   Actual        float64       `dynamodbav:"actual"`
-  BrierScore    float64       `dynamodbav:"brierscore"`
-  Concluded     bool          `dynamodbav:"concluded"`
-  ConcludedTime string        `dynamodbav:"concludetime"`
+  Unit          string        `dynamodbav:"unit"`
 }
 
 func CreateEstimate (title string, description string, unit string, hd string, owner string) (eid string){
 
+      t := time.Now()
+
   		euuid := uuid.New()
   		item := Estimate{
-  				Eid: euuid.String(),
-          Owner: owner,
-          Hd: hd,
-  		    Title: title,
-  		    Description: description,
+        Question: Question{
+          				Id: euuid.String(),
+                  OwnerID: owner,
+                  Hd: hd,
+          		    Title: title,
+          		    Description: description,
+                  Records: []string{t.Format("2006-01-02") + ": Created.", },
+                  URL: "estimate/" + euuid.String(),
+                },
           Unit: unit,
   		}
 
-  		PutItem(item, "estimates-tf")
+  		PutItem(item, "questions-tf")
       fmt.Println(unit)
 
       return euuid.String()
+}
+
+func (e Estimate) GetURL() (url string) {
+
+  return "/view/estimate/" + e.Id
+
 }
 
 func UpdateEstimate (eid string, title string, description string, unit string, user string) {
 
   //Primary key for update query
   key := map[string]*dynamodb.AttributeValue {
-    "eid": {
+    "id": {
       S: aws.String(eid),
     },
   }
@@ -70,13 +76,13 @@ func UpdateEstimate (eid string, title string, description string, unit string, 
   updateexpression := "SET title = :t, description = :d, unitname = :unit"
   conditionexpression := "ownerid = :user"
 
-  UpdateItem(key, updateexpression, expressionattrvalues, "estimates-tf", conditionexpression)
+  UpdateItem(key, updateexpression, expressionattrvalues, "questions-tf", conditionexpression)
 
 }
 
 func GetEstimate (eid string) (e Estimate) {
 
-  result := GetPrimaryItem(eid, "eid", "estimates-tf")
+  result := GetPrimaryItem(eid, "id", "questions-tf")
 
   e = Estimate{}
 
@@ -86,7 +92,7 @@ func GetEstimate (eid string) (e Estimate) {
     panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
   }
 
-  if e.Eid == "" {
+  if e.Question.Id == "" {
       fmt.Println("Could not find that scenario.")
       return
   }
@@ -97,7 +103,7 @@ func GetEstimate (eid string) (e Estimate) {
 
 func ListEstimates(user string) (e []Estimate) {
 
-  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "estimates-tf")
+  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "questions-tf")
 
   e = []Estimate{}
 
@@ -113,7 +119,7 @@ func ListEstimates(user string) (e []Estimate) {
 
 func DeleteEstimate(eid string, owner string) {
 
-  DeletePrimaryItem(eid, "eid", "estimates-tf", "ownerid", owner)
+  DeletePrimaryItem(eid, "id", "questions-tf", "ownerid", owner)
 
   fmt.Println("Deleted estimate.", eid)
 
@@ -123,12 +129,12 @@ func DeleteEstimate(eid string, owner string) {
 
 func DeleteEstimateRanges(eid string) {
 
-    es := ViewEstimateResults(eid)
+    er := ViewEstimateResults(eid)
 
 
-    for _, v  := range es {
-      fmt.Println("Deleting: ", v.Eid, v.User)
-      DeleteCompositeIndexItem(v.Eid, v.User, "eid", "user", "ranges-tf")
+    for _, v  := range er {
+      fmt.Println("Deleting: ", v.Answer.Id, v.Answer.OwnerID)
+      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "eid", "user", "answers-tf")
     }
 
 

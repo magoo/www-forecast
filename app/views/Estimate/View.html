@@ -1,37 +1,15 @@
-{{set . "title" "Rank"}}
+{{set . "title" "Estimate"}}
 {{template "header.html" .}}
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
 {{template "flash.html" .}}
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
-$( function() {
-$( "#sortable" ).sortable(
-  {
-    connectWith: '.sortable-list',
-    update: function(event, ui) {
-      var order = $(this).sortable('toArray');
-        console.log({
-        positions: order
-      });
-    }
-});
-
-
-$( "#sortable" ).disableSelection();
-});
-</script>
-
-
-
-<script>
-  function del(rid){
+  function del(eid){
     $.ajax({
-    url: '/delete/ranks',
+    url: '/estimate/delete',
     type: 'post',
     data: {
-        rid: rid
+        eid: eid
     },
     headers: {
         "X-CSRF-Token": {{ .csrf_token }},   //If your header name has spaces or any other char not appropriate
@@ -44,67 +22,72 @@ $( "#sortable" ).disableSelection();
     window.location.replace("/list")
   }
 </script>
-{{ if .r.Concluded }}
+{{ if .e.Concluded }}
 <div class="alert alert-success">
-	This estimate has concluded with an actual value of <strong>{{.r.Actual}}</strong> and a Brier score of <strong>{{.r.BrierScore}}</strong>.
+	This estimate has concluded with an actual value of <strong>{{.e.Actual}}</strong> and a Brier score of <strong>{{.e.BrierScore}}</strong>.
 </div>
 {{ end }}
 
-{{template "titleCard.html" .r}}
+
+{{template "titleCard.html" .e}}
 
   <div class="card mb-3">
       <div class="card-body">
-
-        <form action="/sort" method="post">
+        <form action="/range" method="post">
           <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
+
           <div class="form-group">
 
-            {{ if .r.Concluded}}
+            {{ if .e.Concluded}}
             {{else}}
-
+              <h5 class="mb-3">Enter Range</h5>
             {{end}}
+              <div class="row ">
+                <div class="input-group mb-3 col-2">
+                  <input name="minimum" value="{{.e.AvgMinimum}}" type="text" class="form-control odds" {{if $.e.Concluded}}disabled{{end}}  aria-label="Minumum Value">
+                  <div class="input-group-append">
+                    <span class="input-group-text">Min</span>
+                  </div>
+                </div>
 
-
-              <div class="row">
-
-              </div>
-              <div class="row">
-                <table class="table">
-                  <tbody id="sortable">
-                    {{range $index, $option := .r.Options}}
-                      <tr class="ui-state-default"><td><i class="fas fa-bars"></i><input type="hidden" name="options[]" value="{{$index}}" /> {{$option}}</td></tr>
-                    {{end}}
-                  </tbody>
-                </table>
-<small class="form-text text-muted">Please sort this list based on your preferences, top to bottom, greatest to least.</small>
-              </div>
-
-
+                <div class="input-group mb-3 col-2">
+                  <input name="maximum" value="{{.e.AvgMaximum}}" type="text" class="form-control odds" {{if $.e.Concluded}}disabled{{end}} aria-label="Maximum Value">
+                  <div class="input-group-append">
+                    <span class="input-group-text">Max</span>
+                  </div>
+                </div>
+                <div class="col-8"></div>
             </div>
+            <small class="form-text text-muted">Unit type is <strong>{{.e.Unit}}</strong></small>
+            <small class="form-text text-muted">You should believe that the true value falls between the Min and Max, with 90% certainty.</small>
 
 
-
-
+          </div>
 
           <div class="form-group" role="group" aria-label="...">
-            <input type="hidden" name="rid" value="{{.r.Rid}}"/>
-            {{ if .r.Concluded}}
+            <input type="hidden" name="eid" value="{{.e.Question.Id}}"/>
+            {{ if .e.Concluded}}
             {{else}}
-            <button class="btn btn-info btn-sm" type="submit">Submit ranking</button>
+            <button class="btn btn-info btn-sm" type="submit">Submit Forecast</button>
             {{end}}
-            <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/rank/{{.r.Rid}}/results'">Results</button>
+            <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/estimate/{{.e.Question.Id}}/results'">Results</button>
           </div>
 
         </form>
       </div>
     </div>
 
-    {{ if eq .u .r.Owner }}
+    {{ if eq .u .e.Question.OwnerID }}
       <div class="card">
           <div class="card-body">
             <h6>Moderator Options</h6>
+
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.r.Rid}})" class="btn btn-info">Delete</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.e.Question.Id}})" class="btn btn-info">Delete</button>
+              {{if .e.Concluded}}
+              {{else}}
+                <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
+              {{end}}
           </div>
       </div>
     {{end}}
@@ -114,29 +97,25 @@ $( "#sortable" ).disableSelection();
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Edit this Rank</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Edit this estimate</h5>
           </div>
           <div class="modal-body">
-            <form method="post" action="/view/rank/{{.r.Rid}}/edit">
+            <form method="post" action="/view/estimate/{{.e.Question.Id}}/edit">
               <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
               <div class="form-group">
                 <label>Title</label>
-                <input type="text" class="form-control" name="title" value="{{.r.Title}}" />
+                <input type="text" class="form-control" name="title" value="{{.e.Title}}" />
               </div>
 
               <div class="form-group">
                 <label>Description</label>
-                <textarea name="description" class="form-control">{{.r.Description}} </textarea>
+                <textarea name="description" class="form-control">{{.e.Description}} </textarea>
               </div>
 
               <div class="form-group">
-                <label>Options</label>
-                {{range $index, $option := .r.Options}}
-
-                  <input type="text" class="form-control" name="options[{{$index}}]" value="{{$option}}" />
-
-                {{end}}
+                <label>Unit</label>
+                <input type="text" class="form-control" name="unit" value="{{.e.Unit}}" />
               </div>
 
 
@@ -163,7 +142,7 @@ $( "#sortable" ).disableSelection();
           </div>
           <div class="modal-body">
 
-            <form method="post" action="/view/estimate/{{.r.Rid}}/conclude">
+            <form method="post" action="/view/estimate/{{.e.Question.Id}}/conclude">
               <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
                 <div class="form-group">
                   <label>Final Value</label>

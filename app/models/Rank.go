@@ -7,34 +7,34 @@ import (
   "github.com/aws/aws-sdk-go/aws"
   //"os"
   "github.com/google/uuid"
+  "time"
 
 )
 
 type Rank struct {
-  Rid           string        `dynamodbav:"rid"`
-  Title         string        `dynamodbav:"title"`
-  Owner         string        `dynamodbav:"ownerid"`
-  Hd            string        `dynamodbav:"hd"`
-  Description   string        `dynamodbav:"description"`
+  Question
   Options       []string      `dynamodbav:"options"`
-  BrierScore    float64       `dynamodbav:"brierscore"`
-  Concluded     bool          `dynamodbav:"concluded"`
-  ConcludedTime string        `dynamodbav:"concludetime"`
 }
 
 func CreateRank (title string, description string, options []string,  hd string, owner string) (rid string){
 
+      t := time.Now()
+
   		ruuid := uuid.New()
   		item := Rank{
-  				Rid: ruuid.String(),
-          Owner: owner,
-          Options: options,
-          Hd: hd,
-  		    Title: title,
-  		    Description: description,
+          Question: Question{
+            Id: ruuid.String(),
+            OwnerID: owner,
+            Hd: hd,
+            Title: title,
+            Description: description,
+            Records: []string{t.Format("2006-01-02") + ": Created.", },
+            URL: "rank/" + ruuid.String(),
+          },
+  				Options: options,
   		}
 
-  		PutItem(item, "ranks-tf")
+  		PutItem(item, "questions-tf")
 
   		fmt.Println("Successfully added.")
 
@@ -42,11 +42,17 @@ func CreateRank (title string, description string, options []string,  hd string,
 
 }
 
+func (r Rank) GetURL() (url string) {
+
+  return "/view/rank/" + r.Id
+
+}
+
 func UpdateRank (rid string, title string, description string, options []string, user string) {
 
   //Key for the table
   key := map[string]*dynamodb.AttributeValue {
-    "rid": {
+    "id": {
       S: aws.String(rid),
     },
   }
@@ -76,7 +82,7 @@ func UpdateRank (rid string, title string, description string, options []string,
   //Enforce moderator
   conditionexpression := "ownerid = :user"
 
-  UpdateItem(key, updateexpression, expressionattrvalues, "ranks-tf", conditionexpression)
+  UpdateItem(key, updateexpression, expressionattrvalues, "questions-tf", conditionexpression)
 
   fmt.Println("Updated rank.")
 
@@ -85,7 +91,7 @@ func UpdateRank (rid string, title string, description string, options []string,
 
 func GetRank (rid string) (r Rank) {
 
-  result := GetPrimaryItem(rid, "rid", "ranks-tf")
+  result := GetPrimaryItem(rid, "id", "questions-tf")
 
   r = Rank{}
 
@@ -95,7 +101,7 @@ func GetRank (rid string) (r Rank) {
     panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
   }
 
-  if r.Rid == "" {
+  if r.Question.Id == "" {
       fmt.Println("Could not find that scenario.")
       return
   }
@@ -106,7 +112,7 @@ func GetRank (rid string) (r Rank) {
 
 func ListRanks(user string) (r []Rank) {
 
-  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "ranks-tf")
+  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "questions-tf")
 
   r = []Rank{}
 
@@ -122,7 +128,7 @@ func ListRanks(user string) (r []Rank) {
 
 func DeleteRank(rid string, owner string) {
 
-  DeletePrimaryItem(rid, "rid", "ranks-tf", "ownerid", owner)
+  DeletePrimaryItem(rid, "id", "questions-tf", "ownerid", owner)
 
   fmt.Println("Deleted rank.", rid)
 
@@ -133,7 +139,7 @@ func DeleteRank(rid string, owner string) {
 func ViewRankResults (rid string) (s []Sort) {
   //Need to do a HD check here to prevent IDOR.
 
-    result := GetPrimaryIndexItem(rid, "rid", "rid-index", "sorts-tf")
+    result := GetPrimaryIndexItem(rid, "id", "id-index", "answers-tf")
 
     s = []Sort{}
 

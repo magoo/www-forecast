@@ -1,0 +1,55 @@
+{{set . "title" "Your Measurements"}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+<script>
+
+function addOption(){
+
+  $("#forecast-form").append("<div class=\"input-group remove\"><input type=\"text\" name=\"options[]\" class=\"form-control\" placeholder=\"Enter option here...\"><div class=\"input-group-append\"><span class=\"input-group-text\" id=\"basic-addon1\" onclick=\"removeParent(this)\">Delete</span></div></div>");
+}
+
+
+
+function removeParent(e){
+  $(e).closest('.remove').remove();
+}
+
+</script>
+
+
+  {{template "flash.html" .}}
+
+    <div class="list-group">
+      {{if .qs}}
+      <h2>Questions you've created</h2>
+      {{else}}
+        <div class="card">
+          <div class="card-body">
+            <h6>No scenarios created.</h6>
+            <p>Create a scenario on the navigation bar above.</p>
+            </div>
+        </div>
+      {{end}}
+      {{range .qs}}
+      <div class="list-group-item">
+        <a href="/view/{{.URL}}">
+          <h4 class="list-group-item-heading">{{.Title}}</h4>
+        </a>
+          <p class="list-group-item-text">{{.Description}}</p>
+        </a>
+      </div>
+      {{end}}
+    </div>
+
+
+
+    {{if .empty }}
+
+    {{end}}
+
+
+
+
+{{template "footer.html" .}}

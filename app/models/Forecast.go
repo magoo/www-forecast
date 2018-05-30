@@ -10,12 +10,8 @@ import (
 )
 
 type Forecast struct {
-  Hd            string        `dynamodbav:"hd"`
-  Sid           string        `dynamodbav:"sid"`
-  Date          string        `dynamodbav:"date"`
-  User          string        `dynamodbav:"ownerid"`
+  Answer
   Forecasts     []int         `dynamodbav:"forecasts"`
-  UserAlias     string        `dynamodbav:"useralias"`
 }
 
 func CreateForecast (u string, f []int, sid string, hd string) {
@@ -25,22 +21,24 @@ func CreateForecast (u string, f []int, sid string, hd string) {
       t := time.Now()
 
   		item := Forecast{
-          Hd: hd,
-          Sid: sid,
-          Date: t.String(),
-  		    User: u,
-          UserAlias: namesgenerator.GetRandomName(0),
+          Answer: Answer{
+            Hd: hd,
+            Id: sid,
+            Date: t.String(),
+    		    OwnerID: u,
+            UserAlias: namesgenerator.GetRandomName(0),
+          },
   		    Forecasts: f,
   		}
 
-  		PutItem(item, "forecasts-tf")
+  		PutItem(item, "answers-tf")
 
 }
 
 func ViewScenarioResults (sid string) (c []Forecast) {
   //Need to do a HD check here to prevent IDOR.
 
-    result := GetPrimaryIndexItem(sid, "sid", "sid-index", "forecasts-tf")
+    result := GetPrimaryIndexItem(sid, "id", "id-index", "answers-tf")
 
     c = []Forecast{}
 
@@ -56,7 +54,7 @@ func ViewScenarioResults (sid string) (c []Forecast) {
 func ViewUserScenarioResults (uid string, sid string) (userForecast Forecast) {
   results := ViewScenarioResults(sid)
   for _, result := range results {
-    if result.User == uid {
+    if result.Answer.OwnerID == uid {
       userForecast = result
     }
   }
@@ -70,8 +68,8 @@ func DeleteScenarioForecasts(sid string) {
 
 
     for _, v  := range fs {
-      fmt.Println("Deleting: ", v.Sid, v.User)
-      DeleteCompositeIndexItem(v.Sid, v.User, "sid", "user", "forecasts-tf")
+      fmt.Println("Deleting: ", v.Answer.Id, v.Answer.OwnerID)
+      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "sid", "user", "answers-tf")
     }
 
 

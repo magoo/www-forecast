@@ -27,7 +27,7 @@ $(document).ready(function(){
   function del(sid){
 
       $.ajax({
-      url: '/delete',
+      url: '/scenario/delete',
       type: 'post',
       data: {
           sid: sid
@@ -66,7 +66,7 @@ $(document).ready(function(){
           <h5 class="modal-title" id="exampleModalLabel">Edit this scenario</h5>
         </div>
         <div class="modal-body">
-          <form method="post" action="/view/{{.f.Sid}}/edit">
+          <form method="post" action="/view/scenario/{{.f.Question.Id}}/edit">
             <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
             <div class="form-group">
@@ -114,7 +114,7 @@ $(document).ready(function(){
         </div>
         <div class="modal-body">
 
-          <form method="post" action="/view/{{.f.Sid}}/conclude">
+          <form method="post" action="/view/scenario/{{.f.Question.Id}}/conclude">
             <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
               {{range $index, $option := .f.Options}}
@@ -182,9 +182,9 @@ $(document).ready(function(){
       {{ if .f.Concluded}}
       {{else}}
       <div class="form-group" role="group" aria-label="...">
-        <input type="hidden" name="sid" value="{{.f.Sid}}"/>
+        <input type="hidden" name="sid" value="{{.f.Question.Id}}"/>
         <button class="btn btn-info btn-sm" type="submit">Submit Forecast</button>
-        <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/{{.f.Sid}}/results'">Results</button>
+        <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/scenario/{{.f.Question.Id}}/results'">Results</button>
       </div>
       {{end}}
     </form>
@@ -205,18 +205,18 @@ $(document).ready(function(){
 
     {{end}}
 
-    {{ if eq .u .f.Owner }}
+    {{ if eq .u .f.Question.OwnerID }}
       <div class="card">
           <div class="card-body">
             <h6>Moderator Options</h6>
             <small class="form-text text-muted">Record this forecast.</small>
-              <form name="recordForm" action="/view/{{.f.Sid}}/record" method="post">
+              <form name="recordForm" action="/view/scenario/{{.f.Question.Id}}/record" method="post">
                 <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
                 <button class="btn btn-light btn-sm" class="btn btn-info">Record</button>
               </form>
               <small class="form-text text-muted">Admin the forecast.</small>
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.f.Sid}})" class="btn btn-info">Delete</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.f.Question.Id}})" class="btn btn-info">Delete</button>
               {{if .f.Concluded}}
               {{else}}
                 <!-- <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button> -->

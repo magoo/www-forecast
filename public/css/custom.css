@@ -46,5 +46,25 @@ td {
   font-weight: 300;
 }
 
+.corner-ribbon{
+  width: 200px;
+  background: #e43;
+  text-align: center;
+  line-height: 50px;
+  letter-spacing: 1px;
+  color: #f0f0f0;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  position: fixed;
+  top: 25px;
+  right: -50px;
+  left: auto;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  background: #e43;
+}
+
+
+
 
 /* animation */

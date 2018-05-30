@@ -9,12 +9,8 @@ import (
 )
 
 type Sort struct {
-  Hd            string        `dynamodbav:"hd"`
-  Rid           string        `dynamodbav:"rid"`
-  Date          string        `dynamodbav:"date"`
-  User          string        `dynamodbav:"ownerid"`
+  Answer
   Options       []int      `dynamodbav:"options"`
-  UserAlias     string        `dynamodbav:"useralias"`
 }
 
 func CreateSort (u string, options []int, rid string, hd string) {
@@ -24,14 +20,16 @@ func CreateSort (u string, options []int, rid string, hd string) {
       t := time.Now()
 
   		item := Sort{
-          Hd: hd,
-          Rid: rid,
-          Date: t.String(),
+        Answer: Answer{
+            Hd: hd,
+            Id: rid,
+            Date: t.String(),
+            OwnerID: u,
+            UserAlias: namesgenerator.GetRandomName(0),
+          },
           Options: options,
-  		    User: u,
-          UserAlias: namesgenerator.GetRandomName(0),
   		}
 
-  		PutItem(item, "sorts-tf")
+  		PutItem(item, "answers-tf")
 
 }

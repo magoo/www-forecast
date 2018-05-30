@@ -10,13 +10,9 @@ import (
 )
 
 type Range struct {
-  Hd            string        `dynamodbav:"hd"`
-  Eid           string        `dynamodbav:"eid"`
-  Date          string        `dynamodbav:"date"`
-  User          string        `dynamodbav:"ownerid"`
+  Answer
   Minimum       float64       `dynamodbav:"minimum"`
   Maximum       float64       `dynamodbav:"maximum"`
-  UserAlias     string        `dynamodbav:"useralias"`
 }
 
 func CreateRange (u string, min float64, max float64, eid string, hd string) {
@@ -26,23 +22,25 @@ func CreateRange (u string, min float64, max float64, eid string, hd string) {
       t := time.Now()
 
   		item := Range{
-          Hd: hd,
-          Eid: eid,
-          Date: t.String(),
-  		    User: u,
-          UserAlias: namesgenerator.GetRandomName(0),
+          Answer: Answer{
+            Hd: hd,
+            Id: eid,
+            Date: t.String(),
+            OwnerID: u,
+            UserAlias: namesgenerator.GetRandomName(0),
+          },
   		    Minimum: min,
           Maximum: max,
   		}
 
-  		PutItem(item, "ranges-tf")
+  		PutItem(item, "answers-tf")
 
 }
 
 func ViewEstimateResults (eid string) (rs []Range) {
   //Need to do a HD check here to prevent IDOR.
 
-    result := GetPrimaryIndexItem(eid, "eid", "eid-index", "ranges-tf")
+    result := GetPrimaryIndexItem(eid, "id", "id-index", "answers-tf")
 
     rs = []Range{}
 
