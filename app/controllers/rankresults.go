@@ -40,7 +40,7 @@ func (c RankResults) Index(rid string) revel.Result {
 		r := models.GetRank(rid)
 
 		// We use the SID from the successful call using the hosted domain, instead of whatever the user gives us.
-		rr := models.ViewRankResults(r.Rid)
+		rr := models.ViewRankResults(r.Question.Id)
 		if (len(rr)>0){
 			pw := getPositionalWinner(rr)
 			//Return rank results, rank, copeland rank

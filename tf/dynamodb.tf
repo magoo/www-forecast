@@ -109,10 +109,10 @@ resource "aws_dynamodb_table" "ranks" {
   name           = "ranks-tf"
   read_capacity  = 1
   write_capacity = 1
-  hash_key       = "rid"
+  hash_key       = "id"
 
   attribute {
-     name = "rid"
+     name = "id"
      type = "S"
   }
 
@@ -134,11 +134,11 @@ resource "aws_dynamodb_table" "sorts" {
   name           = "sorts-tf"
   read_capacity  = 1
   write_capacity = 1
-  hash_key       = "rid"
+  hash_key       = "id"
   range_key       = "ownerid"
 
   attribute {
-     name = "rid"
+     name = "id"
      type = "S"
   }
   attribute {
@@ -147,8 +147,8 @@ resource "aws_dynamodb_table" "sorts" {
   }
 
   global_secondary_index {
-    name               = "rid-index"
-    hash_key           = "rid"
+    name               = "id-index"
+    hash_key           = "id"
     write_capacity     = 1
     read_capacity      = 1
     projection_type    = "ALL"
