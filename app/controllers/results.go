@@ -26,7 +26,7 @@ func (c Results) Index(sid string) revel.Result {
 		s := models.ViewScenario(sid)
 
 		// We use the SID from the successful call using the hosted domain, instead of whatever the user gives us.
-		sr := models.ViewScenarioResults(s.Sid)
+		sr := models.ViewScenarioResults(s.Question.Id)
 		if (len(sr)>0){
 			avg := getAverageForecasts(sr)
 			return c.Render(sr, s, avg)

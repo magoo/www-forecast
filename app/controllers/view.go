@@ -54,9 +54,9 @@ func (c View) Conclude(sid string, resultIndex int) revel.Result {
 
 	t := time.Now()
 
-	f := models.ViewScenario(sid)
+	s := models.ViewScenario(sid)
 
-	if f.Owner != c.Session["user"] {
+	if s.Question.OwnerID != c.Session["user"] {
 		c.Flash.Error("Cannot conclude scenario you do not own.")
 		return c.Redirect(List.Index)
 	}
@@ -74,13 +74,13 @@ func (c View) Conclude(sid string, resultIndex int) revel.Result {
 	//Calculate Brier Score
 	bs := models.BrierCalc(af, resultIndex)
 
-	f.Concluded = true
-	f.ConcludedTime = t.String()
-	f.Results = af
-	f.ResultIndex = resultIndex
-	f.BrierScore = bs
+	s.Question.Concluded = true
+	s.Question.ConcludedTime = t.String()
+	s.Results = af
+	s.ResultIndex = resultIndex
+	s.Question.BrierScore = bs
 
-	models.PutItem(f, "scenarios-tf")
+	models.PutItem(s, "scenarios-tf")
 
 	return c.Redirect("/view/%s", sid)
 }
