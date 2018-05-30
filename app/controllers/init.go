@@ -8,7 +8,6 @@ func init() {
 	//Main auth. In all controllers, make sure the user is logged in.
 	//Every controller with sensitive content should be here.
 	//Better yet, whitelisting these controllers would be better.
-	revel.InterceptFunc(checkUser, revel.BEFORE, &View{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Scenario{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Forecast{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Estimate{})
