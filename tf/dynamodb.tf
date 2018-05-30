@@ -7,10 +7,10 @@ resource "aws_dynamodb_table" "scenarios" {
   name           = "scenarios-tf"
   read_capacity  = 1
   write_capacity = 1
-  hash_key       = "sid"
+  hash_key       = "id"
 
   attribute {
-     name = "sid"
+     name = "id"
      type = "S"
   }
 
@@ -32,11 +32,11 @@ resource "aws_dynamodb_table" "forecasts" {
   name           = "forecasts-tf"
   read_capacity  = 1
   write_capacity = 1
-  hash_key       = "sid"
+  hash_key       = "id"
   range_key       = "ownerid"
 
   attribute {
-     name = "sid"
+     name = "id"
      type = "S"
   }
   attribute {
@@ -45,8 +45,8 @@ resource "aws_dynamodb_table" "forecasts" {
   }
 
   global_secondary_index {
-    name               = "sid-index"
-    hash_key           = "sid"
+    name               = "id-index"
+    hash_key           = "id"
     write_capacity     = 1
     read_capacity      = 1
     projection_type    = "ALL"

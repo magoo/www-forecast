@@ -12,18 +12,11 @@ import (
 )
 
 type Scenario struct {
-  Sid           string           `dynamodbav:"sid"`
-  Title         string           `dynamodbav:"title"`
-  Owner         string           `dynamodbav:"ownerid"`
-  Hd            string           `dynamodbav:"hd"`
-  Description   string           `dynamodbav:"description"`
+  Question
   Options       []string         `dynamodbav:"Options"`
   Results       []int            `dynamodbav:"results"`
   ResultIndex   int              `dynamodbav:"resultindex"`
-  BrierScore    float64          `dynamodbav:"brierscore"`
-  Concluded     bool             `dynamodbav:"concluded"`
-  ConcludedTime string           `dynamodbav:"concludetime"`
-  Records       []string         `dynamodbav:"records,stringset"`
+
 }
 
 
@@ -34,13 +27,15 @@ func CreateScenario(title string, description string, options []string, hd strin
 
   		fuuid := uuid.New()
   		item := Scenario{
-  				Sid: fuuid.String(),
-          Owner: owner,
+        Question: Question{
+  				Id: fuuid.String(),
+          OwnerID: owner,
           Hd: hd,
   		    Title: title,
   		    Description: description,
-          Options: options,
           Records: []string{t.Format("2006-01-02") + ": Created.", },
+        },
+          Options: options,
   		}
 
   		PutItem(item, "scenarios-tf")
@@ -55,7 +50,7 @@ func UpdateScenario(sid string, title string, description string, options []stri
 
       //Start with the key for the table
       key := map[string]*dynamodb.AttributeValue {
-        "sid": {
+        "id": {
           S: aws.String(sid),
         },
       }
@@ -90,7 +85,7 @@ func UpdateScenario(sid string, title string, description string, options []stri
 func ViewScenario(sid string) (s Scenario) {
 
   // I'll need to change this to make "secret link" work.
-  result := GetPrimaryItem(sid, "sid", "scenarios-tf")
+  result := GetPrimaryItem(sid, "id", "scenarios-tf")
 
   s = Scenario{}
 
@@ -100,7 +95,7 @@ func ViewScenario(sid string) (s Scenario) {
     panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
   }
 
-  if s.Sid == "" {
+if s.Question.Id == "" {
       fmt.Println("Could not find that scenario.")
       return
   }
@@ -127,7 +122,7 @@ func ListScenarios(user string) (s []Scenario) {
 
 func DeleteScenario(sid string, owner string) {
 
-  DeletePrimaryItem(sid, "sid", "scenarios-tf", "ownerid", owner)
+  DeletePrimaryItem(sid, "id", "scenarios-tf", "ownerid", owner)
 
   fmt.Println("Deleted scenario.", sid)
 
@@ -137,7 +132,7 @@ func DeleteScenario(sid string, owner string) {
 
 func (s Scenario) GetAverageForecasts() (avg []int, err error) {
 
-  sr := ViewScenarioResults(s.Sid)
+  sr := ViewScenarioResults(s.Question.Id)
 
   if len(sr) < 1 {
     return []int{}, errors.New("No results.")
@@ -171,8 +166,8 @@ func (s Scenario) AddRecord(user string) {
   // func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string, expressionattrvalues map[string]*dynamodb.AttributeValue, table string, conditionexpression string ) (err error) {
   //Primary key for update query
   key := map[string]*dynamodb.AttributeValue {
-    "sid": {
-      S: aws.String(s.Sid),
+    "id": {
+      S: aws.String(s.Question.Id),
     },
   }
 
