@@ -21,7 +21,7 @@ func (c View) Index(sid string) revel.Result {
 		if c.Validation.HasErrors() {
 			c.Flash.Error("Cannot view. Invalid scenario ID.")
 
-			return c.Redirect(List.Index)
+			return c.Redirect(Home.List)
 		}
 
 		f := models.ViewScenario(sid)
@@ -48,7 +48,7 @@ func (c View) Conclude(sid string, resultIndex int) revel.Result {
 	if c.Validation.HasErrors() {
 		c.Flash.Error("Cannot conclude. Invalid scenario ID.")
 
-		return c.Redirect(List.Index)
+		return c.Redirect(Home.List)
 
 	}
 
@@ -58,7 +58,7 @@ func (c View) Conclude(sid string, resultIndex int) revel.Result {
 
 	if s.Question.OwnerID != c.Session["user"] {
 		c.Flash.Error("Cannot conclude scenario you do not own.")
-		return c.Redirect(List.Index)
+		return c.Redirect(Home.List)
 	}
 
 	sr := models.ViewScenarioResults(sid)
@@ -93,7 +93,7 @@ func (c View) AddRecord(sid string) revel.Result {
 	if c.Validation.HasErrors() {
 		c.Flash.Error("Cannot view. Invalid scenario ID.")
 
-		return c.Redirect(List.Index)
+		return c.Redirect(Home.List)
 	}
 
 	s := models.ViewScenario(sid)

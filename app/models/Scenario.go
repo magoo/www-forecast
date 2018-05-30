@@ -19,8 +19,6 @@ type Scenario struct {
 
 }
 
-
-
 func CreateScenario(title string, description string, options []string, hd string, owner string) (sid string){
 
       t := time.Now()
