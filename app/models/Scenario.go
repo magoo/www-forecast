@@ -160,12 +160,12 @@ func (s Scenario) GetAverageForecasts() (avg []int, err error) {
 
 }
 
-func (s Scenario) AddRecord(user string) {
+func (s Scenario) AddRecord(user string) (err error) {
 
   results, err := s.GetAverageForecasts()
 
   if err != nil {
-    return
+    return err
   }
 
   // func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string, expressionattrvalues map[string]*dynamodb.AttributeValue, table string, conditionexpression string ) (err error) {
@@ -201,6 +201,6 @@ func (s Scenario) AddRecord(user string) {
 
   UpdateItem(key, "ADD records :r", item, "questions-tf", "ownerid = :user")
 
-
+  return err
 
 }

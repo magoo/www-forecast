@@ -144,10 +144,13 @@ func (c Scenario) AddRecord(sid string) revel.Result {
 
 	s := models.ViewScenario(sid)
 	u :=  c.Session["user"]
-	s.AddRecord(u)
+	err := s.AddRecord(u)
+
+	if err != nil {
+		c.Flash.Error("Nothing to record.")
+	}
 
 	return c.Redirect("/view/scenario/%s", sid)
-
 
 }
 
