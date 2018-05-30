@@ -13,7 +13,7 @@ import (
 
 type Scenario struct {
   Question
-  Options       []string         `dynamodbav:"Options"`
+  Options       []string         `dynamodbav:"options"`
   Results       []int            `dynamodbav:"results"`
   ResultIndex   int              `dynamodbav:"resultindex"`
 

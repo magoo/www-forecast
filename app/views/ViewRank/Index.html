@@ -87,24 +87,24 @@ $( "#sortable" ).disableSelection();
 
 
           <div class="form-group" role="group" aria-label="...">
-            <input type="hidden" name="rid" value="{{.r.Rid}}"/>
-            {{ if .r.Concluded}}
+            <input type="hidden" name="rid" value="{{.r.Question.Id}}"/>
+            {{ if .r.Question.Concluded}}
             {{else}}
             <button class="btn btn-info btn-sm" type="submit">Submit ranking</button>
             {{end}}
-            <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/rank/{{.r.Rid}}/results'">Results</button>
+            <button type="button" class="btn btn-light btn-sm" onclick="window.location='/view/rank/{{.r.Question.Id}}/results'">Results</button>
           </div>
 
         </form>
       </div>
     </div>
 
-    {{ if eq .u .r.Owner }}
+    {{ if eq .u .r.Question.OwnerID }}
       <div class="card">
           <div class="card-body">
             <h6>Moderator Options</h6>
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.r.Rid}})" class="btn btn-info">Delete</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.r.Question.Id}})" class="btn btn-info">Delete</button>
           </div>
       </div>
     {{end}}
@@ -117,7 +117,7 @@ $( "#sortable" ).disableSelection();
             <h5 class="modal-title" id="exampleModalLabel">Edit this Rank</h5>
           </div>
           <div class="modal-body">
-            <form method="post" action="/view/rank/{{.r.Rid}}/edit">
+            <form method="post" action="/view/rank/{{.r.Question.Id}}/edit">
               <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
               <div class="form-group">
@@ -163,7 +163,7 @@ $( "#sortable" ).disableSelection();
           </div>
           <div class="modal-body">
 
-            <form method="post" action="/view/estimate/{{.r.Rid}}/conclude">
+            <form method="post" action="/view/estimate/{{.r.Question.Id}}/conclude">
               <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
                 <div class="form-group">
                   <label>Final Value</label>
