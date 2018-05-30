@@ -8,42 +8,41 @@ module:testrunner
 
 
 GET     /                                       Home.Index
-GET     /list                                   List.Index
+GET     /list                                   Home.List
 
 # Authentication routes
 POST    /auth                                   Auth.Create
 DELETE  /auth                                   Auth.Delete
 
-GET     /create                                 Create.Index
-POST    /create                                 Create.Create
-GET     /view/:sid                              View.Index
-POST    /view/:sid/edit                         View.Update
-GET     /view/:sid/results                      Results.Index
-POST    /view/:sid/conclude                     View.Conclude
-POST    /view/:sid/record                       View.AddRecord
+GET     /scenario                               Scenario.Index
+POST    /scenario                               Scenario.Create
+POST    /scenario/delete                        Scenario.Delete
+GET     /view/scenario/:sid                     Scenario.View
+POST    /view/scenario/:sid/edit                Scenario.Update
+GET     /view/scenario/:sid/results             Scenario.Results
+POST    /view/scenario/:sid/conclude            Scenario.Conclude
+POST    /view/scenario/:sid/record              Scenario.AddRecord
 
 GET     /estimate                               Estimate.Index
 POST    /estimate                               Estimate.Create
-GET     /view/estimate/:eid                     ViewEstimate.Index
-GET     /view/estimate/:eid/results             estimateresults.Index
-POST    /view/estimate/:eid/conclude            ViewEstimate.Conclude
+POST    /estimate/delete                        Estimate.Delete
+GET     /view/estimate/:eid                     Estimate.View
+GET     /view/estimate/:eid/results             Estimate.Results
+POST    /view/estimate/:eid/conclude            Estimate.Conclude
 POST    /view/estimate/:eid/edit                Estimate.Update
 
 GET     /rank                                   Rank.Index
 POST    /rank                                   Rank.Create
-GET     /view/rank/:rid                         ViewRank.Index
-GET     /view/rank/:rid/results                 RankResults.Index
+POST    /rank/delete                            Rank.Delete
+GET     /view/rank/:rid                         Rank.View
+GET     /view/rank/:rid/results                 Rank.Results
 POST    /view/rank/:rid/edit                    Rank.Update
-#POST    /view/rank/:rid/conclude               ViewRank.Index
+# Not implemented
+#POST    /view/rank/:rid/conclude               Rank.Conclude
+
 
 POST    /forecast                               Forecast.Create
-
 POST    /range                                  Range.Create
-
-POST    /delete                                 Delete.DeleteScenario
-POST    /delete/estimate                        Delete.DeleteEstimate
-POST    /delete/ranks                           Delete.DeleteRank
-
 POST    /sort                                   Sort.Create
 
 # Ignore favicon requests

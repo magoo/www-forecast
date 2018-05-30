@@ -28,7 +28,7 @@ $( "#sortable" ).disableSelection();
 <script>
   function del(rid){
     $.ajax({
-    url: '/delete/ranks',
+    url: '/rank/delete',
     type: 'post',
     data: {
         rid: rid

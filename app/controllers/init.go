@@ -9,18 +9,12 @@ func init() {
 	//Every controller with sensitive content should be here.
 	//Better yet, whitelisting these controllers would be better.
 	revel.InterceptFunc(checkUser, revel.BEFORE, &View{})
-	revel.InterceptFunc(checkUser, revel.BEFORE, &List{})
-	revel.InterceptFunc(checkUser, revel.BEFORE, &Create{})
-	revel.InterceptFunc(checkUser, revel.BEFORE, &Results{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &Scenario{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Forecast{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Estimate{})
-	revel.InterceptFunc(checkUser, revel.BEFORE, &ViewEstimate{})
-	revel.InterceptFunc(checkUser, revel.BEFORE, &EstimateResults{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Range{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Rank{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Sort{})
-	revel.InterceptFunc(checkUser, revel.BEFORE, &ViewRank{})
-	revel.InterceptFunc(checkUser, revel.BEFORE, &RankResults{})
 
 	//revel.OnAppStart(models.DbConnect)
 
