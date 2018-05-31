@@ -1,6 +1,6 @@
 provider "aws" {
   profile             = "e6e-dev"
-  region              = "us-west-1"
+  region              = "us-west-2"
 }
 
 resource "aws_dynamodb_table" "questions" {

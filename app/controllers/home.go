@@ -50,3 +50,7 @@ func (c Home) List() revel.Result {
 
 	return c.Render(qs, empty)
 }
+
+func (c Home) Alpha() revel.Result {
+	return c.Render()
+}
