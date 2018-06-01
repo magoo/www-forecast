@@ -1,6 +1,6 @@
 {{set . "title" "Create Scenario"}}
 {{set . "description" "An scenario helps understand the likelihood of future outcomes."}}
-{{set . "longdescription" "We will ask panelists for their probabilistic expectations of the future."}}
+{{set . "longdescription" "We will ask panelists for a forecast of the future."}}
 {{set . "help" true}}
 {{template "header.html" .}}
 {{template "navbar.html" .}}
@@ -27,7 +27,7 @@ function removeParent(e){
             <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
         <div class="form-group">
-          <label>Scenario</label>
+          <label>What is your question?</label>
           <input class="form-control form-control-lg" autocomplete="off" type="text" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>It will rain more than one inch tomorrow.</i>" name="title" />
           <small class="form-text text-muted">A future event that you will forecast.</small>
         </div>
@@ -35,13 +35,13 @@ function removeParent(e){
 
 
         <div class="form-group">
-          <label>Description</label>
+          <label>Describe your question.</label>
           <textarea class="form-control form-control-lg" type="text" autocomplete="off" placeholder="" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>The local weather report.</i>" name="description"></textarea>
           <small class="form-text text-muted">Any extra information about the future event. For instance, how will it be judged?</small>
         </div>
 
         <div class="form-group">
-          <label>Outcomes</label>
+          <label>What possible outcomes could happen?</label>
           <div class="input-group">
             <input type="text" name="options[]" class="form-control" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>More than one inch of rain.</i>" placeholder="" >
           </div>
@@ -52,8 +52,12 @@ function removeParent(e){
           <div id="forecast-form">
 
           </div>
-          <small class="form-text text-muted">The optional future outcomes. Must be specific, measurable, unique.</small>
-          <button onclick="addOption()" type="button" class="btn btn-secondary btn-sm">Add</button>
+          <small class="form-text text-muted">The optional future outcomes. Must be specific and mutually exclusive. Preferably they are measurable.</small>
+
+        </div>
+
+        <div class="form-group">
+          <button onclick="addOption()" type="button" class="btn btn-secondary btn-sm">Add outcome</button>
         </div>
 
         <div class="btn-group" role="group" aria-label="...">

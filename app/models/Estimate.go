@@ -8,6 +8,7 @@ import (
   //"os"
   "github.com/google/uuid"
   "time"
+  "strconv"
 
 )
 
@@ -54,6 +55,65 @@ func (e Estimate) GetURL() (url string) {
 
   return "/view/estimate/" + e.Id
 
+}
+
+func (e Estimate) AddRecord(user string) (err error){
+
+  er := ViewEstimateResults(e.Question.Id)
+
+  emin, emax := GetAverageRange(er)
+
+  t := time.Now()
+
+  record := t.Format("2006-01-02") + ": Results recorded. Min: " + strconv.FormatFloat(emin, 'f', -1, 64) + " Max: " + strconv.FormatFloat(emax, 'f', -1, 64)
+
+  //Primary key for update query
+  key := map[string]*dynamodb.AttributeValue {
+    "id": {
+      S: aws.String(e.Question.Id),
+    },
+  }
+
+  item := map[string]*dynamodb.AttributeValue {
+    ":r": {
+        SS: []*string{
+          aws.String(record),
+          },
+        },
+    ":user": {
+      S: aws.String(user),
+    },
+  }
+
+  //av, err := dynamodbattribute.MarshalMap(item)
+
+  UpdateItem(key, "ADD records :r", item, "questions-tf", "ownerid = :user")
+
+  return err
+
+}
+
+func GetAverageRange(er []Range) (avgmin float64, avgmax float64){
+
+	size := len(er)
+	var sum float64 = 0
+
+	for _, v := range er {
+		sum += v.Minimum
+	}
+
+	avgmin = sum / float64(size)
+
+	//reset
+	sum = 0
+
+	for _, v := range er {
+		sum += v.Maximum
+	}
+
+	avgmax = sum / float64(size)
+
+	return
 }
 
 func UpdateEstimate (eid string, title string, description string, unit string, user string) {
@@ -141,7 +201,7 @@ func DeleteEstimateRanges(eid string) {
 
     for _, v  := range er {
       fmt.Println("Deleting: ", v.Answer.Id, v.Answer.OwnerID)
-      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "eid", "user", "answers-tf")
+      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "id", "ownerid", "answers-tf")
     }
 
 

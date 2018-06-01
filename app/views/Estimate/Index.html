@@ -12,26 +12,26 @@
         <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
 
         <div class="form-group">
-          <label>Estimate</label>
-          <input class="form-control form-control-lg" type="text" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>Number of coins in a jar.</i>" placeholder="" name="title" />
-          <small class="form-text text-muted">The value you are planning on measuring.</small>
+          <label>What is your question?</label>
+          <input class="form-control form-control-lg" type="text" data-toggle="tooltip" data-placement="top" data-html="true" title="" placeholder="" name="title" />
+          <small class="form-text text-muted">For example: "How many items will be returned by customers in Q4?".</small>
         </div>
 
 
 
         <div class="form-group">
-          <label>Description</label>
+          <label>Describe your question.</label>
           <textarea class="form-control form-control-lg" type="text" placeholder="" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="" name="description"></textarea>
-          <small class="form-text text-muted">The longer form of the estimate. Include judgement guidelines when possible.</small>
+          <small class="form-text text-muted">Consider adding historical data, when the question will close, or how the answer will be eventually be judged.</small>
         </div>
 
         <div class="form-group">
-          <label>Unit to Measure</label>
+          <label>What unit are we estimating?</label>
           <div class="input-group">
             <input type="text" name="unit" class="form-control" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>USD</i>" placeholder="" >
           </div>
-
         <small class="form-text text-muted">The type of value we are measuring. (people, apples, USD, hardware)</small>
+        </div>
 
         <div class="btn-group" role="group" aria-label="...">
           <button class="btn btn-primary" type="submit">Submit form</button>

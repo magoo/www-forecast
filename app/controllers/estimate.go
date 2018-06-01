@@ -40,6 +40,30 @@ func (c Estimate) View(eid string) revel.Result {
 		return c.Render(e, u)
 }
 
+func (c Estimate) Record(eid string) revel.Result {
+	c.Validation.Required(eid)
+	c.Validation.Match(eid, regexp.MustCompile("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"))
+	//^[a-e0-9]{8}-[a-e0-9]{4}-[a-e0-9]{4}-[a-e0-9]{12}$
+
+	if c.Validation.HasErrors() {
+		c.Flash.Error("Cannot view. Invalid estimate ID.")
+
+		return c.Redirect(Home.List)
+	}
+
+	e := models.GetEstimate(eid)
+	u :=  c.Session["user"]
+	err := e.AddRecord(u)
+
+	if err != nil {
+		c.Flash.Error("Nothing to record.")
+	}
+	c.Flash.Success("Results added to record.")
+
+	return c.Redirect("/view/estimate/%s", eid)
+
+}
+
 func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 
 	c.Validation.Required(eid)
@@ -68,7 +92,7 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 		return c.Redirect("/view/estimate/%s", eid)
 	}
 
-	emin, emax := getAverageRange(er)
+	emin, emax := models.GetAverageRange(er)
 
 	//Calculate Brier Score
 	//This is different. There is a 90% confidence assumption.
@@ -132,34 +156,11 @@ func (c Estimate) Results(eid string) revel.Result {
 		// We use the SID from the successful call using the hosted domain, instead of whatever the user gives us.
 		er := models.ViewEstimateResults(e.Question.Id)
 		if (len(er)>0){
-			avgmin, avgmax := getAverageRange(er)
+			avgmin, avgmax := models.GetAverageRange(er)
 			return c.Render(er, e, avgmin, avgmax)
 		} else {
 			c.Flash.Error("No results yet.")
 			return c.Redirect("/view/estimate/%s", eid)
 		}
 
-}
-
-func getAverageRange(er []models.Range) (avgmin float64, avgmax float64){
-
-	size := len(er)
-	var sum float64 = 0
-
-	for _, v := range er {
-		sum += v.Minimum
-	}
-
-	avgmin = sum / float64(size)
-
-	//reset
-	sum = 0
-
-	for _, v := range er {
-		sum += v.Maximum
-	}
-
-	avgmax = sum / float64(size)
-
-	return
 }

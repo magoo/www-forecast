@@ -187,7 +187,7 @@ func (s Scenario) AddRecord(user string) (err error) {
   t := time.Now()
   record := t.Format("2006-01-02") + ": Results recorded. "
 
-   x := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  x := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
   for i, v := range results {
     record += "" + string(x[i%25]) + ". " + " " + strconv.Itoa(v) + "% "

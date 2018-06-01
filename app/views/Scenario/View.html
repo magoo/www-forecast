@@ -149,6 +149,9 @@ $(document).ready(function(){
 
         <div class="row">
           <div class="col-2 input-group ">
+            <div class="input-group-prepend">
+              <span class="input-group-text">{{indexToCharacter $index }}</span>
+            </div>
             <input name="value[]" value="{{if $.myForecast.Forecasts}}{{index $.myForecast.Forecasts $index}}{{end}}" type="text" class="form-control odds" {{if $.f.Results}}disabled{{end}} aria-label="Percentage of possiblity">
             <div class="input-group-append">
               <span class="input-group-text">%</span>
@@ -167,6 +170,7 @@ $(document).ready(function(){
 
         <div class="row">
             <div class="col-2 input-group">
+
               <input id="total" type="text" class="form-control" aria-label="Percentage of possiblity" readonly>
               <div class="input-group-append">
                 <span class="input-group-text">%</span>
@@ -176,9 +180,6 @@ $(document).ready(function(){
                 <li class="list-group-item">Total (Must equal 100)</li>
             </div>
           </div>
-
-
-
       </div>
 
       {{ if .f.Concluded}}
@@ -194,23 +195,17 @@ $(document).ready(function(){
 </div>
 
     {{ if .f.Records }}
-    <div class="card">
-        <div class="card-body">
-          <h4>Previous measurements</h4>
-          <ul>
-          {{range .f.Records}}
-          <li>{{.}}</li>
-          {{end}}
-          </ul>
-        </div>
-    </div>
+
+      {{template "records.html" .f}}
 
     {{end}}
 
     {{ if eq .u .f.Question.OwnerID }}
       <div class="card">
+        <div class="card-header">
+          Moderator Options
+        </div>
           <div class="card-body">
-            <h6>Moderator Options</h6>
             <small class="form-text text-muted">Record this forecast.</small>
               <form name="recordForm" action="/view/scenario/{{.f.Question.Id}}/record" method="post">
                 <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />

@@ -36,6 +36,7 @@ GET     /view/estimate/:eid                     Estimate.View
 GET     /view/estimate/:eid/results             Estimate.Results
 POST    /view/estimate/:eid/conclude            Estimate.Conclude
 POST    /view/estimate/:eid/edit                Estimate.Update
+POST    /view/estimate/:eid/record              Estimate.Record
 
 # CRUD for a "range" which is an "answer" to an estimate
 POST    /range                                  Range.Create
@@ -47,6 +48,7 @@ POST    /rank/delete                            Rank.Delete
 GET     /view/rank/:rid                         Rank.View
 GET     /view/rank/:rid/results                 Rank.Results
 POST    /view/rank/:rid/edit                    Rank.Update
+POST    /view/rank/:rid/record                  Rank.Record
 # Not implemented
 #POST    /view/rank/:rid/conclude               Rank.Conclude
 

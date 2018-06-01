@@ -74,7 +74,7 @@ $( "#sortable" ).disableSelection();
                 <table class="table">
                   <tbody id="sortable">
                     {{range $index, $option := .r.Options}}
-                      <tr class="ui-state-default"><td><i class="fas fa-bars"></i><input type="hidden" name="options[]" value="{{$index}}" /> {{$option}}</td></tr>
+                      <tr class="ui-state-default"><td><i class="fas fa-bars"></i><input type="hidden" name="options[]" value="{{$index}}" /> {{indexToCharacter $index}}: {{$option}}</td></tr>
                     {{end}}
                   </tbody>
                 </table>
@@ -101,10 +101,27 @@ $( "#sortable" ).disableSelection();
       </div>
     </div>
 
+    {{ if .r.Records }}
+
+      {{template "records.html" .r}}
+
+    {{end}}
+
     {{ if eq .u .r.Question.OwnerID }}
+
+
       <div class="card">
+          <div class="card-header">
+            Moderator Options
+          </div>
           <div class="card-body">
-            <h6>Moderator Options</h6>
+            <small class="form-text text-muted">Record this question.</small>
+              <form name="recordForm" action="/view/rank/{{.r.Question.Id}}/record" method="post">
+                <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
+                <button class="btn btn-light btn-sm" class="btn btn-info">Record</button>
+              </form>
+
+              <small class="form-text text-muted">Moderate this question.</small>
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
               <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.r.Question.Id}})" class="btn btn-info">Delete</button>
           </div>

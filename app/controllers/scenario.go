@@ -150,6 +150,7 @@ func (c Scenario) AddRecord(sid string) revel.Result {
 		c.Flash.Error("Nothing to record.")
 	}
 
+	c.Flash.Success("Results added to record.")
 	return c.Redirect("/view/scenario/%s", sid)
 
 }

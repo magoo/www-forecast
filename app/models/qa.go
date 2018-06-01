@@ -33,6 +33,26 @@ type Answer struct {
   Description   string        `dynamodbav:"description"`
 }
 
+func GetQuestion(id string) (q Question) {
+
+  result := GetPrimaryItem(id, "id", "questions-tf")
+
+  q = Question{}
+
+  err := dynamodbattribute.UnmarshalMap(result.Item, &q)
+
+  if err != nil {
+    panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+  }
+
+  if q.Id == "" {
+      fmt.Println("Could not find that question.")
+      return
+  }
+
+  return q
+}
+
 func ListQuestions(user string) (s []Question) {
 
   result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "questions-tf")

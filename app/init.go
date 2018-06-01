@@ -52,6 +52,13 @@ func init() {
 		// mod to allow wrap around if the index is out of bounds
 		return string(animalFaceEmojis[index%25])
 	}
+
+	revel.TemplateFuncs["indexToCharacter"] = func(index int) string {
+		character := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+		// mod to allow wrap around if the index is out of bounds
+		return string(character[index%26])
+	}
 }
 
 // HeaderFilter adds common security headers

@@ -8,6 +8,9 @@ import (
   //"os"
   "github.com/google/uuid"
   "time"
+  "strconv"
+  "sort"
+  "errors"
 
 )
 
@@ -138,7 +141,21 @@ func DeleteRank(rid string, owner string) {
 
   fmt.Println("Deleted rank.", rid)
 
-//  DeleteRankRanges(rid)
+  DeleteRankSorts(rid)
+
+}
+
+func DeleteRankSorts(rid string) {
+
+    rr := ViewRankResults(rid)
+
+    for _, v  := range rr {
+      fmt.Println("Deleting: ", v.Answer.Id, v.Answer.OwnerID)
+      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "id", "ownerid", "answers-tf")
+    }
+
+
+    fmt.Println("Deleted sorts associated with rank.")
 
 }
 
@@ -156,4 +173,70 @@ func ViewRankResults (rid string) (s []Sort) {
     }
 
     return s
+}
+
+func (r Rank) AddRecord(user string) (err error){
+
+  er := ViewRankResults(r.Question.Id)
+  if len(er) < 1{
+    return errors.New("Trying to count position winner when there are no sorts.")
+  }
+
+  pw := GetPositionalWinner(er)
+
+  t := time.Now()
+
+  record := t.Format("2006-01-02") + ": Results recorded. "
+
+  x := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+  for _, v := range pw {
+    record += "" + string(x[v.Index%25]) + ": " + " " + strconv.Itoa(v.Votes) + " "
+  }
+
+  //Primary key for update query
+  key := map[string]*dynamodb.AttributeValue {
+    "id": {
+      S: aws.String(r.Question.Id),
+    },
+  }
+
+  item := map[string]*dynamodb.AttributeValue {
+    ":r": {
+        SS: []*string{
+          aws.String(record),
+          },
+        },
+    ":user": {
+      S: aws.String(user),
+    },
+  }
+
+  //av, err := dynamodbattribute.MarshalMap(item)
+
+  UpdateItem(key, "ADD records :r", item, "questions-tf", "ownerid = :user")
+
+  return err
+
+}
+
+func GetPositionalWinner(rr []Sort) (vs Votes){
+
+	vs = make(Votes, len(rr[0].Options))
+
+	total := len(rr[0].Options)
+
+	//First loop. 'v' is a Sort.
+	for _, v := range rr {
+
+		//Second loop. Each "o" is a preference, top to bottom.
+		for i, o := range v.Options {
+			vs[o].Votes += total - i - 1
+			vs[o].Index = o
+		}
+	}
+
+	sort.Sort(sort.Reverse(vs))
+
+	return vs
 }
