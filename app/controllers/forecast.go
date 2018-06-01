@@ -21,7 +21,7 @@ func (c Forecast) Create(value []int, sid string) revel.Result {
 
 		if s != 100 {
 			c.Flash.Error("You need your values to equal 100%")
-			return c.Redirect("/view/%s", sid )
+			return c.Redirect("/view/scenario/%s", sid )
 		}
 
 		models.CreateForecast(c.Session["user"], value, sid, c.Session["hd"])

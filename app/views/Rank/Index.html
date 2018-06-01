@@ -1,4 +1,7 @@
 {{set . "title" "Create Rank"}}
+{{set . "description" "A rank helps prioritize options."}}
+{{set . "longdescription" "We will ask panelists to sort their preferences."}}
+{{set . "help" true}}
 {{template "header.html" .}}
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
@@ -24,25 +27,25 @@
 
         <div class="form-group">
           <label>Title</label>
-          <input class="form-control form-control-lg" type="text" placeholder="The candidates up for election." name="title" />
+          <input class="form-control form-control-lg" type="text" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>My favorite desserts</i>" name="title" />
           <small class="form-text text-muted">The value you are planning on sorting.</small>
         </div>
 
 
         <div class="form-group">
           <label>Description</label>
-          <textarea class="form-control form-control-lg" type="text" placeholder="These are the eligible preferences for the upcoming vote. Final outcome is decided by an official." name="description"></textarea>
+          <textarea class="form-control form-control-lg" type="text" placeholder="" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="" name="description"></textarea>
           <small class="form-text text-muted">The longer form of the rank. Include judgement guidelines when possible.</small>
         </div>
 
         <div class="form-group">
           <label>Candidates</label>
           <div class="input-group">
-            <input type="text" name="options[]" class="form-control" placeholder="Barack Obama" >
+            <input type="text" name="options[]" class="form-control" placeholder="" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>Ice Cream</i>">
           </div>
 
           <div class="input-group">
-            <input type="text" name="options[]" class="form-control" placeholder="Donald Trump">
+            <input type="text" name="options[]" class="form-control" placeholder="" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>Cake</i>">
           </div>
           <div id="forecast-form">
 
@@ -56,5 +59,25 @@
         </div>
 
       </form>
+
+      <!-- "Learn More" modal -->
+      <div class="modal fade" id="openHelp" tabindex="-1" role="dialog" aria-labelledby="openHelpLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="openHelpLabel">What is this?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{template "help/rank.html"}}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 {{template "footer.html" .}}

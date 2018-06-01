@@ -28,16 +28,24 @@ func CreateScenario(title string, description string, options []string, hd strin
         Question: Question{
   				Id: fuuid.String(),
           OwnerID: owner,
+          Date: t.Format("2006-01-02"),
           Hd: hd,
   		    Title: title,
   		    Description: description,
           Records: []string{t.Format("2006-01-02") + ": Created.", },
           URL: "scenario/" + fuuid.String(),
+          Type: "Scenario",
         },
           Options: options,
   		}
 
-  		PutItem(item, "questions-tf")
+  		err:= PutItem(item, "questions-tf")
+
+      if err != nil {
+        fmt.Println("Error writing to db.")
+      } else {
+        fmt.Println("Successfully added.")
+      }
 
   		fmt.Println("Successfully added.")
 

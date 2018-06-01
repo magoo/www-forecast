@@ -5,6 +5,7 @@ import (
   "github.com/docker/docker/pkg/namesgenerator"
   //"os"
   "time"
+  "fmt"
 
 )
 
@@ -30,6 +31,12 @@ func CreateSort (u string, options []int, rid string, hd string) {
           Options: options,
   		}
 
-  		PutItem(item, "answers-tf")
+  		err := PutItem(item, "answers-tf")
+
+      if err != nil {
+        fmt.Println("Error writing to db.")
+      } else {
+        fmt.Println("Successfully added.")
+      }
 
 }

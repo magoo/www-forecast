@@ -33,7 +33,13 @@ func CreateRange (u string, min float64, max float64, eid string, hd string) {
           Maximum: max,
   		}
 
-  		PutItem(item, "answers-tf")
+  		err := PutItem(item, "answers-tf")
+
+      if err != nil {
+        fmt.Println("Error writing to db.")
+      } else {
+        fmt.Println("Successfully added.")
+      }
 
 }
 

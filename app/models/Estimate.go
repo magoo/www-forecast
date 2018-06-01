@@ -27,18 +27,25 @@ func CreateEstimate (title string, description string, unit string, hd string, o
   		item := Estimate{
         Question: Question{
           				Id: euuid.String(),
+                  Date: t.Format("2006-01-02"),
                   OwnerID: owner,
                   Hd: hd,
           		    Title: title,
           		    Description: description,
                   Records: []string{t.Format("2006-01-02") + ": Created.", },
                   URL: "estimate/" + euuid.String(),
+                  Type: "Estimate",
                 },
           Unit: unit,
   		}
 
-  		PutItem(item, "questions-tf")
-      fmt.Println(unit)
+  		err := PutItem(item, "questions-tf")
+
+      if err != nil {
+        fmt.Println("Error writing to db.")
+      } else {
+        fmt.Println("Successfully added.")
+      }
 
       return euuid.String()
 }

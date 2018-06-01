@@ -1,12 +1,16 @@
 {{set . "title" "Create Scenario"}}
+{{set . "description" "An scenario helps understand the likelihood of future outcomes."}}
+{{set . "longdescription" "We will ask panelists for their probabilistic expectations of the future."}}
+{{set . "help" true}}
 {{template "header.html" .}}
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
+
 <script>
 
 function addOption(){
 
-  $("#forecast-form").append("<div class=\"input-group remove\"><input type=\"text\" name=\"options[]\" class=\"form-control\" placeholder=\"Enter option here...\"><div class=\"input-group-append\"><span class=\"input-group-text\" id=\"basic-addon1\" onclick=\"removeParent(this)\">Delete</span></div></div>");
+  $("#forecast-form").append("<div class=\"input-group remove\"><input type=\"text\" name=\"options[]\" class=\"form-control\" autocomplete=\"off\" placeholder=\"\"><div class=\"input-group-append\"><span class=\"input-group-text\" id=\"basic-addon1\" onclick=\"removeParent(this)\">Delete</span></div></div>");
 }
 
 
@@ -24,26 +28,26 @@ function removeParent(e){
 
         <div class="form-group">
           <label>Scenario</label>
-          <input class="form-control form-control-lg" type="text" placeholder="The AWS API was breached in Q1." name="title" />
-          <small class="form-text text-muted">The risk you are planning on mitigating.</small>
+          <input class="form-control form-control-lg" autocomplete="off" type="text" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>It will rain more than one inch tomorrow.</i>" name="title" />
+          <small class="form-text text-muted">A future event that you will forecast.</small>
         </div>
 
 
 
         <div class="form-group">
           <label>Description</label>
-          <textarea class="form-control form-control-lg" type="text" placeholder="This includes all malicious access of IAM user keys, roles, or otherwising causing unauthorized behavior against AWS infrastructure. The outcome will be judged by our CERT's review of Q1 CloudTrail logs." name="description"></textarea>
-          <small class="form-text text-muted">The long form description of the incident. Include judgement guidelines.</small>
+          <textarea class="form-control form-control-lg" type="text" autocomplete="off" placeholder="" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>The local weather report.</i>" name="description"></textarea>
+          <small class="form-text text-muted">Any extra information about the future event. For instance, how will it be judged?</small>
         </div>
 
         <div class="form-group">
           <label>Outcomes</label>
           <div class="input-group">
-            <input type="text" name="options[]" class="form-control" placeholder="The breach came from an IAM User credential." >
+            <input type="text" name="options[]" class="form-control" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>More than one inch of rain.</i>" placeholder="" >
           </div>
 
           <div class="input-group">
-            <input type="text" name="options[]" class="form-control" placeholder="The breach came from Console Access.">
+            <input type="text" name="options[]" class="form-control" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>Less than one inch of rain.</i>" placeholder="">
           </div>
           <div id="forecast-form">
 
@@ -52,12 +56,31 @@ function removeParent(e){
           <button onclick="addOption()" type="button" class="btn btn-secondary btn-sm">Add</button>
         </div>
 
-
-
-
         <div class="btn-group" role="group" aria-label="...">
           <button class="btn btn-primary" type="submit">Submit form</button>
         </div>
       </form>
+
+
+      <!-- "Learn More" modal -->
+      <div class="modal fade" id="openHelp" tabindex="-1" role="dialog" aria-labelledby="openHelpLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="openHelpLabel">What is this?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{template "help/scenario.html"}}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
 {{template "footer.html" .}}

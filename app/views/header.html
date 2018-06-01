@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/public/css/custom.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,400" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="/public/img/favicon.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <script src="/public/js/jquery-2.2.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -17,6 +18,9 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69938927-2"></script>
     <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -29,6 +33,7 @@
     {{range .moreScripts}}
       <script src="/public/{{.}}" type="text/javascript" charset="utf-8"></script>
     {{end}}
+
     <script>
       function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
@@ -83,5 +88,3 @@
   </head>
   <body>
     <div class="corner-ribbon">🚧 <a style="color: white;" href="/alpha">Alpha</a> 🚧</div>
-  <div class="container">
-    <!-- this div terminates in footer -->

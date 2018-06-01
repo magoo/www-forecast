@@ -10,6 +10,7 @@ import (
 type Question struct {
   Id            string        `dynamodbav:"id"` //Uniquely identify the question
   OwnerID       string        `dynamodbav:"ownerid"` // Owner of the question, is moderator.
+  Date          string        `dynamodbav:"date"`
   Hd            string        `dynamodbav:"hd"` // Owning organization (for larger group visibility)
   Title         string        `dynamodbav:"title"`
   Description   string        `dynamodbav:"description"`
@@ -18,6 +19,7 @@ type Question struct {
   ConcludedTime string        `dynamodbav:"concludetime"` //If so, when?
   Records       []string      `dynamodbav:"records,stringset"`    // Audit records on the scenario.
   URL           string        `dynamodbav:"url"`
+  Type          string        `dynamodbav:"type"`
 }
 
 type Answer struct {

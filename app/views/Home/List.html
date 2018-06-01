@@ -2,7 +2,6 @@
 {{template "header.html" .}}
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
-
 <script>
 
 function addOption(){
@@ -21,9 +20,9 @@ function removeParent(e){
 
   {{template "flash.html" .}}
 
-    <div class="list-group">
+
       {{if .qs}}
-      <h2>Questions you've created</h2>
+
       {{else}}
         <div class="card">
           <div class="card-body">
@@ -33,15 +32,23 @@ function removeParent(e){
         </div>
       {{end}}
       {{range .qs}}
-      <div class="list-group-item">
-        <a href="/view/{{.URL}}">
-          <h4 class="list-group-item-heading">{{.Title}}</h4>
-        </a>
-          <p class="list-group-item-text">{{.Description}}</p>
-        </a>
-      </div>
+
+        <div class="card">
+          <div class="item-header">
+            <small class="text-muted">{{.Type}}</small>
+          </div>
+          <div class="item-body">
+            <a class="question-link" href="/view/{{.URL}}"><h4>{{.Title}}</h4></a>
+          </div>
+          <div class="item-footer">
+            {{if .Date}}
+              <small class="text-muted">Created on {{.Date}}</small>
+            {{end}}
+          </div>
+        </div>
+      <br />
       {{end}}
-    </div>
+
 
 
 

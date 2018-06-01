@@ -25,18 +25,24 @@ func CreateRank (title string, description string, options []string,  hd string,
           Question: Question{
             Id: ruuid.String(),
             OwnerID: owner,
+            Date: t.Format("2006-01-02"),
             Hd: hd,
             Title: title,
             Description: description,
             Records: []string{t.Format("2006-01-02") + ": Created.", },
             URL: "rank/" + ruuid.String(),
+            Type: "Rank",
           },
   				Options: options,
   		}
 
-  		PutItem(item, "questions-tf")
+  		err := PutItem(item, "questions-tf")
 
-  		fmt.Println("Successfully added.")
+      if err != nil {
+        fmt.Println("Error writing to db.")
+      } else {
+        fmt.Println("Successfully added.")
+      }
 
       return ruuid.String()
 

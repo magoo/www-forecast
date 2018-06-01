@@ -111,7 +111,7 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 
 	if (len(sr)== 0) {
 		c.Flash.Error("No results to conclude!")
-		return c.Redirect("/view/%s", sid)
+		return c.Redirect("/view/scenario/%s", sid)
 	}
 
 	fmt.Println("concluding results:", len(sr))
@@ -128,7 +128,7 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 
 	models.PutItem(s, "questions-tf")
 
-	return c.Redirect("/view/%s", sid)
+	return c.Redirect("/view/scenario/%s", sid)
 }
 
 func (c Scenario) AddRecord(sid string) revel.Result {
@@ -176,7 +176,7 @@ func (c Scenario) Results(sid string) revel.Result {
 			return c.Render(sr, s, avg)
 		} else {
 			c.Flash.Error("No results yet.")
-			return c.Redirect("/view/%s", sid)
+			return c.Redirect("/view/scenario/%s", sid)
 		}
 
 }

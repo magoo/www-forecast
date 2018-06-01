@@ -31,7 +31,13 @@ func CreateForecast (u string, f []int, sid string, hd string) {
   		    Forecasts: f,
   		}
 
-  		PutItem(item, "answers-tf")
+  		err := PutItem(item, "answers-tf")
+
+      if err != nil {
+        fmt.Println("Error writing to db.")
+      } else {
+        fmt.Println("Successfully added.")
+      }
 
 }
 

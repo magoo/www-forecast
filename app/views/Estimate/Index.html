@@ -1,4 +1,7 @@
 {{set . "title" "Create Estimate"}}
+{{set . "description" "An estimate helps discover the value of something difficult to measure."}}
+{{set . "longdescription" "We will ask panelists for a range of values they believe the truth to lie within."}}
+{{set . "help" true}}
 {{template "header.html" .}}
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
@@ -10,7 +13,7 @@
 
         <div class="form-group">
           <label>Estimate</label>
-          <input class="form-control form-control-lg" type="text" placeholder="The value of coins in my hand" name="title" />
+          <input class="form-control form-control-lg" type="text" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>Number of coins in a jar.</i>" placeholder="" name="title" />
           <small class="form-text text-muted">The value you are planning on measuring.</small>
         </div>
 
@@ -18,14 +21,14 @@
 
         <div class="form-group">
           <label>Description</label>
-          <textarea class="form-control form-control-lg" type="text" placeholder="I grabbed a handful of coins from a jar, and you were briefly shown them." name="description"></textarea>
+          <textarea class="form-control form-control-lg" type="text" placeholder="" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="" name="description"></textarea>
           <small class="form-text text-muted">The longer form of the estimate. Include judgement guidelines when possible.</small>
         </div>
 
         <div class="form-group">
           <label>Unit to Measure</label>
           <div class="input-group">
-            <input type="text" name="unit" class="form-control" placeholder="USD" >
+            <input type="text" name="unit" class="form-control" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>USD</i>" placeholder="" >
           </div>
 
         <small class="form-text text-muted">The type of value we are measuring. (people, apples, USD, hardware)</small>
@@ -35,5 +38,26 @@
         </div>
 
       </form>
+
+
+      <!-- "Learn More" modal -->
+      <div class="modal fade" id="openHelp" tabindex="-1" role="dialog" aria-labelledby="openHelpLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="openHelpLabel">What is an estimate?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{template "help/estimate.html"}}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 {{template "footer.html" .}}

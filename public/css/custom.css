@@ -24,6 +24,7 @@ a:hover {
 
 .jumbotron {
   background-color:#4ba0b5;
+  border-radius: 0em;
 }
 
 .weak {
@@ -64,7 +65,36 @@ td {
   background: #e43;
 }
 
+.item-header {
+  padding: .25rem 1.25rem;
+  margin-bottom: 0;
+  background-color: rgba(0,0,0,0);
+  border-bottom: 1px solid rgba(0,0,0,.125);
+}
 
+.item-footer {
+  padding: .25rem 1.25rem;
+  background-color: rgba(0,0,0,.03);
+  border-top: 1px solid rgba(0,0,0,.125);
+}
+.item-body {
+      -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+      padding: 1.25rem;
+      padding-top: .75rem;
+      padding-right: 1.25rem;
+      padding-bottom: .50rem;
+      padding-left: 1.25rem;
+  }
+}
 
+.lead {
+  font-size 1.5rem;
+}
+
+.longdescription {
+  font-weight: 300;
+}
 
 /* animation */
