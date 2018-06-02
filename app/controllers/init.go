@@ -5,6 +5,8 @@ import (
 )
 func init() {
 
+	revel.InterceptFunc(enforceHSTS, revel.BEFORE, &Home{})
+
 	//Main auth. In all controllers, make sure the user is logged in.
 	//Every controller with sensitive content should be here.
 	//Better yet, whitelisting these controllers would be better.
@@ -21,6 +23,17 @@ func init() {
 		return a + 1
 	}
 
+}
+
+func enforceHSTS(c *revel.Controller) revel.Result {
+
+		if c.Request.Header.Get("X-Forwarded-Proto") != "" {
+			if c.Request.Header.Get("X-Forwarded-Proto") != "https" {
+				return c.Redirect("https://e6e.io")
+			}
+		}
+
+	return nil
 }
 
 // Check for session token
