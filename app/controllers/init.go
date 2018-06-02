@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/revel/revel"
-	"fmt"
 )
 func init() {
 
@@ -26,17 +25,6 @@ func init() {
 
 // Check for session token
 func checkUser(c *revel.Controller) revel.Result {
-
-	if revel.DevMode != true {
-		fmt.Println("HSTS Redirect" )
-		//fmt.Printf("%+v", c.Request)
-		if c.Request.Host != "localhost:443" {
-			fmt.Println("It's HTTP!")
-		}
-		return c.Redirect("https://www.e6e.io")
-	}
-
-
 
 	revel.AppLog.Debug("AccessLog", "user", c.Session["user"], "ip", c.ClientIP, "path", c.Request.URL.Path)
 
