@@ -6,6 +6,14 @@ import (
 )
 func init() {
 
+	revel.InterceptFunc(enforceHSTS, revel.BEFORE, &Home{})
+	revel.InterceptFunc(enforceHSTS, revel.BEFORE, &Scenario{})
+	revel.InterceptFunc(enforceHSTS, revel.BEFORE, &Forecast{})
+	revel.InterceptFunc(enforceHSTS, revel.BEFORE, &Estimate{})
+	revel.InterceptFunc(enforceHSTS, revel.BEFORE, &Range{})
+	revel.InterceptFunc(enforceHSTS, revel.BEFORE, &Rank{})
+	revel.InterceptFunc(enforceHSTS, revel.BEFORE, &Sort{})
+
 	//Main auth. In all controllers, make sure the user is logged in.
 	//Every controller with sensitive content should be here.
 	//Better yet, whitelisting these controllers would be better.
@@ -24,9 +32,7 @@ func init() {
 
 }
 
-// Check for session token
-func checkUser(c *revel.Controller) revel.Result {
-
+func enforceHSTS(c *revel.Controller) revel.Result {
 	if revel.DevMode != true {
 		fmt.Println("HSTS Redirect" )
 		//fmt.Printf("%+v", c.Request)
@@ -36,7 +42,11 @@ func checkUser(c *revel.Controller) revel.Result {
 		return c.Redirect("https://www.e6e.io")
 	}
 
+	return nil
+}
 
+// Check for session token
+func checkUser(c *revel.Controller) revel.Result {
 
 	revel.AppLog.Debug("AccessLog", "user", c.Session["user"], "ip", c.ClientIP, "path", c.Request.URL.Path)
 
