@@ -97,4 +97,24 @@ td {
   font-weight: 300;
 }
 
+.markdown>h1 {
+  font-size: 20px;
+}
+
+.markdown>h2 {
+  font-size: 16px;
+}
+
+.markdown>h3 {
+  font-size: 12px;
+}
+
+.markdown>blockquote {
+  border-left: 3px solid #ddd;
+  padding-left: 10px;
+}
+
+.markdown>ul {
+  list-style-type: disc;
+}
 /* animation */
