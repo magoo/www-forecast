@@ -41,8 +41,8 @@ func (c Scenario) Create(title string, description string, options []string) rev
 
 }
 
-func (c Scenario) Delete(sid string) revel.Result {
-		c.Validation.Match(sid, regexp.MustCompile("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"))
+func (c Scenario) Delete(id string) revel.Result {
+		c.Validation.Match(id, regexp.MustCompile("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"))
 
 		if c.Validation.HasErrors() {
 			c.Flash.Error("You have to identify a scenario.")
@@ -50,7 +50,7 @@ func (c Scenario) Delete(sid string) revel.Result {
 		}
 
 
-		models.DeleteScenario(sid, c.Session["user"])
+		models.DeleteScenario(id, c.Session["user"])
 
 		res := JSONResponse{Code: "ok"}
 

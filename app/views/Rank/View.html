@@ -27,25 +27,7 @@ $( "#sortable" ).disableSelection();
 
 
 
-<script>
-  function del(rid){
-    $.ajax({
-    url: '/rank/delete',
-    type: 'post',
-    data: {
-        rid: rid
-    },
-    headers: {
-        "X-CSRF-Token": {{ .csrf_token }},   //If your header name has spaces or any other char not appropriate
-    },
-    dataType: 'json',
-    success: function (data) {
-        console.info(data);
-    }
-  });
-    window.location.replace("/list")
-  }
-</script>
+
 {{ if .r.Concluded }}
 <div class="alert alert-success">
 	This estimate has concluded with an actual value of <strong>{{.r.Actual}}</strong> and a Brier score of <strong>{{.r.BrierScore}}</strong>.
@@ -123,7 +105,7 @@ $( "#sortable" ).disableSelection();
 
               <small class="form-text text-muted">Moderate this question.</small>
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.r.Question.Id}})" class="btn btn-info">Delete</button>
+              {{ template "deleteButton.html" .r.URL }}
           </div>
       </div>
     {{end}}

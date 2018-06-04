@@ -1,0 +1,21 @@
+<script>
+  function del(resourceId){
+    var resourceParts = resourceId.split("/");
+    type = resourceParts[0];
+    id = resourceParts[1];
+
+    $.ajax({
+      url: '/' + type + '/delete',
+      type: 'post',
+      data: {
+          id: id
+      },
+      dataType: 'json',
+      success: function (data) {
+          window.location.replace("/list")
+      }
+    });
+  }
+</script>
+
+<button type="button" class="btn btn-secondary btn-sm" onclick="del({{.}})" class="btn btn-info">Delete</button>
