@@ -121,8 +121,8 @@ func (c Estimate) Update(eid string, title string, description string, unit stri
 
 }
 
-func (c Estimate) Delete(eid string) revel.Result {
-		c.Validation.Match(eid, regexp.MustCompile("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"))
+func (c Estimate) Delete(id string) revel.Result {
+		c.Validation.Match(id, regexp.MustCompile("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"))
 
 		if c.Validation.HasErrors() {
 			c.Flash.Error("You have to identify an estimate.")
@@ -130,7 +130,7 @@ func (c Estimate) Delete(eid string) revel.Result {
 		}
 
 
-		models.DeleteEstimate(eid, c.Session["user"])
+		models.DeleteEstimate(id, c.Session["user"])
 
 		res := JSONResponse{Code: "ok"}
 

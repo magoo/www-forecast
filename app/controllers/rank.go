@@ -53,8 +53,8 @@ func (c Rank) Record(rid string) revel.Result {
 
 }
 
-func (c Rank) Delete(rid string) revel.Result {
-		c.Validation.Match(rid, regexp.MustCompile("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"))
+func (c Rank) Delete(id string) revel.Result {
+		c.Validation.Match(id, regexp.MustCompile("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"))
 
 		if c.Validation.HasErrors() {
 			c.Flash.Error("You have to identify a rank.")
@@ -62,7 +62,7 @@ func (c Rank) Delete(rid string) revel.Result {
 		}
 
 
-		models.DeleteRank(rid, c.Session["user"])
+		models.DeleteRank(id, c.Session["user"])
 
 		res := JSONResponse{Code: "ok"}
 
