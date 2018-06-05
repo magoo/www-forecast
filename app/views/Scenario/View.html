@@ -25,32 +25,6 @@ $(document).ready(function(){
     handleForecastChange();
 });
 </script>
-<script>
-  function del(sid){
-
-      $.ajax({
-      url: '/scenario/delete',
-      type: 'post',
-      data: {
-          sid: sid
-      },
-      headers: {
-          "X-CSRF-Token": {{ .csrf_token }},   //If your header name has spaces or any other char not appropriate
-      },
-      dataType: 'json',
-      success: function (data) {
-          console.info(data);
-      }
-    });
-    window.location.replace("/list")
-  }
-
-  var button = document.querySelector('form[name="recordForm"] > button');
-  button.addEventListener(function() {
-    document.querySelector('form[name="recordForm"]').submit();
-  });
-
-</script>
 
 {{ if .f.Concluded }}
 <div class="alert alert-success">
@@ -206,14 +180,15 @@ $(document).ready(function(){
           Moderator Options
         </div>
           <div class="card-body">
-            <small class="form-text text-muted">Record this forecast.</small>
+            <small class="form-text text-muted">Record this Scenario.</small>
               <form name="recordForm" action="/view/scenario/{{.f.Question.Id}}/record" method="post">
                 <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
                 <button class="btn btn-light btn-sm" class="btn btn-info">Record</button>
               </form>
-              <small class="form-text text-muted">Admin the forecast.</small>
+              <small class="form-text text-muted">Admin this Scenario.</small>
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
               <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.f.Question.Id}})" class="btn btn-info">Delete</button>
+              {{ template "deleteButton.html" .f.URL }}
               {{if .f.Concluded}}
               {{else}}
                 <!-- <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button> -->
