@@ -187,11 +187,11 @@ $(document).ready(function(){
               </form>
               <small class="form-text text-muted">Admin this Scenario.</small>
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.f.Question.Id}})" class="btn btn-info">Delete</button>
+              
               {{ template "deleteButton.html" .f.URL }}
               {{if .f.Concluded}}
               {{else}}
-                <!-- <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button> -->
+                <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
               {{end}}
           </div>
       </div>

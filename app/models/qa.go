@@ -1,9 +1,11 @@
 package models
 
 import (
-
+  "github.com/aws/aws-sdk-go/aws"
+  "github.com/aws/aws-sdk-go/service/dynamodb"
   "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
   "fmt"
+  "time"
 
 )
 
@@ -82,5 +84,44 @@ func ListAnswers(user string) (s []Question) {
   }
 
   return s
+
+}
+
+
+func (q Question) WriteRecord(message string, user string) (err error) {
+
+
+
+  if err != nil {
+    return err
+  }
+
+  // func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string, expressionattrvalues map[string]*dynamodb.AttributeValue, table string, conditionexpression string ) (err error) {
+  //Primary key for update query
+  key := map[string]*dynamodb.AttributeValue {
+    "id": {
+      S: aws.String(q.Id),
+    },
+  }
+
+  t := time.Now()
+  record := t.Format("2006-01-02") + ": " + message
+
+  item := map[string]*dynamodb.AttributeValue {
+    ":r": {
+        SS: []*string{
+          aws.String(record),
+          },
+        },
+    ":user": {
+      S: aws.String(user),
+    },
+  }
+
+  //av, err := dynamodbattribute.MarshalMap(item)
+
+  UpdateItem(key, "ADD records :r", item, "questions-tf", "ownerid = :user")
+
+  return err
 
 }

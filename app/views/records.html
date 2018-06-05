@@ -3,10 +3,12 @@
     Previous activity
   </div>
     <div class="card-body">
-
+      <table class="table">
       {{range .Records}}
-      <p><small>{{.}}</small></p>
+      <tr>
+        <td><small>{{.}}</small></td>
+      </tr>
       {{end}}
-
+      </table>
     </div>
 </div>

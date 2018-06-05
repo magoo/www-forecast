@@ -4,7 +4,8 @@ import (
 	"github.com/revel/revel"
 	"www-forecast/app/models"
 	"regexp"
-	"time"
+	"strconv"
+	"fmt"
 )
 
 type Estimate struct {
@@ -85,7 +86,6 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 	}
 
 	er := models.ViewEstimateResults(eid)
-	t := time.Now()
 
 	if (len(er)== 0) {
 		c.Flash.Error("No results to conclude!")
@@ -98,14 +98,27 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 	//This is different. There is a 90% confidence assumption.
 	bs := models.BrierCalcEstimate(emin, emax, resultValue)
 
-	e.Concluded = true
-	e.ConcludedTime = t.String()
-	e.AvgMinimum = emin
-	e.AvgMaximum = emax
-	e.Actual = resultValue
+	//e.Concluded = true
+	//e.ConcludedTime = t.String()
+	//e.AvgMinimum = emin
+	//e.AvgMaximum = emax
+	//e.Actual = resultValue
 	e.BrierScore = bs
 
+	if e.Question.BrierScore == 0 {
+		e.Question.BrierScore = bs
+
+	} else {
+		e.Question.BrierScore = (bs + e.Question.BrierScore) / 2
+	}
+
 	models.PutItem(e, "questions-tf")
+
+	err := e.Question.WriteRecord("Concluded. Brier Score is updated to " + strconv.FormatFloat(e.Question.BrierScore, 'f', -1, 64), c.Session["user"])
+
+	if err != nil {
+		fmt.Println("Error writing record to scenario.")
+	}
 
 	return c.Redirect("/view/estimate/%s", eid)
 }
