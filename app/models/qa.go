@@ -105,7 +105,7 @@ func (q Question) WriteRecord(message string, user string) (err error) {
   }
 
   t := time.Now()
-  record := t.Format("2006-01-02") + ": " + message
+  record := t.Format("2006-01-02 3:04:05PM") + ": " + message
 
   item := map[string]*dynamodb.AttributeValue {
     ":r": {

@@ -103,7 +103,6 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 	//e.AvgMinimum = emin
 	//e.AvgMaximum = emax
 	//e.Actual = resultValue
-	e.BrierScore = bs
 
 	if e.Question.BrierScore == 0 {
 		e.Question.BrierScore = bs
@@ -112,9 +111,13 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 		e.Question.BrierScore = (bs + e.Question.BrierScore) / 2
 	}
 
-	models.PutItem(e, "questions-tf")
+	err := models.PutItem(e, "questions-tf")
 
-	err := e.Question.WriteRecord("Concluded. Brier Score is updated to " + strconv.FormatFloat(e.Question.BrierScore, 'f', -1, 64), c.Session["user"])
+	if err != nil {
+		fmt.Println("Error writing record to scenario.")
+	}
+
+	err = e.Question.WriteRecord("Concluded. Brier Score is updated to " + strconv.FormatFloat(e.Question.BrierScore, 'f', -1, 64), c.Session["user"])
 
 	if err != nil {
 		fmt.Println("Error writing record to scenario.")

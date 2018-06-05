@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/revel/revel"
 	"github.com/cbonello/revel-csrf"
+	"www-forecast/app/models"
 )
 
 var (
@@ -51,6 +52,39 @@ func init() {
 
 		// mod to allow wrap around if the index is out of bounds
 		return string(animalFaceEmojis[index%25])
+	}
+
+	revel.TemplateFuncs["brierRound"] = func(bs float64) float64 {
+		return models.RoundPlus(bs, 3)
+	}
+
+	revel.TemplateFuncs["brierColor"] = func(bs float64) string {
+
+		switch {
+			case (bs < .10):
+				return "#25A400"
+			case bs > .10 && bs < .15:
+				return "#25A400"
+			case bs > .15 && bs < .20:
+				return "#25A400"
+			case bs > .20 && bs < .25:
+				return "#D2FDC5"
+			case bs > .25 && bs < .30:
+				return "#FDCFC5"
+			case bs > .30 && bs < .45:
+				return "#FEBBAD"
+			case bs > .45 && bs < .55:
+				return "#FE9B86"
+			case bs > .65 && bs < .75:
+				return "#FF7355"
+			case bs > .75 && bs < .85:
+				return "#FF5733"
+			case bs > .85 && bs < 1:
+				return "#A8432E"
+			default:
+				return "black"
+		}
+
 	}
 
 	revel.TemplateFuncs["indexToCharacter"] = func(index int) string {

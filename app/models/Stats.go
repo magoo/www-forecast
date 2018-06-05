@@ -1,6 +1,9 @@
 package models
 
-import "fmt"
+import (
+  "fmt"
+  "math"
+)
 
 func BrierCalc (af []int, index int) (score float64) {
 
@@ -27,10 +30,19 @@ func BrierCalc (af []int, index int) (score float64) {
 
 func BrierCalcEstimate (min float64, max float64, actual float64) float64 {
 
-  if ((actual > min) && (actual < max)){
-    return .02
+  if ((actual >= min) && (actual <= max)){
+    return .01
   } else {
-    return 1.62
+    return .81
   }
 
+}
+
+func RoundPlus(f float64, places int) (float64) {
+    shift := math.Pow(10, float64(places))
+    return Round(f * shift) / shift;
+}
+
+func Round(f float64) float64 {
+	return math.Floor(f + .5)
 }

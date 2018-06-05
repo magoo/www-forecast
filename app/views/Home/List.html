@@ -45,7 +45,7 @@ function removeParent(e){
           </div>
           <div class="item-footer">
             {{if .Date}}
-              <small class="text-muted">Created on {{.Date}}{{if (gt (len .Records) 1)}}, with {{decrement (len .Records)}} records.{{end}} </small>
+              <small class="text-muted">Created on {{.Date}}.{{if (gt (len .Records) 1)}} {{decrement (len .Records)}} records.{{end}}{{if .BrierScore}} <span style="color:{{brierColor .BrierScore}};">{{brierRound .BrierScore}}</span>{{end}}</small>
             {{end}}
           </div>
         </div>
