@@ -1,7 +1,5 @@
 {{set . "title" "Your Questions"}}
 {{set . "description" "You are the moderator for these questions."}}
-{{set . "longdescription" "These are only visible to others if you share their link."}}
-{{set . "help" true}}
 {{template "header.html" .}}
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
@@ -23,17 +21,12 @@ function removeParent(e){
 
   {{template "flash.html" .}}
 
-
       {{if .qs}}
 
       {{else}}
-        <div class="card">
-          <div class="card-body">
-            <h6>No measurements created.</h6>
-            <p>Create a measurement on the navigation bar above.</p>
-            </div>
-        </div>
+
       {{end}}
+
       {{range .qs}}
 
         <div class="card">
@@ -49,15 +42,12 @@ function removeParent(e){
             {{end}}
           </div>
         </div>
-      <br />
+        <br />
       {{end}}
 
+      {{template "newux.html" }}
+      <br />
 
-
-
-    {{if .empty }}
-
-    {{end}}
 
     <!-- "Learn More" modal -->
     <div class="modal fade" id="openHelp" tabindex="-1" role="dialog" aria-labelledby="openHelpLabel" aria-hidden="true">
