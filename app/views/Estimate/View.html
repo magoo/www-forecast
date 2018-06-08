@@ -1,6 +1,6 @@
 {{set . "title" "Estimate"}}
 {{set . "description" "An estimate helps discover the value of something difficult to measure."}}
-{{set . "longdescription" "Submit a range of numbers below that you believe will include the true value."}}
+
 {{template "header.html" .}}
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
@@ -72,17 +72,18 @@
         <div class="card-header">
         Moderator Options</div>
           <div class="card-body">
-            <small class="form-text text-muted">Record this question.</small>
+            <small class="form-text text-muted">Keep a record on this estimate.</small>
               <form name="recordForm" action="/view/estimate/{{.e.Question.Id}}/record" method="post">
                 <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
                 <button class="btn btn-light btn-sm" class="btn btn-info">Record</button>
+								<button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
               </form>
             <small class="form-text text-muted">Admin this question.</small>
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
               {{ template "deleteButton.html" .e.URL }}
               {{if .e.Concluded}}
               {{else}}
-                <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
+
               {{end}}
           </div>
       </div>

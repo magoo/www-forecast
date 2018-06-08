@@ -3,74 +3,36 @@
 
 </script>
 
-<script>
-var TxtRotate = function(el, toRotate, period) {
-  this.toRotate = toRotate;
-  this.el = el;
-  this.loopNum = 0;
-  this.period = parseInt(period, 10) || 2000;
-  this.txt = '';
-  this.tick();
-  this.isDeleting = false;
-};
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="#">
+      <svg width="33px" height="35px" viewBox="449 250 33 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+          <desc>Created with Sketch.</desc>
+          <defs></defs>
+          <rect id="Rectangle" stroke="none" fill="#619EB2" fill-rule="evenodd" x="449" y="253" width="30" height="30" rx="9"></rect>
+          <text id="e6e" stroke="none" fill="none" font-family="GillSans-Light, Gill Sans" font-size="18" font-weight="300" letter-spacing="-0.833333313">
+              <tspan x="452" y="273" fill="#FEFFFF">e6e</tspan>
+          </text>
+      </svg>
+    </a>
 
-TxtRotate.prototype.tick = function() {
-  var i = this.loopNum % this.toRotate.length;
-  var fullTxt = this.toRotate[i];
+    <!-- <a href="/">e6e</a> -->
+  </nav>
+</div>
 
-  if (this.isDeleting) {
-    this.txt = fullTxt.substring(0, this.txt.length - 1);
-  } else {
-    this.txt = fullTxt.substring(0, this.txt.length + 1);
-  }
-
-  this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
-
-  var that = this;
-  var delta = 300 - Math.random() * 400;
-
-  if (this.isDeleting) { delta /= 2; }
-
-  if (!this.isDeleting && this.txt === fullTxt) {
-    delta = this.period;
-    this.isDeleting = true;
-  } else if (this.isDeleting && this.txt === '') {
-    this.isDeleting = false;
-    this.loopNum++;
-    delta = 500;
-  }
-
-  setTimeout(function() {
-    that.tick();
-  }, delta);
-};
-
-window.onload = function() {
-  var elements = document.getElementsByClassName('txt-rotate');
-  for (var i=0; i<elements.length; i++) {
-    var toRotate = elements[i].getAttribute('data-rotate');
-    var period = elements[i].getAttribute('data-period');
-    if (toRotate) {
-      new TxtRotate(elements[i], JSON.parse(toRotate), period);
-    }
-  }
-  // INJECT CSS
-  var css = document.createElement("style");
-  css.type = "text/css";
-  css.innerHTML = ".txt-rotate > .wrap { border-right: 0.08em solid #666 }";
-  document.body.appendChild(css);
-};
-</script>
-
-  <header style="margin-top:12em;" class="jumbotron">
-
-    <h1 >e6e.io</h1>
+  <header class="jumbotron">
+    <div class="container">
+    <h1 class="display-3 text-center">Measure your intangible data.</h1>
     <hr />
-    <h3>An estimation platform designed for <span class="txt-rotate" data-period="2000" data-rotate='[ "intelligence analysis", "business forecasting", "risk management"]'></span>.</h3>
+    <h3 class="text-center">Build consensus in a risk assessment, sales forecast, or any critical decision. </h3>
+    <div class="text-center">
+      <button type="button" class="btn btn-secondary btn-lg" data-toggle="modal" data-target="#exampleModal" style="margin-top:3em;">
+        Sign in
+      </button>
+      </div>
 
-    <button type="button" class="btn btn-secondary btn-lg" data-toggle="modal" data-target="#exampleModal" style="margin-top:3em;">
-      Sign in
-    </button>
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -93,6 +55,105 @@ window.onload = function() {
     </div>
 
   </header>
+
   {{template "flash.html" .}}
 
-{{template "footer.html" .}}
+<div class="container">
+  <div class="text-center">
+    <h1 class="display-5">What do I use it for?</h1>
+  </div>
+</div>
+
+<div class="container my-4">
+  <div class="row">
+    <div class="col-sm">
+      <div class="card border-0">
+
+        <div class="card-body">
+          <h5 class="card-title text-center">
+             Consensus Building
+          </h5>
+          <p>Ensure that all points of view are represented in decision making.</p>
+
+        </div>
+
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="card border-0">
+
+        <div class="card-body">
+          <h5 class="card-title text-center border-">
+             Calibration
+          </h5>
+          <p>Fine tuned forecasting over time with trackable forecast performance.</p>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="card border-0">
+
+        <div class="card-body">
+          <h5 class="card-title text-center">
+             Quantification
+          </h5>
+          <p>Build, improve, and report on intangible subject matters with quantifiable techniques.</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="container">
+  <div class="text-center my-4">
+    <h1 class="display-5">How do I use it?</h1>
+  </div>
+</div>
+
+<div class="container my-4">
+  <div class="row">
+    <div class="col-sm">
+      <div class="card">
+        <div class="card-header text-center">
+          <i class="fas fa-dice"></i> Scenarios
+        </div>
+        <div class="card-body">
+
+          <p>What is the probability that an event will happen in the future?</p>
+          <p>Send a <strong>scenario</strong> link to a group and estimate those likelihoods.</p>
+          </div>
+
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="card">
+        <div class="card-header text-center">
+          <i class="fas fa-calculator"></i> Estimates
+        </div>
+        <div class="card-body">
+
+          <p>What is the value of something that is difficult to measure?</p>
+          <p>Send an <strong>estimate</strong> link to a group and estimate that value.</p>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="card">
+        <div class="card-header text-center">
+          <i class="fas fa-list-ol"></i> Ranks
+        </div>
+        <div class="card-body">
+
+          <p>How should we prioritize a list of many options?</p>
+          <p>Send a <strong>rank</strong> link to a group to prioritize these options based on preference.</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

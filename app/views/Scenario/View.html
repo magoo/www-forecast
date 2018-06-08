@@ -1,6 +1,5 @@
 {{set . "title" "Scenario"}}
 {{set . "description" "An scenario helps understand the likelihood of future outcomes."}}
-{{set . "longdescription" "Enter the likelihoods you predict for each possible outcome."}}
 {{template "header.html" .}}
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
@@ -113,6 +112,9 @@ $(document).ready(function(){
   </div>
 
   <div class="card mb-3">
+      <div class="card-header">
+        <small class="text-muted">Enter your estimated percentage likelihood for each outcome. </small>
+      </div>
       <div class="card-body">
 
     <form action="/forecast" method="post">
@@ -180,18 +182,19 @@ $(document).ready(function(){
           Moderator Options
         </div>
           <div class="card-body">
-            <small class="form-text text-muted">Record this Scenario.</small>
+            <small class="form-text text-muted">Keep a record on this Scenario.</small>
               <form name="recordForm" action="/view/scenario/{{.f.Question.Id}}/record" method="post">
                 <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
                 <button class="btn btn-light btn-sm" class="btn btn-info">Record</button>
+                <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
               </form>
               <small class="form-text text-muted">Admin this Scenario.</small>
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
-              
+
               {{ template "deleteButton.html" .f.URL }}
               {{if .f.Concluded}}
               {{else}}
-                <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button>
+
               {{end}}
           </div>
       </div>
