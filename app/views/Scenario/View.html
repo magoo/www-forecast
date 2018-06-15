@@ -112,11 +112,11 @@ $(document).ready(function(){
   </div>
 
   <div class="card mb-3">
-      <div class="card-header">
-        <small class="text-muted">Enter your estimated percentage likelihood for each outcome. </small>
-      </div>
-      <div class="card-body">
 
+      <div class="card-body">
+        <p class="card-text">
+        Enter your estimated percentage likelihood for each outcome.
+      </p>
     <form action="/forecast" method="post">
       <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
       <div class="form-group">

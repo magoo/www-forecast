@@ -122,7 +122,7 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 	if err != nil {
 		fmt.Println("Error writing record to scenario.")
 	}
-
+	c.Flash.Success("Updated score.")
 	return c.Redirect("/view/estimate/%s", eid)
 }
 

@@ -3,4 +3,10 @@
       <h2>{{.Title}}</h2>
       <p class="card-text" data-markdown="{{.Description}}"></p>
     </div>
+    {{if .BrierScore }}
+      <div class="card-footer">
+        <span class="text-muted">This question has a forecast score of {{template "brierscore.html" .}}</span>
+</span>
+      </div>
+    {{ end }}
  </div>
