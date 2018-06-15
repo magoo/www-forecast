@@ -19,7 +19,9 @@ func (c Rank) Create(title string, description string, options []string) revel.R
 
     rid := models.CreateRank(title, description, options, c.Session["hd"], c.Session["user"])
 
-		return c.Redirect("/view/rank/%s", rid)
+		c.Flash.Out["createdurl"] = revel.Config.StringDefault("e6eDomain", "https://www.e6e.io") + "/view/rank/" + rid
+
+		return c.Redirect(Home.List)
 }
 
 func (c Rank) Update(rid string, title string, description string, options []string) revel.Result {

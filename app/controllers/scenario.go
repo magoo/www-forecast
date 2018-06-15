@@ -38,7 +38,10 @@ func (c Scenario) Create(title string, description string, options []string) rev
 
   sid := models.CreateScenario(title, description, options, c.Session["hd"], c.Session["user"])
   //fmt.Println(options[0])
-  return c.Redirect("/view/scenario/%s", sid)
+
+	c.Flash.Out["createdurl"] = revel.Config.StringDefault("e6eDomain", "https://www.e6e.io") + "/view/scenario/" + sid
+
+  return c.Redirect(Home.List)
 
 }
 

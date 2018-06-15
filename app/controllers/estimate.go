@@ -20,7 +20,9 @@ func (c Estimate) Create(title string, description string, unit string) revel.Re
 
     eid := models.CreateEstimate(title, description, unit, c.Session["hd"], c.Session["user"])
 
-		return c.Redirect("/view/estimate/%s", eid)
+		c.Flash.Out["createdurl"] = revel.Config.StringDefault("e6eDomain", "https://www.e6e.io") + "/view/estimate/" + eid
+
+		return c.Redirect(Home.List)
 }
 
 func (c Estimate) View(eid string) revel.Result {

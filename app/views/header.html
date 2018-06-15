@@ -38,6 +38,14 @@
     {{range .moreScripts}}
       <script src="/public/{{.}}" type="text/javascript" charset="utf-8"></script>
     {{end}}
+    {{if .flash.createdurl}}
+    <script>
+    $(document).on('ready',function(){
+      $('#openCreated').modal('show');
+      console.log("did it")
+    });
+    </script>
+    {{end}}
 
     <script>
       function onSignIn(googleUser) {
