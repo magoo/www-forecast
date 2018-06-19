@@ -55,7 +55,7 @@ $( "#sortable" ).disableSelection();
                 <table class="table">
                   <tbody id="sortable">
                     {{range $index, $option := .r.Options}}
-                      <tr class="ui-state-default"><td><i class="fas fa-bars"></i><input type="hidden" name="options[]" value="{{$index}}" /> {{indexToCharacter $index}}: {{$option}}</td></tr>
+                      <tr class="ui-state-default"><td><i class="fas fa-bars"></i><input autocomplete="off" type="hidden" name="options[]" value="{{$index}}" /> {{indexToCharacter $index}}: {{$option}}</td></tr>
                     {{end}}
                   </tbody>
                 </table>
@@ -122,19 +122,19 @@ $( "#sortable" ).disableSelection();
 
               <div class="form-group">
                 <label>Title</label>
-                <input type="text" class="form-control" name="title" value="{{.r.Title}}" />
+                <input autocomplete="off" type="text" class="form-control" name="title" value="{{.r.Title}}" />
               </div>
 
               <div class="form-group">
                 <label>Description</label>
-                <textarea name="description" class="form-control">{{.r.Description}} </textarea>
+                <textarea autocomplete="off" name="description" class="form-control">{{.r.Description}} </textarea>
               </div>
 
               <div class="form-group">
                 <label>Options</label>
                 {{range $index, $option := .r.Options}}
 
-                  <input type="text" class="form-control" name="options[{{$index}}]" value="{{$option}}" />
+                  <input autocomplete="off" type="text" class="form-control" name="options[{{$index}}]" value="{{$option}}" />
 
                 {{end}}
               </div>
@@ -167,7 +167,7 @@ $( "#sortable" ).disableSelection();
               <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
                 <div class="form-group">
                   <label>Final Value</label>
-                  <input class="form-control" id="resultValue" name="resultValue" type="text"  value="">
+                  <input autocomplete="off" class="form-control" id="resultValue" name="resultValue" type="text"  value="">
                   <small id="emailHelp" class="form-text text-muted">The actual data that occurred in hindsight.</small>
                 </div>
           </div>

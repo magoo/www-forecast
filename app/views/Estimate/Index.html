@@ -13,7 +13,7 @@
 
         <div class="form-group">
           <label>What is your question?</label>
-          <input class="form-control form-control-lg" type="text" data-toggle="tooltip" data-placement="top" data-html="true" title="" placeholder="" name="title" />
+          <input autocomplete="off" class="form-control form-control-lg" type="text" data-toggle="tooltip" name="title" />
           <small class="form-text text-muted">For example: "How many items will be returned by customers in Q4?".</small>
         </div>
 
@@ -21,14 +21,14 @@
 
         <div class="form-group">
           <label>Describe your question.</label>
-          <textarea class="form-control form-control-lg" type="text" placeholder="" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="" name="description"></textarea>
+          <textarea class="form-control form-control-lg" type="text" placeholder="" autocomplete="off" name="description"></textarea>
           <small class="form-text text-muted">Consider adding historical data, when the question will close, or how the answer will be eventually be judged.</small>
         </div>
 
         <div class="form-group">
           <label>What unit are we estimating?</label>
           <div class="input-group">
-            <input type="text" name="unit" class="form-control" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>USD</i>" placeholder="" >
+            <input autocomplete="off" type="text" name="unit" class="form-control" placeholder="" >
           </div>
         <small class="form-text text-muted">The type of value we are measuring. (people, apples, USD, hardware)</small>
         </div>

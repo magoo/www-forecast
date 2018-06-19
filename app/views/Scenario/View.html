@@ -58,7 +58,7 @@ $(document).ready(function(){
               <label>Options</label>
               {{range $index, $option := .f.Options}}
 
-                <input type="text" class="form-control" name="options[{{$index}}]" value="{{$option}}" />
+                <input autocomplete="off" type="text" class="form-control" name="options[{{$index}}]" value="{{$option}}" />
 
               {{end}}
             </div>
@@ -88,25 +88,32 @@ $(document).ready(function(){
           </button>
         </div>
         <div class="modal-body">
+          {{template "concludewarning.html"}}
 
           <form method="post" action="/view/scenario/{{.f.Question.Id}}/conclude">
             <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
-
-              {{range $index, $option := .f.Options}}
-              <div class="form-check">
-                <input class="form-check-input" name="resultIndex" type="radio"  value="{{$index}}">
-                <label class="form-check-label">
-                  {{$option}}
-                </label>
+              <div class="form-group">
+                <h5>Final Value</h5>
+                {{range $index, $option := .f.Options}}
+                <div class="form-check">
+                  <input autocomplete="off" class="form-check-input" name="resultIndex" type="radio"  value="{{$index}}">
+                  <label class="form-check-label">
+                    {{$option}}
+                  </label>
+                </div>
+                {{end}}
               </div>
-              {{end}}
+
+        <div class="alert alert-warning" role="alert">
+          Careful! This cannot be reversed.
+        </div>
 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Conclude!</button>
         </div>
-        </form>
+          </form>
       </div>
     </div>
   </div>
@@ -128,7 +135,7 @@ $(document).ready(function(){
             <div class="input-group-prepend">
               <span class="input-group-text">{{indexToCharacter $index }}</span>
             </div>
-            <input name="value[]" value="{{if $.myForecast.Forecasts}}{{index $.myForecast.Forecasts $index}}{{end}}" type="text" class="form-control odds" {{if $.f.Results}}disabled{{end}} aria-label="Percentage of possiblity">
+            <input autocomplete="off" name="value[]" value="{{if $.myForecast.Forecasts}}{{index $.myForecast.Forecasts $index}}{{end}}" type="text" class="form-control odds" {{if $.f.Results}}disabled{{end}} aria-label="Percentage of possiblity">
             <div class="input-group-append">
               <span class="input-group-text">%</span>
             </div>

@@ -125,3 +125,35 @@ func (q Question) WriteRecord(message string, user string) (err error) {
   return err
 
 }
+
+func ViewQuestionAnswers(id string) (as []Answer) {
+  //Need to do a HD check here to prevent IDOR.
+
+    result := GetPrimaryIndexItem(id, "id", "id-index", "answers-tf")
+
+    as = []Answer{}
+
+    err := dynamodbattribute.UnmarshalListOfMaps(result.Items, &as)
+
+    if err != nil {
+      panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+    }
+
+    return as
+}
+
+func DeleteQuestionAnswers(id string) (err error) {
+
+  qas := ViewQuestionAnswers(id)
+
+  for _, v  := range qas {
+    fmt.Println("Deleting: ", v.Id, v.OwnerID)
+    DeleteCompositeIndexItem(v.Id, v.OwnerID, "id", "ownerid", "answers-tf")
+  }
+
+
+  fmt.Println("Deleted answers associated with question.")
+
+  return nil
+
+}

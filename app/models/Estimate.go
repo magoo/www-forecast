@@ -9,6 +9,7 @@ import (
   "github.com/google/uuid"
   "time"
   "strconv"
+  "errors"
 
 )
 
@@ -60,6 +61,10 @@ func (e Estimate) GetURL() (url string) {
 func (e Estimate) AddRecord(user string) (err error){
 
   er := ViewEstimateResults(e.Question.Id)
+
+  if len(er) < 1 {
+    return errors.New("No results.")
+  }
 
   emin, emax := GetAverageRange(er)
 

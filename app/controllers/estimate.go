@@ -60,9 +60,9 @@ func (c Estimate) Record(eid string) revel.Result {
 
 	if err != nil {
 		c.Flash.Error("Nothing to record.")
+	} else {
+		c.Flash.Success("Results added to record.")
 	}
-	c.Flash.Success("Results added to record.")
-
 	return c.Redirect("/view/estimate/%s", eid)
 
 }
@@ -116,13 +116,23 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 	err := models.PutItem(e, "questions-tf")
 
 	if err != nil {
-		fmt.Println("Error writing record to scenario.")
+		fmt.Println("Error writing question.")
+	}
+
+	u :=  c.Session["user"]
+	err = e.AddRecord(u)
+
+	if err != nil {
+		fmt.Println("Error writing record to question.")
+		return c.Redirect("/view/estimate/%s", eid)
 	}
 
 	err = e.Question.WriteRecord("Concluded. Brier Score is updated to " + strconv.FormatFloat(e.Question.BrierScore, 'f', -1, 64), c.Session["user"])
 
+	models.DeleteQuestionAnswers(eid)
+
 	if err != nil {
-		fmt.Println("Error writing record to scenario.")
+		fmt.Println("Error concluding question.")
 	}
 	c.Flash.Success("Updated score.")
 	return c.Redirect("/view/estimate/%s", eid)

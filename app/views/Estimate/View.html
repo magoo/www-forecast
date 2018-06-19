@@ -28,14 +28,14 @@
             {{end}}
               <div class="row ">
                 <div class="input-group mb-3 col-2">
-                  <input name="minimum" value="{{.e.AvgMinimum}}" type="text" class="form-control odds" {{if $.e.Concluded}}disabled{{end}}  aria-label="Minumum Value">
+                  <input autocomplete="off" name="minimum" value="{{.e.AvgMinimum}}" type="text" class="form-control odds" {{if $.e.Concluded}}disabled{{end}}  aria-label="Minumum Value">
                   <div class="input-group-append">
                     <span class="input-group-text">Min</span>
                   </div>
                 </div>
 
                 <div class="input-group mb-3 col-2">
-                  <input name="maximum" value="{{.e.AvgMaximum}}" type="text" class="form-control odds" {{if $.e.Concluded}}disabled{{end}} aria-label="Maximum Value">
+                  <input autocomplete="off" name="maximum" value="{{.e.AvgMaximum}}" type="text" class="form-control odds" {{if $.e.Concluded}}disabled{{end}} aria-label="Maximum Value">
                   <div class="input-group-append">
                     <span class="input-group-text">Max</span>
                   </div>
@@ -102,7 +102,7 @@
 
               <div class="form-group">
                 <label>Title</label>
-                <input type="text" class="form-control" name="title" value="{{.e.Title}}" />
+                <input autocomplete="off" type="text" class="form-control" name="title" value="{{.e.Title}}" />
               </div>
 
               <div class="form-group">
@@ -112,7 +112,7 @@
 
               <div class="form-group">
                 <label>Unit</label>
-                <input type="text" class="form-control" name="unit" value="{{.e.Unit}}" />
+                <input autocomplete="off" type="text" class="form-control" name="unit" value="{{.e.Unit}}" />
               </div>
 
 
@@ -132,21 +132,22 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Conclude this Estimate</h5>
-
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
           </div>
           <div class="modal-body">
-
+							{{template "concludewarning.html"}}
             <form method="post" action="/view/estimate/{{.e.Question.Id}}/conclude">
               <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
                 <div class="form-group">
                   <label>Final Value</label>
-                  <input class="form-control" id="resultValue" name="resultValue" type="text"  value="">
+                  <input autocomplete="off" class="form-control" id="resultValue" name="resultValue" type="text"  value="">
                   <small id="emailHelp" class="form-text text-muted">The actual data that occurred in hindsight.</small>
                 </div>
+								<div class="alert alert-warning" role="alert">
+									Careful! This cannot be reversed.
+								</div>
           </div>
+
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">Conclude!</button>

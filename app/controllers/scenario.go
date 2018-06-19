@@ -118,7 +118,6 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 		return c.Redirect("/view/scenario/%s", sid)
 	}
 
-	fmt.Println("concluding results:", len(sr))
 	af, _ := s.GetAverageForecasts()
 
 	//Calculate Brier Score
@@ -136,12 +135,20 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 
 	models.PutItem(s, "questions-tf")
 
-	err := s.Question.WriteRecord("Concluded. Brier Score is updated to " + strconv.FormatFloat(s.Question.BrierScore, 'f', -1, 64), c.Session["user"])
+	u :=  c.Session["user"]
+	err := s.AddRecord(u)
 
 	if err != nil {
 		fmt.Println("Error writing record to scenario.")
 	}
 
+	err = s.Question.WriteRecord("Concluded. Brier Score is updated to " + strconv.FormatFloat(s.Question.BrierScore, 'f', -1, 64), c.Session["user"])
+
+	if err != nil {
+		fmt.Println("Error concluding scenario.")
+	}
+
+	models.DeleteQuestionAnswers(sid)
 
 	return c.Redirect("/view/scenario/%s", sid)
 }

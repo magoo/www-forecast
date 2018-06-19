@@ -28,7 +28,7 @@ function removeParent(e){
 
         <div class="form-group">
           <label>What is your question?</label>
-          <input class="form-control form-control-lg" autocomplete="off" type="text" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>It will rain more than one inch tomorrow.</i>" name="title" />
+          <input class="form-control form-control-lg" autocomplete="off" type="text" name="title" />
           <small class="form-text text-muted">A future event that you will forecast.</small>
         </div>
 
@@ -36,18 +36,18 @@ function removeParent(e){
 
         <div class="form-group">
           <label>Describe your question.</label>
-          <textarea class="form-control form-control-lg" type="text" autocomplete="off" placeholder="" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>The local weather report.</i>" name="description"></textarea>
+          <textarea class="form-control form-control-lg" type="text" autocomplete="off" placeholder="" name="description"></textarea>
           <small class="form-text text-muted">Any extra information about the future event. For instance, how will it be judged?</small>
         </div>
 
         <div class="form-group">
           <label>What possible outcomes could happen?</label>
           <div class="input-group">
-            <input type="text" name="options[]" class="form-control" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>More than one inch of rain.</i>" placeholder="" >
+            <input type="text" name="options[]" class="form-control" autocomplete="off" placeholder="" >
           </div>
 
           <div class="input-group">
-            <input type="text" name="options[]" class="form-control" autocomplete="off" data-toggle="tooltip" data-placement="top" data-html="true" title="<i>Less than one inch of rain.</i>" placeholder="">
+            <input type="text" name="options[]" class="form-control" autocomplete="off" placeholder="">
           </div>
           <div id="forecast-form">
 
