@@ -5,7 +5,7 @@ import (
   "math"
 )
 
-func BrierCalc (af []int, index int) (score float64) {
+func BrierCalc (af []float64, index int) (score float64) {
 
   //fmt.Println("Entering Brier Calculation with index:", index)
 
@@ -19,11 +19,10 @@ func BrierCalc (af []int, index int) (score float64) {
     }
     dec := 0.01
 
-    score += (float64(outcome) - (float64(v) * dec)) * (float64(outcome) - (float64(v) * dec))
+    score += (float64(outcome) - (v * dec)) * (float64(outcome) - (v * dec))
     //fmt.Println("Current score: ", score)
   }
-  //fmt.Println("Final score:", score)
-  //fmt.Println("Outcome Array length:", len(af))
+
   return score / float64(len(af))
 
 }

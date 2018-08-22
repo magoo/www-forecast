@@ -38,7 +38,7 @@
             {{end}}
 
             <th class="averageresult">
-              {{index $.avg $index}}
+              {{index $.avg $index | printf "%.2f" }}
             </th>
         </tr>
         {{end}}

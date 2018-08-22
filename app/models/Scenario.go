@@ -143,25 +143,25 @@ func DeleteScenario(sid string, owner string) {
 
 }
 
-func (s Scenario) GetAverageForecasts() (avg []int, err error) {
+func (s Scenario) GetAverageForecasts() (avg []float64, err error) {
 
   sr := ViewScenarioResults(s.Question.Id)
 
   if len(sr) < 1 {
-    return []int{}, errors.New("No results.")
+    return []float64{}, errors.New("No results.")
   }
 
-  avg = []int{}
+  avg = []float64{}
 	size := len(sr[0].Forecasts)
 
 	for i := 0; i < size; i++ {
-		sum := 0
+		var sum float64 = 0
 			for _, v := range sr {
-					sum += v.Forecasts[i]
+					sum += float64(v.Forecasts[i])
 					//fmt.Println("Adding forecast: ", v.Forecasts[i])
 			}
-			//fmt.Println("Adding average to array: ", sum / len(sr))
-		avg = append(avg, sum / len(sr))
+			fmt.Println("Adding average to array: ", sum / float64(len(sr)))
+		avg = append(avg, sum / float64(len(sr)))
 	}
 
   return avg, nil
@@ -190,7 +190,7 @@ func (s Scenario) AddRecord(user string) (err error) {
   x := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
   for i, v := range results {
-    record += "" + string(x[i%25]) + ". " + " " + strconv.Itoa(v) + "% "
+    record += "" + string(x[i%25]) + ". " + " " + strconv.FormatFloat(v, 'f', 2, 32) + "% "
   }
 
 
