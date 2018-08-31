@@ -15,7 +15,7 @@ $(document).ready(function(){
 
       for (var i = 0, len = arr.length; i < len; i++) {
         console.log(arr[i].value);
-        total += parseInt(arr[i].value, 10) || 0;
+        total += parseFloat(arr[i].value, 10) || 0;
       }
       $("#total").val(total);
     }
