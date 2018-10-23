@@ -56,6 +56,12 @@
   version = "0.2"
 
 [[projects]]
+  name = "github.com/inconshreveable/log15"
+  packages = ["term"]
+  revision = "67afb5ed74ec82fd7ac8f49d27c509ac6f991970"
+  version = "v2.14"
+
+[[projects]]
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
   revision = "0b12d6b5"
@@ -65,6 +71,30 @@
   name = "github.com/magoo/revel-csrf"
   packages = ["."]
   revision = "aa24265f570c81f9bab6f4c1ecec27fbccf17f5d"
+
+[[projects]]
+  name = "github.com/mattn/go-colorable"
+  packages = ["."]
+  revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
+  version = "v0.0.9"
+
+[[projects]]
+  name = "github.com/mattn/go-isatty"
+  packages = ["."]
+  revision = "6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c"
+  version = "v0.0.4"
+
+[[projects]]
+  name = "github.com/revel/config"
+  packages = ["."]
+  revision = "662332b741dd464a886ab0901379c02b9bc5dc30"
+  version = "v0.20.0"
+
+[[projects]]
+  name = "github.com/revel/log15"
+  packages = ["."]
+  revision = "793412a67da6f8d15fede4c38f5c66272478cb8a"
+  version = "v2.11.20"
 
 [[projects]]
   name = "github.com/revel/modules"
@@ -78,10 +108,26 @@
   version = "v0.19.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/revel/pathtree"
+  packages = ["."]
+  revision = "41257a1839e945fce74afd070e02bab2ea2c776a"
+
+[[projects]]
   name = "github.com/revel/revel"
-  packages = ["testing"]
+  packages = [
+    ".",
+    "logger",
+    "testing"
+  ]
   revision = "fd65ef0defe5fa045524fd3319515793162a3628"
   version = "v0.20.0"
+
+[[projects]]
+  name = "github.com/xeonx/timeago"
+  packages = ["."]
+  revision = "714e6695c468c22fb6431a914d8c5f9d19fa2367"
+  version = "v1.0.0-rc3"
 
 [[projects]]
   branch = "master"
@@ -95,6 +141,12 @@
 
 [[projects]]
   branch = "master"
+  name = "golang.org/x/sys"
+  packages = ["unix"]
+  revision = "44b849a8bc13eb42e95e6c6c5e360481b73ec710"
+
+[[projects]]
+  branch = "master"
   name = "google.golang.org/api"
   packages = [
     "gensupport",
@@ -104,9 +156,27 @@
   ]
   revision = "a2651947f503a1793446d4058bb073a6fdf99e53"
 
+[[projects]]
+  name = "gopkg.in/fsnotify/fsnotify.v1"
+  packages = ["."]
+  revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
+  version = "v1.4.7"
+
+[[projects]]
+  name = "gopkg.in/natefinch/lumberjack.v2"
+  packages = ["."]
+  revision = "a96e63847dc3c67d17befa69c303767e2f84e54f"
+  version = "v2.1"
+
+[[projects]]
+  branch = "v0"
+  name = "gopkg.in/stack.v0"
+  packages = ["."]
+  revision = "9b43fcefddd0178abdabf4d484ab0d695d0011db"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bc0bd8c383d9d8cea798601faa74127941d91d9da9210c1d2d5c9c29142f03dc"
+  inputs-digest = "23a9c2ab53a1e30c50e42f679c1cebf905b854a21aa968c7d1e0caeb59bcff8a"
   solver-name = "gps-cdcl"
   solver-version = 1

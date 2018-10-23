@@ -24,7 +24,7 @@
 #   go-tests = true
 #   unused-packages = true
 
-ignored = ["github.com/revel/revel"]
+# ignored = ["github.com/revel/revel"]
 
 [[constraint]]
   name = "github.com/aws/aws-sdk-go"
