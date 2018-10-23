@@ -5,8 +5,9 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
-	"github.com/revel/revel"
 	"io"
+
+	"github.com/revel/revel"
 )
 
 var rawTokenLength, lengthCSRFToken int

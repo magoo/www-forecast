@@ -5,10 +5,11 @@ package csrf
 
 import (
 	"crypto/subtle"
-	"github.com/revel/revel"
+	"net/http"
 	"net/url"
 	"regexp"
-	"net/http"
+
+	"github.com/revel/revel"
 )
 
 const (
@@ -42,7 +43,7 @@ var CSRFFilter = func(c *revel.Controller, fc []revel.Filter) {
 			// onto a new algorithm for generating tokens, or a new session has
 			// been initiated. In any case, a new token is generated and the
 			// error will be detected later.
-			revel.AppLog.Debug("REVEL_CSRF: Bad token length.", "found", 	len(realToken), "expected", lengthCSRFToken)
+			revel.AppLog.Debug("REVEL_CSRF: Bad token length.", "found", len(realToken), "expected", lengthCSRFToken)
 			realToken = generateNewToken(c)
 		}
 	}

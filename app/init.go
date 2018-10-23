@@ -1,9 +1,10 @@
 package app
 
 import (
-	"github.com/revel/revel"
-	"github.com/cbonello/revel-csrf"
 	"www-forecast/app/models"
+
+	"github.com/magoo/revel-csrf"
+	"github.com/revel/revel"
 )
 
 var (
@@ -24,14 +25,14 @@ func init() {
 		revel.SessionFilter,           // Restore and write the session cookie.
 		revel.FlashFilter,             // Restore and write the flash cookie.
 		//added for CSRF protection
-		csrf.CSRFFilter,              // CSRF prevention.
-		revel.ValidationFilter,        // Restore kept validation errors and save new ones from cookie.
-		revel.I18nFilter,              // Resolve the requested language
-		HeaderFilter,                  // Add some security based headers
+		csrf.CSRFFilter,        // CSRF prevention.
+		revel.ValidationFilter, // Restore kept validation errors and save new ones from cookie.
+		revel.I18nFilter,       // Resolve the requested language
+		HeaderFilter,           // Add some security based headers
 		AuthFilter,
-		revel.InterceptorFilter,       // Run interceptors around the action.
-		revel.CompressFilter,          // Compress the result.
-		revel.ActionInvoker,           // Invoke the action.
+		revel.InterceptorFilter, // Run interceptors around the action.
+		revel.CompressFilter,    // Compress the result.
+		revel.ActionInvoker,     // Invoke the action.
 	}
 
 	// Register startup functions with OnAppStart
@@ -61,28 +62,28 @@ func init() {
 	revel.TemplateFuncs["brierColor"] = func(bs float64) string {
 
 		switch {
-			case (bs < .10):
-				return "#25A400"
-			case bs > .10 && bs < .15:
-				return "#25A400"
-			case bs > .15 && bs < .20:
-				return "#25A400"
-			case bs > .20 && bs < .25:
-				return "#D2FDC5"
-			case bs > .25 && bs < .30:
-				return "#FDCFC5"
-			case bs > .30 && bs < .45:
-				return "#FEBBAD"
-			case bs > .45 && bs < .55:
-				return "#FE9B86"
-			case bs > .65 && bs < .75:
-				return "#FF7355"
-			case bs > .75 && bs < .85:
-				return "#FF5733"
-			case bs > .85 && bs < 1:
-				return "#A8432E"
-			default:
-				return "black"
+		case (bs < .10):
+			return "#25A400"
+		case bs > .10 && bs < .15:
+			return "#25A400"
+		case bs > .15 && bs < .20:
+			return "#25A400"
+		case bs > .20 && bs < .25:
+			return "#D2FDC5"
+		case bs > .25 && bs < .30:
+			return "#FDCFC5"
+		case bs > .30 && bs < .45:
+			return "#FEBBAD"
+		case bs > .45 && bs < .55:
+			return "#FE9B86"
+		case bs > .65 && bs < .75:
+			return "#FF7355"
+		case bs > .75 && bs < .85:
+			return "#FF5733"
+		case bs > .85 && bs < 1:
+			return "#A8432E"
+		default:
+			return "black"
 		}
 
 	}
@@ -103,7 +104,7 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 	c.Response.Out.Header().Add("X-XSS-Protection", "1; mode=block")
 	c.Response.Out.Header().Add("X-Content-Type-Options", "nosniff")
 	if revel.RunMode == "prod" {
-		c.Response.Out.Header().Add("Strict-Transport-Security","max-age=31536000; includeSubDomains; preload")
+		c.Response.Out.Header().Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
 	}
 
 	fc[0](c, fc[1:]) // Execute the next filter stage.

@@ -37,12 +37,6 @@
   version = "v1.12.79"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/cbonello/revel-csrf"
-  packages = ["."]
-  revision = "4dd0f3c795bb32e987fe8eea7f13078581ada38d"
-
-[[projects]]
   name = "github.com/docker/docker"
   packages = [
     "pkg/namesgenerator",
@@ -67,6 +61,12 @@
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
   revision = "0b12d6b5"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/magoo/revel-csrf"
+  packages = ["."]
+  revision = "aa24265f570c81f9bab6f4c1ecec27fbccf17f5d"
 
 [[projects]]
   name = "github.com/revel/modules"
@@ -108,6 +108,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6a40f8efc1d14aabd5aeedbb9f5e20ed369cf64bc0da25275d534a5a891875b3"
+  inputs-digest = "0138d210e1e7e504dad7b93d7f96ede6644fa6ae26665303fcb089e0273e5d94"
   solver-name = "gps-cdcl"
   solver-version = 1
