@@ -72,6 +72,7 @@
   name = "github.com/revel/modules"
   packages = [
     "static/app/controllers",
+    "testrunner",
     "testrunner/app",
     "testrunner/app/controllers"
   ]
@@ -108,6 +109,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0138d210e1e7e504dad7b93d7f96ede6644fa6ae26665303fcb089e0273e5d94"
+  inputs-digest = "bc0bd8c383d9d8cea798601faa74127941d91d9da9210c1d2d5c9c29142f03dc"
   solver-name = "gps-cdcl"
   solver-version = 1

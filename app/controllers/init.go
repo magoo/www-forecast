@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/revel/revel"
 )
+
 func init() {
 
 	revel.InterceptFunc(enforceHSTS, revel.BEFORE, &Home{})
@@ -30,11 +31,11 @@ func init() {
 
 func enforceHSTS(c *revel.Controller) revel.Result {
 
-		if c.Request.Header.Get("X-Forwarded-Proto") != "" {
-			if c.Request.Header.Get("X-Forwarded-Proto") != "https" {
-				return c.Redirect("https://e6e.io")
-			}
+	if c.Request.Header.Get("X-Forwarded-Proto") != "" {
+		if c.Request.Header.Get("X-Forwarded-Proto") != "https" {
+			return c.Redirect("https://e6e.io")
 		}
+	}
 
 	return nil
 }
@@ -44,7 +45,9 @@ func checkUser(c *revel.Controller) revel.Result {
 
 	revel.AppLog.Debug("AccessLog", "user", c.Session["user"], "ip", c.ClientIP, "path", c.Request.URL.Path)
 
-	c.Validation.Required(c.Session["user"])
+	user := c.Session["user"]
+
+	c.Validation.Required(user).Message("Must be logged in.")
 
 	if c.Validation.HasErrors() {
 
@@ -55,5 +58,5 @@ func checkUser(c *revel.Controller) revel.Result {
 		return c.Redirect(Home.Index)
 	}
 
-    return nil
+	return nil
 }
