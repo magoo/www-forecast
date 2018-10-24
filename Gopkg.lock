@@ -37,8 +37,8 @@
     "service/dynamodb/dynamodbattribute",
     "service/sts"
   ]
-  revision = "9a79cc876234949427d966249a09fc98e7864bde"
-  version = "v1.15.61"
+  revision = "c446a547f59665b7ce54ac57bd8f8b04e5179563"
+  version = "v1.15.62"
 
 [[projects]]
   name = "github.com/docker/docker"
@@ -101,7 +101,6 @@
   packages = [
     "static/app/controllers",
     "static/app/model",
-    "testrunner",
     "testrunner/app",
     "testrunner/app/controllers"
   ]
@@ -144,7 +143,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "44b849a8bc13eb42e95e6c6c5e360481b73ec710"
+  revision = "5cd93ef61a7c8f0f858690154eb6de2e69415fa1"
 
 [[projects]]
   branch = "master"
@@ -178,6 +177,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "515b35a6a8b4787c806adbb49eb8f5131d2844c3518f2cbb50f4a4d005d91a7b"
+  inputs-digest = "24b98b0862896dbe12272645bf827720bc97cf3c412a04912d810ab258fe7a91"
   solver-name = "gps-cdcl"
   solver-version = 1
