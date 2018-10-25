@@ -149,7 +149,7 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 		fmt.Println("Error concluding scenario.")
 	}
 
-	models.DeleteQuestionAnswers(sid)
+	// models.DeleteQuestionAnswers(sid)
 
 	return c.Redirect("/view/scenario/%s", sid)
 }

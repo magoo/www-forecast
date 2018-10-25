@@ -131,7 +131,7 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 
 	err = e.Question.WriteRecord("Concluded. Brier Score is updated to "+strconv.FormatFloat(e.Question.BrierScore, 'f', -1, 64), c.Session["user"])
 
-	models.DeleteQuestionAnswers(eid)
+	// models.DeleteQuestionAnswers(eid)
 
 	if err != nil {
 		fmt.Println("Error concluding question.")
