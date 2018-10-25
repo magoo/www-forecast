@@ -31,6 +31,8 @@ Install terraform. The `tf` folder contains a terraform configuration to create 
 
 `terraform apply` within the `tf directory` to set up.
 
+You can use the `E6E_TABLE_PREFIX` environment variable to point the app at a specific set of tables, but you'll have to modify the terraform script to name these tables with your chosen prefix.
+
 ### Google Identity
 Need a set of Google API credentials to work with `http://localhost:4000` or whatever domain you're using.
 

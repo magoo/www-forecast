@@ -39,7 +39,7 @@ func CreateRank (title string, description string, options []string,  hd string,
   				Options: options,
   		}
 
-  		err := PutItem(item, "questions-tf")
+  		err := PutItem(item, questionTable)
 
       if err != nil {
         fmt.Println("Error writing to db.")
@@ -91,7 +91,7 @@ func UpdateRank (rid string, title string, description string, options []string,
   //Enforce moderator
   conditionexpression := "ownerid = :user"
 
-  UpdateItem(key, updateexpression, expressionattrvalues, "questions-tf", conditionexpression)
+  UpdateItem(key, updateexpression, expressionattrvalues, questionTable, conditionexpression)
 
   fmt.Println("Updated rank.")
 
@@ -100,7 +100,7 @@ func UpdateRank (rid string, title string, description string, options []string,
 
 func GetRank (rid string) (r Rank) {
 
-  result := GetPrimaryItem(rid, "id", "questions-tf")
+  result := GetPrimaryItem(rid, "id", questionTable)
 
   r = Rank{}
 
@@ -121,7 +121,7 @@ func GetRank (rid string) (r Rank) {
 
 func ListRanks(user string) (r []Rank) {
 
-  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "questions-tf")
+  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", questionTable)
 
   r = []Rank{}
 
@@ -137,7 +137,7 @@ func ListRanks(user string) (r []Rank) {
 
 func DeleteRank(rid string, owner string) {
 
-  DeletePrimaryItem(rid, "id", "questions-tf", "ownerid", owner)
+  DeletePrimaryItem(rid, "id", questionTable, "ownerid", owner)
 
   fmt.Println("Deleted rank.", rid)
 
@@ -214,7 +214,7 @@ func (r Rank) AddRecord(user string) (err error){
 
   //av, err := dynamodbattribute.MarshalMap(item)
 
-  UpdateItem(key, "ADD records :r", item, "questions-tf", "ownerid = :user")
+  UpdateItem(key, "ADD records :r", item, questionTable, "ownerid = :user")
 
   return err
 
