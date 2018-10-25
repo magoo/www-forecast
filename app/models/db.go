@@ -1,19 +1,27 @@
 package models
 
 import (
-		"github.com/aws/aws-sdk-go/aws"
-	  "github.com/aws/aws-sdk-go/aws/session"
-	  "github.com/aws/aws-sdk-go/service/dynamodb"
-		"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-		"fmt"
-		"os"
+	"fmt"
+	"os"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
 //Revel config not accessible here. Using OS environment instead.
 var sess, _ = session.NewSession(&aws.Config{
-		Region: aws.String(os.Getenv("E6E_AWS_ENV")),
-	},
+	Region: aws.String(os.Getenv("E6E_AWS_ENV")),
+},
 )
+
+//Set this environment variable if you need a table prefix in DynamoDB.
+var tablePrefix = GetTablePrefix()
+
+var questionTable = tablePrefix + "questions-tf"
+
+var answerTable = tablePrefix + "answers-tf"
 
 var Svc = dynamodb.New(sess)
 
@@ -28,7 +36,7 @@ func PutItem(item interface{}, table string) (err error) {
 	}
 
 	input := &dynamodb.PutItemInput{
-		Item: av,
+		Item:      av,
 		TableName: aws.String(table),
 	}
 
@@ -42,13 +50,13 @@ func PutItem(item interface{}, table string) (err error) {
 	return
 }
 
-func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string, expressionattrvalues map[string]*dynamodb.AttributeValue, table string, conditionexpression string ) (err error) {
+func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string, expressionattrvalues map[string]*dynamodb.AttributeValue, table string, conditionexpression string) (err error) {
 
 	input := &dynamodb.UpdateItemInput{
-    ExpressionAttributeValues: expressionattrvalues,
-    Key: key,
-    TableName:        aws.String(table),
-    UpdateExpression: aws.String(updateexpression),
+		ExpressionAttributeValues: expressionattrvalues,
+		Key:                 key,
+		TableName:           aws.String(table),
+		UpdateExpression:    aws.String(updateexpression),
 		ConditionExpression: aws.String(conditionexpression),
 	}
 
@@ -68,41 +76,41 @@ func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string
 	return
 }
 
-func GetPrimaryIndexItem(primaryValue string, primary string, index string, table string) (result *dynamodb.QueryOutput){
+func GetPrimaryIndexItem(primaryValue string, primary string, index string, table string) (result *dynamodb.QueryOutput) {
 	input := &dynamodb.QueryInput{
-			ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-					":v1": {
-							S: aws.String(primaryValue),
-					},
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":v1": {
+				S: aws.String(primaryValue),
 			},
-			KeyConditionExpression: aws.String(primary + " = :v1"),
-			IndexName:              aws.String(index),
-			TableName:              aws.String(table),
+		},
+		KeyConditionExpression: aws.String(primary + " = :v1"),
+		IndexName:              aws.String(index),
+		TableName:              aws.String(table),
 	}
 
 	result, err := Svc.Query(input)
 	if err != nil {
-					fmt.Println(err.Error())
+		fmt.Println(err.Error())
 	}
 
 	return
 
 }
 
-func GetPrimaryItem(primaryValue string, primary string, table string) (result *dynamodb.GetItemOutput){
+func GetPrimaryItem(primaryValue string, primary string, table string) (result *dynamodb.GetItemOutput) {
 	input := &dynamodb.GetItemInput{
-    Key: map[string]*dynamodb.AttributeValue{
-        primary: {
-            S: aws.String(primaryValue),
-        },
-    },
-    TableName: aws.String(table),
-  }
+		Key: map[string]*dynamodb.AttributeValue{
+			primary: {
+				S: aws.String(primaryValue),
+			},
+		},
+		TableName: aws.String(table),
+	}
 
-  result, err := Svc.GetItem(input)
-  if err != nil {
-          fmt.Println(err.Error())
-  }
+	result, err := Svc.GetItem(input)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 
 	return
 }
@@ -110,21 +118,21 @@ func GetPrimaryItem(primaryValue string, primary string, table string) (result *
 func GetCompositeKeyItem(primaryValue string, sortValue string, primary string, sort string, table string) (result *dynamodb.GetItemOutput) {
 
 	input := &dynamodb.GetItemInput{
-    Key: map[string]*dynamodb.AttributeValue{
-        primary: {
-            S: aws.String(primaryValue),
-        },
-        sort: {
-            S: aws.String(sortValue),
-        },
-    },
-    TableName: aws.String(table),
-  }
+		Key: map[string]*dynamodb.AttributeValue{
+			primary: {
+				S: aws.String(primaryValue),
+			},
+			sort: {
+				S: aws.String(sortValue),
+			},
+		},
+		TableName: aws.String(table),
+	}
 
-  result, err := Svc.GetItem(input)
-  if err != nil {
-          fmt.Println(err.Error())
-  }
+	result, err := Svc.GetItem(input)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 
 	return
 
@@ -133,23 +141,23 @@ func GetCompositeKeyItem(primaryValue string, sortValue string, primary string, 
 func GetCompositeIndexItem(primaryValue string, sortValue string, primary string, sort string, index string, table string) (result *dynamodb.QueryOutput) {
 
 	input := &dynamodb.QueryInput{
-			ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-					":v1": {
-							S: aws.String(primaryValue),
-					},
-					":v2": {
-							S: aws.String(sortValue),
-					},
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":v1": {
+				S: aws.String(primaryValue),
 			},
-			KeyConditionExpression: aws.String(primary + " = :v1 AND " + sort + " = :v2"),
-			IndexName:              aws.String(index),
-			TableName:              aws.String(table),
+			":v2": {
+				S: aws.String(sortValue),
+			},
+		},
+		KeyConditionExpression: aws.String(primary + " = :v1 AND " + sort + " = :v2"),
+		IndexName:              aws.String(index),
+		TableName:              aws.String(table),
 	}
 
 	result, err := Svc.Query(input)
 	if err != nil {
-					fmt.Println("Error getting composite index item: " , err.Error())
-					fmt.Println(primary + " = :v1 AND " + sort + " = :v2")
+		fmt.Println("Error getting composite index item: ", err.Error())
+		fmt.Println(primary + " = :v1 AND " + sort + " = :v2")
 	}
 
 	return
@@ -159,48 +167,58 @@ func GetCompositeIndexItem(primaryValue string, sortValue string, primary string
 func DeleteCompositeIndexItem(primaryValue string, sortValue string, primary string, sort string, table string) {
 
 	deleteRequest := &dynamodb.DeleteItemInput{
-			Key: map[string]*dynamodb.AttributeValue{
-					primary: {
-							S: aws.String(primaryValue),
-					},
-					sort: {
-							S: aws.String(sortValue),
-					},
+		Key: map[string]*dynamodb.AttributeValue{
+			primary: {
+				S: aws.String(primaryValue),
 			},
-			TableName: aws.String(table),
+			sort: {
+				S: aws.String(sortValue),
+			},
+		},
+		TableName: aws.String(table),
 	}
 
 	_, err := Svc.DeleteItem(deleteRequest)
 
 	if err != nil {
-						fmt.Println("Got error calling DeleteItem")
-						fmt.Println(err.Error())
-				}
-
+		fmt.Println("Got error calling DeleteItem")
+		fmt.Println(err.Error())
+	}
 
 }
 
 func DeletePrimaryItem(primaryValue string, primary string, table string, attrname string, attrvalue string) {
 
 	deleteRequest := &dynamodb.DeleteItemInput{
-			Key: map[string]*dynamodb.AttributeValue{
-					primary: {
-							S: aws.String(primaryValue),
-					},
+		Key: map[string]*dynamodb.AttributeValue{
+			primary: {
+				S: aws.String(primaryValue),
 			},
-			TableName: aws.String(table),
-			ConditionExpression: aws.String(attrname + " = :v1"),
-			ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-				":v1": { S: aws.String(attrvalue)},
-			},
+		},
+		TableName:           aws.String(table),
+		ConditionExpression: aws.String(attrname + " = :v1"),
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":v1": {S: aws.String(attrvalue)},
+		},
 	}
 
 	_, err := Svc.DeleteItem(deleteRequest)
 
 	if err != nil {
-						fmt.Println("Got error calling DeleteItem")
-						fmt.Println(err.Error())
-				}
+		fmt.Println("Got error calling DeleteItem")
+		fmt.Println(err.Error())
+	}
 
+}
+
+func GetTablePrefix() (prefix string) {
+
+	prefix = os.Getenv("E6E_TABLE_PREFIX")
+
+	if prefix != "" {
+		prefix = prefix + "-"
+	}
+
+	return
 
 }

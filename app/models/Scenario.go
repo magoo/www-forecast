@@ -39,7 +39,7 @@ func CreateScenario(title string, description string, options []string, hd strin
           Options: options,
   		}
 
-  		err:= PutItem(item, "questions-tf")
+  		err:= PutItem(item, questionTable)
 
       if err != nil {
         fmt.Println("Error writing to db.")
@@ -90,7 +90,7 @@ func UpdateScenario(sid string, title string, description string, options []stri
       conditionexpression := "ownerid = :user"
 
 
-  		UpdateItem(key, updateexpression, expressionattrvalues, "questions-tf", conditionexpression)
+  		UpdateItem(key, updateexpression, expressionattrvalues, questionTable, conditionexpression)
 
   		fmt.Println("Updated scenario.")
 }
@@ -98,7 +98,7 @@ func UpdateScenario(sid string, title string, description string, options []stri
 func ViewScenario(sid string) (s Scenario) {
 
   // I'll need to change this to make "secret link" work.
-  result := GetPrimaryItem(sid, "id", "questions-tf")
+  result := GetPrimaryItem(sid, "id", questionTable)
 
   s = Scenario{}
 
@@ -119,7 +119,7 @@ if s.Question.Id == "" {
 
 func ListScenarios(user string) (s []Scenario) {
 
-  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "questions-tf")
+  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", questionTable)
 
   s = []Scenario{}
 
@@ -135,7 +135,7 @@ func ListScenarios(user string) (s []Scenario) {
 
 func DeleteScenario(sid string, owner string) {
 
-  DeletePrimaryItem(sid, "id", "questions-tf", "ownerid", owner)
+  DeletePrimaryItem(sid, "id", questionTable, "ownerid", owner)
 
   fmt.Println("Deleted scenario.", sid)
 
@@ -207,7 +207,7 @@ func (s Scenario) AddRecord(user string) (err error) {
 
   //av, err := dynamodbattribute.MarshalMap(item)
 
-  UpdateItem(key, "ADD records :r", item, "questions-tf", "ownerid = :user")
+  UpdateItem(key, "ADD records :r", item, questionTable, "ownerid = :user")
 
   return err
 

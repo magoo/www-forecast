@@ -41,7 +41,7 @@ func CreateEstimate (title string, description string, unit string, hd string, o
           Unit: unit,
   		}
 
-  		err := PutItem(item, "questions-tf")
+  		err := PutItem(item, questionTable)
 
       if err != nil {
         fmt.Println("Error writing to db.")
@@ -92,7 +92,7 @@ func (e Estimate) AddRecord(user string) (err error){
 
   //av, err := dynamodbattribute.MarshalMap(item)
 
-  UpdateItem(key, "ADD records :r", item, "questions-tf", "ownerid = :user")
+  UpdateItem(key, "ADD records :r", item, questionTable, "ownerid = :user")
 
   return err
 
@@ -148,13 +148,13 @@ func UpdateEstimate (eid string, title string, description string, unit string, 
   updateexpression := "SET title = :t, description = :d, unitname = :unit"
   conditionexpression := "ownerid = :user"
 
-  UpdateItem(key, updateexpression, expressionattrvalues, "questions-tf", conditionexpression)
+  UpdateItem(key, updateexpression, expressionattrvalues, questionTable, conditionexpression)
 
 }
 
 func GetEstimate (eid string) (e Estimate) {
 
-  result := GetPrimaryItem(eid, "id", "questions-tf")
+  result := GetPrimaryItem(eid, "id", questionTable)
 
   e = Estimate{}
 
@@ -175,7 +175,7 @@ func GetEstimate (eid string) (e Estimate) {
 
 func ListEstimates(user string) (e []Estimate) {
 
-  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "questions-tf")
+  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", questionTable)
 
   e = []Estimate{}
 
@@ -191,7 +191,7 @@ func ListEstimates(user string) (e []Estimate) {
 
 func DeleteEstimate(eid string, owner string) {
 
-  DeletePrimaryItem(eid, "id", "questions-tf", "ownerid", owner)
+  DeletePrimaryItem(eid, "id", questionTable, "ownerid", owner)
 
   fmt.Println("Deleted estimate.", eid)
 
