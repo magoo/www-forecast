@@ -1,24 +1,39 @@
 # e6e
+This is a Revel web application with a DynamoDB backend, requiring Google developer credentials.
 
 ## Development workflow
 Dependencies before getting started:
 
-1) Clone the github repo
-2) Setup Go & Dep
+1) Setup Go & Dep
+2) Clone the github repo
 3) Setup Revel
 4) Verify the install works
-5) Setup Google Identity
-6) Setup AWS credentials
-7) Setup DynamoDB
+5) Setup AWS credentials
+6) Setup DynamoDB
+7) Setup Google Identity
 
-### Go & GOPATH
-Standard install of go works. Golang is fairly opinionated on having a structured `$GOPATH`, and my code lives within my `$GOPATH/src/www-forecast`.
 
-### Dep
+### 1. Go & GOPATH
+Currently developing with `go1.11.1`. Golang is picky on having a structured `$GOPATH`.
+
+Clone this repo into `$GOPATH/src/www-forecast`.
+
+### 2. Dep
 Install the [dep package manager for go](https://github.com/golang/dep), brew install dep and ensure dep.
 
-### AWS IAM Account
-Create a DynamoDB table and an IAM programmatic user account that can read/write to it.
+
+### 3. Set up Revel
+You'll need the revel command line tool.
+
+```bash
+go get -u github.com/revel/cmd/revel
+```
+
+### 4. Verify the install works.
+Enter the `$GOPATH/src/www-forecast` directory and `revel run`. The server should start locally. It won't work quite yet as we haven't setup AWS and Google credentials, but this is a good point to stop and troubleshoot any issues with Go or Revel.
+
+### 5. AWS IAM Account
+Create an IAM programmatic user account with permission to modify DynamoDB.
 
 Once you have these, make sure they are loaded in your path:
 ```
@@ -26,15 +41,15 @@ export AWS_SECRET_KEY= (AWS secret key)
 export AWS_ACCESS_KEY= (AWS access Key)
 ```
 
-### DynamoDB
+### 6. DynamoDB
 Install terraform. The `tf` folder contains a terraform configuration to create the DynamoDB tables needed to operate.
 
-`terraform apply` within the `tf directory` to set up.
+`terraform apply` within the `tf/` directory to set up tables.
 
-You can use the `E6E_TABLE_PREFIX` environment variable to point the app at a specific set of tables, but you'll have to modify the terraform script to name these tables with your chosen prefix.
+> You can use the `E6E_TABLE_PREFIX` environment variable to point the app at a specific set of tables, but you'll have to modify the terraform script to name these tables with your chosen prefix.
 
-### Google Identity
-Need a set of Google API credentials to work with `http://localhost:4000` or whatever domain you're using.
+### 7. Google Identity
+You'll need a set of Google API/OAuth credentials to work with `http://localhost:9000` or whatever domain you'll be using.
 
 - https://console.developers.google.com/apis/credentials
 
@@ -44,13 +59,8 @@ export E6E_GOOGLE_SECRET= (Google Secret)
 export E6E_GOOGLE_CLIENT= (Google Client)
 ```
 
-### Installing and starting Revel
-Install [revel command line tool](https://revel.github.io/tutorial/gettingstarted.html).
-
-For a local e6e server, just running `revel run` from the main `www-forecast` directory.
-
-## Production
-This is currently a docker container (`Dockerfile` included) that is pushed to Fargate (An AWS service). Roles and environment are configured in production.
+## e6e.io Production
+This is currently a docker container (`Dockerfile` included) that is pushed to Fargate (An AWS service). The Fargate configuration is manual and not yet documented. Currently, roles and environment are configured in production.
 
 1. `docker build -t scrty .`
 2. `docker tag scrty:latest 832911230879.dkr.ecr.us-east-1.amazonaws.com/scrty:latest`
