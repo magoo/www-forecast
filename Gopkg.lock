@@ -2,6 +2,7 @@
 
 
 [[projects]]
+  digest = "1:ae738a928a51fb6a71985e555b3d39d2140e3a52f1f444e71bff6761ab4120fe"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -35,148 +36,203 @@
     "private/protocol/xml/xmlutil",
     "service/dynamodb",
     "service/dynamodb/dynamodbattribute",
-    "service/sts"
+    "service/sts",
   ]
+  pruneopts = "T"
   revision = "c446a547f59665b7ce54ac57bd8f8b04e5179563"
   version = "v1.15.62"
 
 [[projects]]
+  digest = "1:737600611200b7066942318948256cde82f62c2cafa0045c483f1c7c5fc0ad2b"
   name = "github.com/docker/docker"
   packages = [
     "pkg/namesgenerator",
-    "pkg/random"
+    "pkg/random",
   ]
+  pruneopts = "T"
   revision = "092cba3727bb9b4a2f0e922cd6c0f93ea270e363"
   version = "v1.13.1"
 
 [[projects]]
+  digest = "1:8f8811f9be822914c3a25c6a071e93beb4c805d7b026cbf298bc577bc1cc945b"
   name = "github.com/google/uuid"
   packages = ["."]
+  pruneopts = "T"
   revision = "064e2069ce9c359c118179501254f67d7d37ba24"
   version = "0.2"
 
 [[projects]]
+  digest = "1:55d1a44ee5e75217224af913201bb5fdb0afe4769fc4853f32a35572c199cf29"
   name = "github.com/inconshreveable/log15"
   packages = ["term"]
+  pruneopts = "T"
   revision = "67afb5ed74ec82fd7ac8f49d27c509ac6f991970"
   version = "v2.14"
 
 [[projects]]
+  digest = "1:eebce3c1fad57b604c517ea649edd5dcbd2530f0f7e62ac0b7b232f2eacbcc88"
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
+  pruneopts = "T"
   revision = "0b12d6b5"
 
 [[projects]]
   branch = "master"
+  digest = "1:c17a219b87eb88e05192dcfe313bab626fa8782427b21ee799a8437a5a2c344c"
   name = "github.com/magoo/revel-csrf"
   packages = ["."]
+  pruneopts = "T"
   revision = "aa24265f570c81f9bab6f4c1ecec27fbccf17f5d"
 
 [[projects]]
+  digest = "1:b168836ecd85a2d138391dbc464d2442ea9400c29cc0636f2c6056b996692e29"
   name = "github.com/mattn/go-colorable"
   packages = ["."]
+  pruneopts = "T"
   revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
   version = "v0.0.9"
 
 [[projects]]
+  digest = "1:0981502f9816113c9c8c4ac301583841855c8cf4da8c72f696b3ebedf6d0e4e5"
   name = "github.com/mattn/go-isatty"
   packages = ["."]
+  pruneopts = "T"
   revision = "6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c"
   version = "v0.0.4"
 
 [[projects]]
+  digest = "1:44abf07d5be18dc7ce9299b74ec68bb18f5bcb75e72f7e81750b6f103969521d"
   name = "github.com/revel/config"
   packages = ["."]
+  pruneopts = "T"
   revision = "662332b741dd464a886ab0901379c02b9bc5dc30"
   version = "v0.20.0"
 
 [[projects]]
+  digest = "1:5feca17db09c8862450c74a1fc0a3e5c56dcf7b5866eff623907f43554820b77"
   name = "github.com/revel/log15"
   packages = ["."]
+  pruneopts = "T"
   revision = "793412a67da6f8d15fede4c38f5c66272478cb8a"
   version = "v2.11.20"
 
 [[projects]]
+  digest = "1:04a343093f76d611b8eb5f5fd3d577b894d2907edbe5be8f661f5a65c8dabb78"
   name = "github.com/revel/modules"
   packages = [
+    ".",
     "static/app/controllers",
     "static/app/model",
     "testrunner/app",
-    "testrunner/app/controllers"
+    "testrunner/app/controllers",
   ]
+  pruneopts = "T"
   revision = "6403ed92ef388a1ec746c08db8456397fc0b8f89"
   version = "v0.20.1"
 
 [[projects]]
   branch = "master"
+  digest = "1:a0812e773563f2e41afebf582088a86b0f01eb5bd794c19ecc1bce25820b1fa2"
   name = "github.com/revel/pathtree"
   packages = ["."]
+  pruneopts = "T"
   revision = "41257a1839e945fce74afd070e02bab2ea2c776a"
 
 [[projects]]
+  digest = "1:f6c9d732866e17eacaa57cfc54a02013809de9e863197a86692134f15d3a153c"
   name = "github.com/revel/revel"
   packages = [
     ".",
     "logger",
-    "testing"
+    "testing",
   ]
+  pruneopts = "T"
   revision = "fd65ef0defe5fa045524fd3319515793162a3628"
   version = "v0.20.0"
 
 [[projects]]
+  digest = "1:aafbac4d92cf743e01242738f6aa09cb7aa5259d7e1221cc2c146eb99854cc8e"
   name = "github.com/xeonx/timeago"
   packages = ["."]
+  pruneopts = "T"
   revision = "714e6695c468c22fb6431a914d8c5f9d19fa2367"
   version = "v1.0.0-rc3"
 
 [[projects]]
   branch = "master"
+  digest = "1:0c04b2a25e05e53a014eb3329cd9e3759bee811e333cf6db2ec1819d6c2dad31"
   name = "golang.org/x/net"
   packages = [
     "context",
     "context/ctxhttp",
-    "websocket"
+    "websocket",
   ]
+  pruneopts = "T"
   revision = "9b4f9f5ad5197c79fd623a3638e70d8b26cef344"
 
 [[projects]]
   branch = "master"
+  digest = "1:d6d9bf31934efd450aeb0a07061dce8a0e84bc80e4aae05841dd588325832a40"
   name = "golang.org/x/sys"
   packages = ["unix"]
+  pruneopts = "T"
   revision = "5cd93ef61a7c8f0f858690154eb6de2e69415fa1"
 
 [[projects]]
   branch = "master"
+  digest = "1:da6605042a480ddf51b5261d24f4dc73f4016fc6ec9acb8185a69de982921596"
   name = "google.golang.org/api"
   packages = [
     "gensupport",
     "googleapi",
     "googleapi/internal/uritemplates",
-    "oauth2/v2"
+    "oauth2/v2",
   ]
+  pruneopts = "T"
   revision = "a2651947f503a1793446d4058bb073a6fdf99e53"
 
 [[projects]]
+  digest = "1:7fc160b460a6fc506b37fcca68332464c3f2cd57b6e3f111f26c5bbfd2d5518e"
   name = "gopkg.in/fsnotify/fsnotify.v1"
   packages = ["."]
+  pruneopts = "T"
   revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
   version = "v1.4.7"
 
 [[projects]]
+  digest = "1:c805e517269b0ba4c21ded5836019ed7d16953d4026cb7d00041d039c7906be9"
   name = "gopkg.in/natefinch/lumberjack.v2"
   packages = ["."]
+  pruneopts = "T"
   revision = "a96e63847dc3c67d17befa69c303767e2f84e54f"
   version = "v2.1"
 
 [[projects]]
   branch = "v0"
+  digest = "1:00d2943cfcfbb3dc043f6d8586d0db5a9e8507c36429babe8d5d1af8ee43a753"
   name = "gopkg.in/stack.v0"
   packages = ["."]
+  pruneopts = "T"
   revision = "9b43fcefddd0178abdabf4d484ab0d695d0011db"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "24b98b0862896dbe12272645bf827720bc97cf3c412a04912d810ab258fe7a91"
+  input-imports = [
+    "github.com/aws/aws-sdk-go/aws",
+    "github.com/aws/aws-sdk-go/aws/session",
+    "github.com/aws/aws-sdk-go/service/dynamodb",
+    "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute",
+    "github.com/docker/docker/pkg/namesgenerator",
+    "github.com/google/uuid",
+    "github.com/magoo/revel-csrf",
+    "github.com/revel/modules",
+    "github.com/revel/modules/static/app/controllers",
+    "github.com/revel/modules/testrunner/app",
+    "github.com/revel/modules/testrunner/app/controllers",
+    "github.com/revel/revel",
+    "github.com/revel/revel/testing",
+    "google.golang.org/api/oauth2/v2",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1

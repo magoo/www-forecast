@@ -25,7 +25,14 @@
 #   unused-packages = true
 
 # ignored = ["github.com/revel/revel"]
-[[constraint]]
+
+required = ["github.com/revel/revel", "github.com/revel/modules"]
+
+[[override]]
+  version = "0.20.1"
+  name = "github.com/revel/modules"
+
+[[override]]
   name = "github.com/revel/revel"
   version = "0.20.0"
 
@@ -38,13 +45,9 @@
   version = "0.2.0"
 
 [[constraint]]
-  name = "github.com/revel/modules"
-  version = "0.20.1"
-
-[[constraint]]
   branch = "master"
   name = "google.golang.org/api"
 
 [prune]
   go-tests = true
-  unused-packages = true
+  # unused-packages = true
