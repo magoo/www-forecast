@@ -19,11 +19,18 @@ var sess, _ = session.NewSession(&aws.Config{
 //Set this environment variable if you need a table prefix in DynamoDB.
 var tablePrefix = GetTablePrefix()
 
-var questionTable = tablePrefix + "questions-tf"
+var questionTable = GetTableName("E6E_QUESTIONS_TABLE_NAME", "questions-tf") 
 
-var answerTable = tablePrefix + "answers-tf"
+var answerTable = GetTableName("E6E_ANSWERS_TABLE_NAME", "answers-tf") 
 
 var Svc = dynamodb.New(sess)
+
+func GetTableName(envvar, fallback string) string {
+	if value, ok := os.LookupEnv(envvar); ok {
+		return tablePrefix + value
+	}
+	return tablePrefix + fallback
+}
 
 func PutItem(item interface{}, table string) (err error) {
 
