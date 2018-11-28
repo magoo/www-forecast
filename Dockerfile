@@ -1,11 +1,22 @@
 FROM golang:1.8
 
-RUN go get github.com/revel/cmd/revel
+EXPOSE 9000
+
+ENV DEP_URL https://github.com/golang/dep/releases/download/v0.5.0/dep-linux-amd64
+
+ENV DEP_HASH 287b08291e14f1fae8ba44374b26a2b12eb941af3497ed0ca649253e21ba2f83
+
+RUN curl $DEP_URL -L -o $GOPATH/bin/dep && echo "$DEP_HASH $GOPATH/bin/dep" | sha256sum -c - && chmod 755 $GOPATH/bin/dep
+
 RUN go get github.com/revel/cmd/revel
 
-WORKDIR $GOPATH
+WORKDIR $GOPATH/src/www-forecast
 
-ADD . $GOPATH/src/www-forecast
+COPY Gopkg.toml Gopkg.lock ./ 
+
+RUN dep ensure --vendor-only
+
+COPY . $GOPATH/src/www-forecast
 
 RUN revel build www-forecast $GOPATH/bin/www-forecast prod
 
@@ -15,6 +26,3 @@ RUN rm -rf $GOPATH/src
 
 CMD $GOPATH/bin/www-forecast/run.sh
 
-EXPOSE 9000
-
-### docker run -i -t -p 8080:8080
