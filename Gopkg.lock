@@ -77,6 +77,14 @@
   revision = "0b12d6b5"
 
 [[projects]]
+  branch = "master"
+  digest = "1:c17a219b87eb88e05192dcfe313bab626fa8782427b21ee799a8437a5a2c344c"
+  name = "github.com/magoo/revel-csrf"
+  packages = ["."]
+  pruneopts = "T"
+  revision = "aa24265f570c81f9bab6f4c1ecec27fbccf17f5d"
+
+[[projects]]
   digest = "1:b168836ecd85a2d138391dbc464d2442ea9400c29cc0636f2c6056b996692e29"
   name = "github.com/mattn/go-colorable"
   packages = ["."]
@@ -211,6 +219,7 @@
     "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute",
     "github.com/docker/docker/pkg/namesgenerator",
     "github.com/google/uuid",
+    "github.com/magoo/revel-csrf",
     "github.com/revel/modules",
     "github.com/revel/revel",
     "github.com/revel/revel/testing",
