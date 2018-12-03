@@ -1,6 +1,8 @@
 package app
 
 import (
+	"os"
+	"strings"
 	"www-forecast/app/models"
 
 	"github.com/magoo/revel-csrf"
@@ -93,6 +95,10 @@ func init() {
 
 		// mod to allow wrap around if the index is out of bounds
 		return string(character[index%26])
+	}
+
+	if cfgPaths, ok := os.LookupEnv("E6E_CONFIG_PATHS"); ok {
+		revel.ConfPaths = strings.Split(cfgPaths, ",")
 	}
 }
 
