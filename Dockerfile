@@ -8,11 +8,11 @@ ENV DEP_HASH 287b08291e14f1fae8ba44374b26a2b12eb941af3497ed0ca649253e21ba2f83
 
 RUN curl $DEP_URL -L -o $GOPATH/bin/dep && echo "$DEP_HASH $GOPATH/bin/dep" | sha256sum -c - && chmod 755 $GOPATH/bin/dep
 
-RUN go get github.com/revel/cmd/revel
+RUN go get -u github.com/revel/cmd/revel
 
 WORKDIR $GOPATH/src/www-forecast
 
-COPY Gopkg.toml Gopkg.lock ./ 
+COPY Gopkg.toml Gopkg.lock ./
 
 RUN dep ensure --vendor-only
 

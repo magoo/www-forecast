@@ -1,0 +1,186 @@
+{{template "header.html" .}}
+
+
+
+  <header class="jumbotron">
+    <div class="container">
+    <h1 class="display-3 text-center">Measure your intangible data.</h1>
+    <hr />
+    <h3 class="text-center">Build consensus in a risk assessment, sales forecast, or any critical decision. </h3>
+    <div class="text-center">
+      <button type="button" class="btn btn-secondary btn-lg" data-toggle="modal" data-target="#exampleModal" style="margin-top:3em;">
+        Sign in
+      </button>
+      </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Sign In</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+          </div>
+          <div class="modal-footer" id="loginmodalbox">
+            <a href="/list" id="sign-in" class="disabled btn btn-secondary">Sign into Google to continue</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  {{template "flash.html" .}}
+
+<div class="container">
+  <div class="text-center">
+    <h1 class="display-5">What do I use it for?</h1>
+  </div>
+</div>
+
+<div class="container my-4">
+  <div class="row">
+    <div class="col-sm">
+      <div class="card border-0">
+
+        <div class="card-body">
+          <h5 class="card-title text-center">
+             Making estimation easier
+          </h5>
+          <p class="text-center">Report on intangible metrics with quantifiable techniques.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="card border-0">
+
+        <div class="card-body">
+          <h5 class="card-title text-center">
+             Quantifying subjective opinions
+          </h5>
+          <p class="text-center">Improve estimation by including multiple points of view and reducing bias.</p>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="card border-0">
+
+        <div class="card-body">
+          <h5 class="card-title text-center border-">
+             Predicting future events
+          </h5>
+          <p class="text-center">Fine tune your team's forecasting skill with historic performance metrics.</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<header class="jumbotron" style="background-color: rgba(0,0,0,.03)">
+  <div class="row justify-content-center">
+      <div class="col-4">
+
+        <div class="text-center my-3">
+          <h1 class="display-4">Reduce uncertainty.</h1>
+        </div>
+        <div class="container">
+          <div class="text-center my-3">
+            <h3>Answer difficult questions, together!</h3>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-4">
+        <div class="text-center my-4">
+          <h1 class="display-1">🐵	🐶	🐺</h1>
+        </div>
+        <div class="container">
+          <div class="text-center my-4">
+
+          </div>
+        </div>
+      </div>
+  </div>
+</header>
+
+  <div class="container my-5">
+    <div class="text-center my-4">
+      <h1 class="display-5">How do I use it?</h1>
+    </div>
+  </div>
+
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-sm">
+        <div class="card">
+          <div class="card-header text-center">
+           Predict a future from many futures.
+          </div>
+          <div class="card-body">
+            <div class="text-center mb-4"><i class="fas fa-sitemap fa-5x"></i></div>
+            <p>What is the probability that an event will happen in the future?</p>
+            <p>Send a <strong>scenario</strong> link to a group and estimate those likelihoods.</p>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="card">
+          <div class="card-header text-center">
+            Predict numbers that are difficult.
+          </div>
+          <div class="card-body">
+            <div class="text-center mb-4"><i class="fas fa-calculator fa-5x"></i></div>
+            <p>What is the value of something that is difficult to measure?</p>
+            <p>Send an <strong>estimate</strong> link to a group and estimate that value.</p>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="card">
+          <div class="card-header text-center">
+            Sort a list based on preference.
+          </div>
+          <div class="card-body">
+            <div class="text-center mb-4"><i class="fas fa-sort-amount-up fa-5x"></i></div>
+            <p>How should we prioritize a list of many options?</p>
+            <p>Send a <strong>rank</strong> link to a group to prioritize these options based on preference.</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <header class="jumbotron mb-0" style="background-color: rgba(0,0,0,.03)">
+    <div class="row justify-content-center">
+        <div class="col-4">
+
+          <div class="text-center my-4">
+            <h1 class="display-4">Learn more</h1>
+          </div>
+          <div class="container">
+            <div class="text-center my-4">
+              <h3>Read more about <a href="https://magoo.github.io/simple-risk-analysis/">this method</a> and <a href="https://medium.com/@magoo/how-to-measure-risk-with-a-better-okr-c259bccf359e">OKRs</a>.</h3>
+            </div>
+          </div>
+
+        </div>
+    </div>
+  </header>
+
+
+
+
+{{template "indexfooter.html"}}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>{{.title}}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-signin-client_id" content="{{.gc}}">
+    <link rel="stylesheet" type="text/css" href="/public/css/bootstrap-4.1.1.min.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/custom.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,400" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="/public/img/favicon.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="/public/js/jquery-2.2.4.min.js"></script>
+    <script src="/public/js/jquery-ui-1.12.4.js"></script>
+    <script src="/public/js/bootstrap-4.1.1.min.js"></script>
+    <script src="/public/js/showdown-ce5e16b.min.js"></script>
+    <script src="/public/js/xss.js"></script>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69938927-2"></script>
+    <script src="/public/js/application.js"></script>
+    <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-69938927-2');
+    </script>
+    {{range .moreStyles}}
+      <link rel="stylesheet" type="text/css" href="/public/{{.}}">
+    {{end}}
+    {{range .moreScripts}}
+      <script src="/public/{{.}}" type="text/javascript" charset="utf-8"></script>
+    {{end}}
+    {{if .flash.createdurl}}
+    <script>
+    $(document).on('ready',function(){
+      $('#openCreated').modal('show');
+      console.log("did it")
+    });
+    </script>
+    {{end}}
+
+    <script>
+      function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        var id_token = googleUser.getAuthResponse().id_token;
+        var signInButton = $("#sign-in");
+
+        signInButton.addClass("disabled");
+        signInButton.text("Signing in...")
+        $.ajax({
+          url: "/auth",
+          data: {
+            googleIdToken: id_token
+          },
+          method: "POST",
+        }).done(function(data) {
+          console.log('Signed in as: ', data);
+          if (window.location.pathname == "/") {
+            console.log("home")
+            signInButton.removeClass("disabled");
+            signInButton.text("Go!")
+          }
+        });
+      }
+
+      function onSignOut() {
+        var signOutButton = $("#sign-out");
+        signOutButton.addClass("disabled");
+        signOutButton.text("Signing out...");
+
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          console.log('Google User signed out.');
+          $.ajax({
+            url: "/auth",
+            type: 'DELETE'
+          }).done(function() {
+            console.log('User session signed out.');
+            window.location = '/';
+          });
+        });
+      }
+
+      $( document ).ready(function() {
+        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+          if(options.type !== "GET" && !options.crossDomain) {
+            jqXHR.setRequestHeader('X-CSRF-Token', {{ .csrf_token }});
+          }
+        });
+        $("#sign-out").click(onSignOut);
+      });
+    </script>
+  </head>
+  <body>

@@ -1,0 +1,49 @@
+{{set . "title" "Results"}}
+{{set . "description" "The consensus forecast for your question is below."}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+{{template "titleCard.html" .e}}
+
+  <div class="card">
+    <div class="card-body">
+
+        <h3>Estimated Results</h3>
+        <table class="table">
+          <tr>
+            <th>
+              Estimate
+            </th>
+            {{range $index, $value := .er}}
+              <th>
+                {{ animalFaceEmoji $index }}
+              </th>
+            {{end}}
+            <th>
+              Average
+            </th>
+          </tr>
+
+        <tr>
+            <td>Min</td>
+            {{range $index, $option := .er }}
+            <td>{{.Minimum}}</td>
+            {{end}}
+            <th>{{.avgmin}}</th>
+        </tr>
+
+        <tr>
+            <td>Max</td>
+            {{range $index, $option := .er }}
+            <td>{{.Maximum}}</td>
+            {{end}}
+            <th>{{.avgmax}}</th>
+        </tr>
+
+        </table>
+
+    </div>
+  </div>
+
+{{template "footer.html" .}}

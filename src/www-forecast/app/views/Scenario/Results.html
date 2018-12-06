@@ -1,0 +1,49 @@
+{{set . "title" "Results"}}
+{{set . "description" "The consensus forecast for your question is below."}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+{{template "titleCard.html" .s}}
+
+ <div class="card">
+   <div class="card-body">
+       <h3>Scenario Results</h3>
+      <table class="table">
+        <tr>
+          <th class="cell">
+            Scenario
+          </th>
+          {{range $index, $value := .sr}}
+            <th class="cell">
+              {{ animalFaceEmoji $index }}
+            </th>
+          {{end}}
+          <th class="cell">
+            Average
+          </th>
+        </tr>
+
+        {{range $index, $option := .s.Options }}
+        <tr>
+
+            <th class="cell">
+              {{$option}}
+            </th>
+
+            {{range $.sr}}
+            <td class="cell">
+              {{index .Forecasts $index}}
+            </td>
+            {{end}}
+
+            <th class="averageresult">
+              {{index $.avg $index | printf "%.2f" }}
+            </th>
+        </tr>
+        {{end}}
+      </table>
+    </div>
+  </div>
+
+{{template "footer.html" .}}

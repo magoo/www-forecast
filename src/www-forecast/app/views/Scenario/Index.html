@@ -1,0 +1,90 @@
+{{set . "title" "Create Scenario"}}
+{{set . "description" "A scenario helps understand the likelihood of future outcomes."}}
+{{set . "longdescription" "We will ask panelists for a forecast of the future."}}
+{{set . "help" true}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+<script>
+
+function addOption(){
+
+  $("#forecast-form").append("<div class=\"input-group remove\"><input type=\"text\" name=\"options[]\" class=\"form-control\" autocomplete=\"off\" placeholder=\"\"><div class=\"input-group-append\"><span class=\"input-group-text\" id=\"basic-addon1\" onclick=\"removeParent(this)\">Delete</span></div></div>");
+}
+
+
+
+function removeParent(e){
+  $(e).closest('.remove').remove();
+}
+
+</script>
+
+  {{template "flash.html" .}}
+
+      <form method="post" action="/scenario" >
+            <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
+
+        <div class="form-group">
+          <label>What is your question?</label>
+          <input class="form-control form-control-lg" autocomplete="off" type="text" name="title" />
+          <small class="form-text text-muted">A future event that you will forecast.</small>
+        </div>
+
+
+
+        <div class="form-group">
+          <label>Describe your question.</label>
+          <textarea class="form-control form-control-lg" type="text" autocomplete="off" placeholder="" name="description"></textarea>
+          <small class="form-text text-muted">Any extra information about the future event. For instance, how will it be judged?</small>
+        </div>
+
+        <div class="form-group">
+          <label>What possible outcomes could happen?</label>
+          <div class="input-group">
+            <input type="text" name="options[]" class="form-control" autocomplete="off" placeholder="" >
+          </div>
+
+          <div class="input-group">
+            <input type="text" name="options[]" class="form-control" autocomplete="off" placeholder="">
+          </div>
+          <div id="forecast-form">
+
+          </div>
+          <small class="form-text text-muted">The optional future outcomes. Must be specific and mutually exclusive. Preferably they are measurable.</small>
+
+        </div>
+
+        <div class="form-group">
+          <button onclick="addOption()" type="button" class="btn btn-secondary btn-sm">Add outcome</button>
+        </div>
+
+        <div class="btn-group" role="group" aria-label="...">
+          <button class="btn btn-primary" type="submit">Submit form</button>
+        </div>
+      </form>
+
+
+      <!-- "Learn More" modal -->
+      <div class="modal fade" id="openHelp" tabindex="-1" role="dialog" aria-labelledby="openHelpLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="openHelpLabel">What is this?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{template "help/scenario.html"}}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+{{template "footer.html" .}}

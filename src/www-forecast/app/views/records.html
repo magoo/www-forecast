@@ -1,0 +1,14 @@
+<div class="card mb-3">
+  <div class="card-header">
+    Previous activity
+  </div>
+    <div class="card-body">
+      <table class="table">
+      {{range .Records}}
+      <tr>
+        <td><small>{{.}}</small></td>
+      </tr>
+      {{end}}
+      </table>
+    </div>
+</div>

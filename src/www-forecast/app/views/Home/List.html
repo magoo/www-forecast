@@ -1,0 +1,104 @@
+{{set . "title" "Your Questions"}}
+{{set . "description" "Questions you moderate will be listed below."}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+<script>
+
+function addOption(){
+
+  $("#forecast-form").append("<div class=\"input-group remove\"><input type=\"text\" name=\"options[]\" class=\"form-control\" placeholder=\"Enter option here...\"><div class=\"input-group-append\"><span class=\"input-group-text\" id=\"basic-addon1\" onclick=\"removeParent(this)\">Delete</span></div></div>");
+}
+
+
+
+function removeParent(e){
+  $(e).closest('.remove').remove();
+}
+
+</script>
+
+
+  {{template "flash.html" .}}
+
+      {{if .qs}}
+
+      {{else}}
+
+      {{end}}
+
+      {{range .qs}}
+
+        <div class="card">
+          <div class="item-header">
+            <small class="text-muted">{{.Type}}</small>
+          </div>
+          <div class="item-body">
+            <a class="question-link" href="/view/{{.URL}}"><h4>{{.Title}}</h4></a>
+          </div>
+          <div class="item-footer">
+            {{if .Date}}
+              <small class="text-muted">Created on {{.Date}}.{{if (gt (len .Records) 1)}} {{decrement (len .Records)}} records.{{end}}{{if .BrierScore}} {{template "brierscore.html" .}}{{end}}</small>
+            {{end}}
+          </div>
+        </div>
+        <br />
+      {{end}}
+
+      {{template "newux.html" }}
+      <br />
+
+
+    <!-- "Learn More" modal -->
+    <div class="modal fade" id="openHelp" tabindex="-1" role="dialog" aria-labelledby="openHelpLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="openHelpLabel">What is this?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            {{template "help/questions.html"}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+      <!-- "Created" modal -->
+      {{if .flash.createdurl}}
+      <div class="modal fade" id="openCreated" tabindex="-1" role="dialog" aria-labelledby="openCreated" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="openCreatedLabel">You've created a question! 🎉</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+
+              <p>Send this URL <strong>only</strong> to people who should contribute to the answer.</p>
+
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" value="{{.flash.createdurl}}" aria-label="Username" onclick="this.select()" aria-describedby="basic-addon1" />
+              </div>
+              <p>Only people with the link can access the question.</p>
+            </div>
+            <div class="modal-footer">
+              <a class="btn btn-secondary" href="{{.flash.createdurl}}" role="button">Go to question</a>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{end}}
+
+{{template "footer.html" .}}
