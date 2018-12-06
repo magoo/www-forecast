@@ -1,0 +1,74 @@
+# Routes Config
+#
+# This file defines all application routes (Higher priority routes first)
+#
+
+module:testrunner
+# module:jobs
+
+
+GET     /                                       Home.Index
+GET     /list                                   Home.List
+GET     /alpha                                  Home.Alpha
+
+# Authentication routes
+POST    /auth                                   Auth.Create
+DELETE  /auth                                   Auth.Delete
+
+# CRUD for Scenarios
+GET     /scenario                               Scenario.Index
+POST    /scenario                               Scenario.Create
+POST    /scenario/delete                        Scenario.Delete
+GET     /view/scenario/:sid                     Scenario.View
+POST    /view/scenario/:sid/edit                Scenario.Update
+GET     /view/scenario/:sid/results             Scenario.Results
+POST    /view/scenario/:sid/conclude            Scenario.Conclude
+POST    /view/scenario/:sid/record              Scenario.AddRecord
+
+# CRUD for a forecast, which is an "answer" to a scenario
+POST    /forecast                               Forecast.Create
+
+# CRUD for an estimate
+GET     /estimate                               Estimate.Index
+POST    /estimate                               Estimate.Create
+POST    /estimate/delete                        Estimate.Delete
+GET     /view/estimate/:eid                     Estimate.View
+GET     /view/estimate/:eid/results             Estimate.Results
+POST    /view/estimate/:eid/conclude            Estimate.Conclude
+POST    /view/estimate/:eid/edit                Estimate.Update
+POST    /view/estimate/:eid/record              Estimate.Record
+
+# CRUD for a "range" which is an "answer" to an estimate
+POST    /range                                  Range.Create
+
+# CRUD for a rank
+GET     /rank                                   Rank.Index
+POST    /rank                                   Rank.Create
+POST    /rank/delete                            Rank.Delete
+GET     /view/rank/:rid                         Rank.View
+GET     /view/rank/:rid/results                 Rank.Results
+POST    /view/rank/:rid/edit                    Rank.Update
+POST    /view/rank/:rid/record                  Rank.Record
+# Not implemented
+#POST    /view/rank/:rid/conclude               Rank.Conclude
+
+#CRUD for a "sort" which is an "answer" to a rank
+POST    /sort                                   Sort.Create
+
+
+
+# Ignore favicon requests
+GET     /favicon.ico                            404
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/*filepath                       Static.Serve("public")
+
+# Catch all, this will route any request into the controller path
+#
+#                    **** WARNING ****
+# Enabling this exposes any controller and function to the web.
+# ** This is a serious security issue if used online **
+#
+# For rapid development uncomment the following to add new controller.action endpoints
+# without having to add them to the routes table.
+# *       /:controller/:action                    :controller.:action

@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-header">
+    Moderator Options
+  </div>
+    <div class="card-body">
+      <small class="form-text text-muted">Manage the question.</small>
+        <form name="recordForm" action="/view/{{.Question.URL}}/record" method="post">
+          <input type="hidden" name="csrf_token" value="{{ $.csrf_token }}" />
+          <button class="btn btn-light btn-sm btn-info">Create Record</button>
+        </form>
+        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal" class="btn btn-info">Edit</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="del({{.Question.Id}})" class="btn btn-info">Delete</button>
+        {{if .f.Concluded}}
+        {{else}}
+          <!-- <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#concludeModal">Conclude</button> -->
+        {{end}}
+    </div>
+</div>

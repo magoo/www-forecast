@@ -1,0 +1,63 @@
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light">
+
+    <button class="navbar-brand navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand">
+      <svg width="33px" height="35px" viewBox="449 250 33 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+          <desc>Created with Sketch.</desc>
+          <defs></defs>
+          <rect id="Rectangle" stroke="none" fill="#619EB2" fill-rule="evenodd" x="449" y="253" width="30" height="30" rx="9"></rect>
+          <text id="e6e" stroke="none" fill="none" font-family="GillSans-Light, Gill Sans" font-size="18" font-weight="300" letter-spacing="-0.833333313">
+              <tspan x="452" y="273" fill="#FEFFFF">e6e</tspan>
+          </text>
+      </svg>
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item ">
+          <a class="nav-link" href="/list">Measurements </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Create
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/scenario">Scenario</a>
+            <a class="dropdown-item" href="/estimate">Estimate</a>
+            <a class="dropdown-item" href="/rank">Rank</a>
+          </div>
+        </li>
+
+        <li class="nav-item ">
+          <a href="#" class="nav-link" data-toggle="modal" data-target="#signOutModal">Sign Out</a>
+        </li>
+
+      </ul>
+
+    </div>
+    <!-- <a href="/">e6e</a> -->
+  </nav>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="signOutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Sign Out?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div style="display:none;" class="modal-body">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+      </div>
+      <div class="modal-footer">
+        <button id="sign-out" type="button" class="btn btn-secondary" data-dismiss="modal">Sign out</button>
+      </div>
+    </div>
+  </div>
+</div>

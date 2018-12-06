@@ -1,0 +1,63 @@
+{{set . "title" "Create Estimate"}}
+{{set . "description" "An estimate helps discover the value of something difficult to measure."}}
+{{set . "longdescription" "We will ask panelists for a range of values they believe the truth to lie within."}}
+{{set . "help" true}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+  {{template "flash.html" .}}
+
+      <form method="post" action="/estimate" >
+        <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
+
+        <div class="form-group">
+          <label>What is your question?</label>
+          <input autocomplete="off" class="form-control form-control-lg" type="text" data-toggle="tooltip" name="title" />
+          <small class="form-text text-muted">For example: "How many items will be returned by customers in Q4?".</small>
+        </div>
+
+
+
+        <div class="form-group">
+          <label>Describe your question.</label>
+          <textarea class="form-control form-control-lg" type="text" placeholder="" autocomplete="off" name="description"></textarea>
+          <small class="form-text text-muted">Consider adding historical data, when the question will close, or how the answer will be eventually be judged.</small>
+        </div>
+
+        <div class="form-group">
+          <label>What unit are we estimating?</label>
+          <div class="input-group">
+            <input autocomplete="off" type="text" name="unit" class="form-control" placeholder="" >
+          </div>
+        <small class="form-text text-muted">The type of value we are measuring. (people, apples, USD, hardware)</small>
+        </div>
+
+        <div class="btn-group" role="group" aria-label="...">
+          <button class="btn btn-primary" type="submit">Submit form</button>
+        </div>
+
+      </form>
+
+
+      <!-- "Learn More" modal -->
+      <div class="modal fade" id="openHelp" tabindex="-1" role="dialog" aria-labelledby="openHelpLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="openHelpLabel">What is an estimate?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{template "help/estimate.html"}}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+{{template "footer.html" .}}

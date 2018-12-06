@@ -1,0 +1,19 @@
+<header class="jumbotron" style="background-color:#4ba0b5">
+
+  <div class="container">
+    <h1>{{.title}}</h1>
+    {{if .description}}
+    <p class="lead">{{.description}}</p>
+     {{if .longdescription}}
+     <hr class="my-4">
+     <p class="longdescription">{{.longdescription}}</p>
+     {{end}}
+     {{if .help}}
+
+     <button type="button" class="btn btn-secondary btn-md" data-toggle="modal" data-target="#openHelp" role="button">Learn more</button>
+     {{end}}
+     {{end}}
+  </div>
+</header>
+<!-- this div terminates in footer -->
+<div class="container">
