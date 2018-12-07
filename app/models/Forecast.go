@@ -5,7 +5,6 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/docker/docker/pkg/namesgenerator"
-	"os"
 	"time"
 )
 
