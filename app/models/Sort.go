@@ -3,11 +3,12 @@ package models
 import (
   //"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
   "github.com/docker/docker/pkg/namesgenerator"
-  //"os"
+  "os"
   "time"
   "fmt"
 
 )
+
 
 type Sort struct {
   Answer
@@ -31,7 +32,7 @@ func CreateSort (u string, options []int, rid string, hd string) {
           Options: options,
   		}
 
-  		err := PutItem(item, "answers-tf")
+  		err := PutItem(item, answerTable)
 
       if err != nil {
         fmt.Println("Error writing to db.")

@@ -5,7 +5,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/docker/docker/pkg/namesgenerator"
-	//"os"
+	"os"
 	"time"
 )
 
@@ -31,7 +31,7 @@ func CreateForecast(u string, f []float64, sid string, hd string) {
 		Forecasts: f,
 	}
 
-	err := PutItem(item, "answers-tf")
+	err := PutItem(item, answerTable)
 
 	if err != nil {
 		fmt.Println("Error writing to db.")
@@ -44,7 +44,7 @@ func CreateForecast(u string, f []float64, sid string, hd string) {
 func ViewScenarioResults(sid string) (c []Forecast) {
 	//Need to do a HD check here to prevent IDOR.
 
-	result := GetPrimaryIndexItem(sid, "id", "id-index", "answers-tf")
+	result := GetPrimaryIndexItem(sid, "id", "id-index", answerTable)
 
 	c = []Forecast{}
 
@@ -74,7 +74,7 @@ func DeleteScenarioForecasts(sid string) {
 
 	for _, v := range fs {
 		fmt.Println("Deleting: ", v.Answer.Id, v.Answer.OwnerID)
-		DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "sid", "user", "answers-tf")
+		DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "sid", "user", answerTable)
 	}
 
 	fmt.Println("Deleted forecasts associated with scenario.")
