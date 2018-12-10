@@ -19,3 +19,5 @@ tf/terraform.tfstate.backup
 *.tfstate
 
 *.DS_Store
+
+vendor/

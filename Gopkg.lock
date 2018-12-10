@@ -119,13 +119,7 @@
 [[projects]]
   digest = "1:04a343093f76d611b8eb5f5fd3d577b894d2907edbe5be8f661f5a65c8dabb78"
   name = "github.com/revel/modules"
-  packages = [
-    ".",
-    "static/app/controllers",
-    "static/app/model",
-    "testrunner/app",
-    "testrunner/app/controllers",
-  ]
+  packages = ["."]
   pruneopts = "T"
   revision = "6403ed92ef388a1ec746c08db8456397fc0b8f89"
   version = "v0.20.1"
@@ -227,9 +221,6 @@
     "github.com/google/uuid",
     "github.com/magoo/revel-csrf",
     "github.com/revel/modules",
-    "github.com/revel/modules/static/app/controllers",
-    "github.com/revel/modules/testrunner/app",
-    "github.com/revel/modules/testrunner/app/controllers",
     "github.com/revel/revel",
     "github.com/revel/revel/testing",
     "google.golang.org/api/oauth2/v2",
