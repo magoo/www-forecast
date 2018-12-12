@@ -33,7 +33,7 @@ func CreateRange (u string, min float64, max float64, eid string, hd string) {
           Maximum: max,
   		}
 
-  		err := PutItem(item, "answers-tf")
+  		err := PutItem(item, answerTable)
 
       if err != nil {
         fmt.Println("Error writing to db.")
@@ -46,7 +46,7 @@ func CreateRange (u string, min float64, max float64, eid string, hd string) {
 func ViewEstimateResults (eid string) (rs []Range) {
   //Need to do a HD check here to prevent IDOR.
 
-    result := GetPrimaryIndexItem(eid, "id", "id-index", "answers-tf")
+    result := GetPrimaryIndexItem(eid, "id", "id-index", answerTable)
 
     rs = []Range{}
 

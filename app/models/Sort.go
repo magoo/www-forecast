@@ -9,6 +9,7 @@ import (
 
 )
 
+
 type Sort struct {
   Answer
   Options       []int      `dynamodbav:"options"`
@@ -31,7 +32,7 @@ func CreateSort (u string, options []int, rid string, hd string) {
           Options: options,
   		}
 
-  		err := PutItem(item, "answers-tf")
+  		err := PutItem(item, answerTable)
 
       if err != nil {
         fmt.Println("Error writing to db.")

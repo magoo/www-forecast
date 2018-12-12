@@ -72,7 +72,7 @@ func ListQuestions(user string) (s []Question) {
 }
 
 func ListAnswers(user string) (s []Question) {
-	result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", "answers-tf")
+	result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", answerTable)
 
 	s = []Question{}
 
@@ -125,7 +125,7 @@ func (q Question) WriteRecord(message string, user string) (err error) {
 func ViewQuestionAnswers(id string) (as []Answer) {
 	//Need to do a HD check here to prevent IDOR.
 
-	result := GetPrimaryIndexItem(id, "id", "id-index", "answers-tf")
+	result := GetPrimaryIndexItem(id, "id", "id-index", answerTable)
 
 	as = []Answer{}
 
@@ -144,7 +144,7 @@ func DeleteQuestionAnswers(id string) (err error) {
 
 	for _, v := range qas {
 		fmt.Println("Deleting: ", v.Id, v.OwnerID)
-		DeleteCompositeIndexItem(v.Id, v.OwnerID, "id", "ownerid", "answers-tf")
+		DeleteCompositeIndexItem(v.Id, v.OwnerID, "id", "ownerid", answerTable)
 	}
 
 	fmt.Println("Deleted answers associated with question.")

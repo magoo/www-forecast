@@ -206,7 +206,7 @@ func DeleteEstimateRanges(eid string) {
 
     for _, v  := range er {
       fmt.Println("Deleting: ", v.Answer.Id, v.Answer.OwnerID)
-      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "id", "ownerid", "answers-tf")
+      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "id", "ownerid", "answerTable")
     }
 
 
