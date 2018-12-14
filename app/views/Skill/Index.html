@@ -1,0 +1,65 @@
+{{set . "title" "Skill"}}
+{{set . "description" "How effective you are at forecasting."}}
+{{set . "help" true}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+  {{template "flash.html" .}}
+
+    {{if .fs}}
+
+      <div class="card mb-3">
+          <div class="card-body">
+            <h2>Your Brier Score</h2>
+            <p class="card-text"><span class="text-muted">Your Brier score is {{template "brierscore.html" .}} across the following <strong>{{.fs}}</strong> concluded forecasts.</span></p>
+          </div>
+
+       </div>
+
+      {{range .questions}}
+
+        <div class="card">
+          <div class="item-header">
+            <small class="text-muted">{{.Type}}</small>
+          </div>
+          <div class="item-body">
+            <a class="question-link" href="/view/{{.URL}}"><h4>{{.Title}}</h4></a>
+          </div>
+          <div class="item-footer">
+            {{if .Date}}
+              <small class="text-muted">Created on {{.Date}}.{{if (gt (len .Records) 1)}} {{decrement (len .Records)}} records.{{end}}{{if .BrierScore}} {{template "brierscore.html" .}}{{end}}</small>
+            {{end}}
+          </div>
+        </div>
+        <br />
+      {{end}}
+
+
+    {{else}}
+      <div>You haven't forecasted yet, or, none of your forecasts have closed yet. Sorry!</div>
+    {{end}}
+
+
+    <!-- "Learn More" modal -->
+    <div class="modal fade" id="openHelp" tabindex="-1" role="dialog" aria-labelledby="openHelpLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="openHelpLabel">What is this?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            {{template "help/my.html"}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+{{template "footer.html" .}}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"time"
 	"www-forecast/app/models"
 
 	"github.com/revel/revel"
@@ -101,8 +102,9 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 	//This is different. There is a 90% confidence assumption.
 	bs := models.BrierCalcEstimate(emin, emax, resultValue)
 
-	//e.Concluded = true
-	//e.ConcludedTime = t.String()
+	t := time.Now()
+	e.Concluded = true
+	e.ConcludedTime = t.String()
 	//e.AvgMinimum = emin
 	//e.AvgMaximum = emax
 	//e.Actual = resultValue
@@ -132,6 +134,12 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 	err = e.Question.WriteRecord("Concluded. Brier Score is updated to "+strconv.FormatFloat(e.Question.BrierScore, 'f', -1, 64), c.Session["user"])
 
 	// models.DeleteQuestionAnswers(eid)
+
+	err = e.ConcludeEstimateResults()
+
+	if err != nil {
+		fmt.Println("Error concluding individual ranges.")
+	}
 
 	if err != nil {
 		fmt.Println("Error concluding question.")

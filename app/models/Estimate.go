@@ -1,104 +1,123 @@
 package models
 
 import (
-  "fmt"
-  "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-  "github.com/aws/aws-sdk-go/service/dynamodb"
-  "github.com/aws/aws-sdk-go/aws"
-  //"os"
-  "github.com/google/uuid"
-  "time"
-  "strconv"
-  "errors"
+	"fmt"
 
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	//"os"
+	"errors"
+	"strconv"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 type Estimate struct {
-  Question
-  AvgMinimum    float64       `dynamodbav:"minimum"`
-  AvgMaximum    float64       `dynamodbav:"maximum"`
-  Actual        float64       `dynamodbav:"actual"`
-  Unit          string        `dynamodbav:"unit"`
+	Question
+	AvgMinimum float64 `dynamodbav:"minimum"`
+	AvgMaximum float64 `dynamodbav:"maximum"`
+	Actual     float64 `dynamodbav:"actual"`
+	Unit       string  `dynamodbav:"unit"`
 }
 
-func CreateEstimate (title string, description string, unit string, hd string, owner string) (eid string){
+func CreateEstimate(title string, description string, unit string, hd string, owner string) (eid string) {
 
-      t := time.Now()
+	t := time.Now()
 
-  		euuid := uuid.New()
-  		item := Estimate{
-        Question: Question{
-          				Id: euuid.String(),
-                  Date: t.Format("2006-01-02"),
-                  OwnerID: owner,
-                  Hd: hd,
-          		    Title: title,
-          		    Description: description,
-                  Records: []string{t.Format("2006-01-02") + ": Created.", },
-                  URL: "estimate/" + euuid.String(),
-                  Type: "Estimate",
-                },
-          Unit: unit,
-  		}
+	euuid := uuid.New()
+	item := Estimate{
+		Question: Question{
+			Id:          euuid.String(),
+			Date:        t.Format("2006-01-02"),
+			OwnerID:     owner,
+			Hd:          hd,
+			Title:       title,
+			Description: description,
+			Records:     []string{t.Format("2006-01-02") + ": Created."},
+			URL:         "estimate/" + euuid.String(),
+			Type:        "Estimate",
+		},
+		Unit: unit,
+	}
 
-  		err := PutItem(item, questionTable)
+	err := PutItem(item, questionTable)
 
-      if err != nil {
-        fmt.Println("Error writing to db.")
-      } else {
-        fmt.Println("Successfully added.")
-      }
+	if err != nil {
+		fmt.Println("Error writing to db.")
+	} else {
+		fmt.Println("Successfully added.")
+	}
 
-      return euuid.String()
+	return euuid.String()
 }
 
 func (e Estimate) GetURL() (url string) {
 
-  return "/view/estimate/" + e.Id
+	return "/view/estimate/" + e.Id
 
 }
 
-func (e Estimate) AddRecord(user string) (err error){
+func (e Estimate) AddRecord(user string) (err error) {
 
-  er := ViewEstimateResults(e.Question.Id)
+	er := ViewEstimateResults(e.Question.Id)
 
-  if len(er) < 1 {
-    return errors.New("No results.")
-  }
+	if len(er) < 1 {
+		return errors.New("No results.")
+	}
 
-  emin, emax := GetAverageRange(er)
+	emin, emax := GetAverageRange(er)
 
-  t := time.Now()
+	t := time.Now()
 
-  record := t.Format("2006-01-02") + ": Results recorded. Min: " + strconv.FormatFloat(emin, 'f', -1, 64) + " Max: " + strconv.FormatFloat(emax, 'f', -1, 64)
+	record := t.Format("2006-01-02") + ": Results recorded. Min: " + strconv.FormatFloat(emin, 'f', -1, 64) + " Max: " + strconv.FormatFloat(emax, 'f', -1, 64)
 
-  //Primary key for update query
-  key := map[string]*dynamodb.AttributeValue {
-    "id": {
-      S: aws.String(e.Question.Id),
-    },
-  }
+	//Primary key for update query
+	key := map[string]*dynamodb.AttributeValue{
+		"id": {
+			S: aws.String(e.Question.Id),
+		},
+	}
 
-  item := map[string]*dynamodb.AttributeValue {
-    ":r": {
-        SS: []*string{
-          aws.String(record),
-          },
-        },
-    ":user": {
-      S: aws.String(user),
-    },
-  }
+	item := map[string]*dynamodb.AttributeValue{
+		":r": {
+			SS: []*string{
+				aws.String(record),
+			},
+		},
+		":user": {
+			S: aws.String(user),
+		},
+	}
 
-  //av, err := dynamodbattribute.MarshalMap(item)
+	//av, err := dynamodbattribute.MarshalMap(item)
 
-  UpdateItem(key, "ADD records :r", item, questionTable, "ownerid = :user")
+	UpdateItem(key, "ADD records :r", item, questionTable, "ownerid = :user")
 
-  return err
+	return err
 
 }
 
-func GetAverageRange(er []Range) (avgmin float64, avgmax float64){
+func (e Estimate) ConcludeEstimateResults() (err error) {
+
+	er := ViewEstimateResults(e.Question.Id)
+
+	if len(er) < 1 {
+		return errors.New("No forecasts to conclude.")
+	}
+
+	for _, v := range er {
+		v.BrierScore = BrierCalcEstimate(v.Minimum, v.Maximum, e.Actual)
+		v.Concluded = true
+		PutItem(v, answerTable)
+	}
+
+	return nil
+
+}
+
+func GetAverageRange(er []Range) (avgmin float64, avgmax float64) {
 
 	size := len(er)
 	var sum float64 = 0
@@ -121,95 +140,93 @@ func GetAverageRange(er []Range) (avgmin float64, avgmax float64){
 	return
 }
 
-func UpdateEstimate (eid string, title string, description string, unit string, user string) {
+func UpdateEstimate(eid string, title string, description string, unit string, user string) {
 
-  //Primary key for update query
-  key := map[string]*dynamodb.AttributeValue {
-    "id": {
-      S: aws.String(eid),
-    },
-  }
+	//Primary key for update query
+	key := map[string]*dynamodb.AttributeValue{
+		"id": {
+			S: aws.String(eid),
+		},
+	}
 
-  expressionattrvalues:= map[string]*dynamodb.AttributeValue {
-    ":t": {
-      S: aws.String(title),
-    },
-    ":d": {
-      S: aws.String(description),
-    },
-    ":unit": {
-      S: aws.String(unit),
-    },
-    ":user": {
-      S: aws.String(user),
-    },
-  }
+	expressionattrvalues := map[string]*dynamodb.AttributeValue{
+		":t": {
+			S: aws.String(title),
+		},
+		":d": {
+			S: aws.String(description),
+		},
+		":unit": {
+			S: aws.String(unit),
+		},
+		":user": {
+			S: aws.String(user),
+		},
+	}
 
-  updateexpression := "SET title = :t, description = :d, unitname = :unit"
-  conditionexpression := "ownerid = :user"
+	updateexpression := "SET title = :t, description = :d, unitname = :unit"
+	conditionexpression := "ownerid = :user"
 
-  UpdateItem(key, updateexpression, expressionattrvalues, questionTable, conditionexpression)
+	UpdateItem(key, updateexpression, expressionattrvalues, questionTable, conditionexpression)
 
 }
 
-func GetEstimate (eid string) (e Estimate) {
+func GetEstimate(eid string) (e Estimate) {
 
-  result := GetPrimaryItem(eid, "id", questionTable)
+	result := GetPrimaryItem(eid, "id", questionTable)
 
-  e = Estimate{}
+	e = Estimate{}
 
-  err := dynamodbattribute.UnmarshalMap(result.Item, &e)
+	err := dynamodbattribute.UnmarshalMap(result.Item, &e)
 
-  if err != nil {
-    panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
-  }
+	if err != nil {
+		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+	}
 
-  if e.Question.Id == "" {
-      fmt.Println("Could not find that scenario.")
-      return
-  }
+	if e.Question.Id == "" {
+		fmt.Println("Could not find that scenario.")
+		return
+	}
 
-  return e
+	return e
 
 }
 
 func ListEstimates(user string) (e []Estimate) {
 
-  result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", questionTable)
+	result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", questionTable)
 
-  e = []Estimate{}
+	e = []Estimate{}
 
-  err := dynamodbattribute.UnmarshalListOfMaps(result.Items, &e)
+	err := dynamodbattribute.UnmarshalListOfMaps(result.Items, &e)
 
-  if err != nil {
-    panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
-  }
+	if err != nil {
+		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+	}
 
-  return e
+	return e
 
 }
 
 func DeleteEstimate(eid string, owner string) {
 
-  DeletePrimaryItem(eid, "id", questionTable, "ownerid", owner)
+	DeletePrimaryItem(eid, "id", questionTable, "ownerid", owner)
 
-  fmt.Println("Deleted estimate.", eid)
+	fmt.Println("Deleted estimate.", eid)
 
-  DeleteEstimateRanges(eid)
+	DeleteEstimateRanges(eid)
 
 }
 
 func DeleteEstimateRanges(eid string) {
 
-    er := ViewEstimateResults(eid)
+	er := ViewEstimateResults(eid)
 
+	for _, v := range er {
+		fmt.Println("Deleting: ", v.Answer.Id, v.Answer.OwnerID)
+		DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "id", "ownerid", "answerTable")
+	}
 
-    for _, v  := range er {
-      fmt.Println("Deleting: ", v.Answer.Id, v.Answer.OwnerID)
-      DeleteCompositeIndexItem(v.Answer.Id, v.Answer.OwnerID, "id", "ownerid", "answerTable")
-    }
-
-
-    fmt.Println("Deleted forecasts associated with scenario.")
+	fmt.Println("Deleted forecasts associated with scenario.")
 
 }

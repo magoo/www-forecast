@@ -3,11 +3,11 @@ package controllers
 import (
 	"fmt"
 	"regexp"
+	"strconv"
+	"time"
 	"www-forecast/app/models"
 
 	"github.com/revel/revel"
-	//"time"
-	"strconv"
 )
 
 type Scenario struct {
@@ -99,7 +99,7 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 
 	}
 
-	//t := time.Now()
+	t := time.Now()
 
 	s := models.ViewScenario(sid)
 
@@ -120,10 +120,11 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 	//Calculate Brier Score
 	bs := models.BrierCalc(af, resultIndex)
 
-	//s.Question.Concluded = true
-	//s.Question.ConcludedTime = t.String()
+	s.Question.Concluded = true
+	s.Question.ConcludedTime = t.String()
 	//s.Results = af
-	//s.ResultIndex = resultIndex
+	s.ResultIndex = resultIndex
+
 	if s.Question.BrierScore == 0 {
 		s.Question.BrierScore = bs
 	} else {
@@ -137,10 +138,17 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 	}
 
 	u := c.Session["user"]
+
 	err = s.AddRecord(u)
 
 	if err != nil {
 		fmt.Println("Error writing record to scenario.")
+	}
+
+	err = s.ConcludeScenarioForecasts()
+
+	if err != nil {
+		fmt.Println("Error concluding individual forecasts.")
 	}
 
 	err = s.Question.WriteRecord("Concluded. Brier Score is updated to "+strconv.FormatFloat(s.Question.BrierScore, 'f', -1, 64), c.Session["user"])
