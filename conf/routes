@@ -55,7 +55,8 @@ POST    /view/rank/:rid/record                  Rank.Record
 #CRUD for a "sort" which is an "answer" to a rank
 POST    /sort                                   Sort.Create
 
-
+# View page for "My Brier"
+GET     /my                                     My.Index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

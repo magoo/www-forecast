@@ -1,0 +1,38 @@
+{{set . "title" "My Score"}}
+{{set . "description" "How effective you are at forecasting."}}
+{{set . "help" true}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+  {{template "flash.html" .}}
+
+
+
+    <div>
+      Your Brier score is <code>{{ .bs }}</code> across <strong>{{.fs}}</strong> concluded forecasts.
+    </div>
+
+
+    <!-- "Learn More" modal -->
+    <div class="modal fade" id="openHelp" tabindex="-1" role="dialog" aria-labelledby="openHelpLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="openHelpLabel">What is this?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            {{template "help/my.html"}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+{{template "footer.html" .}}
