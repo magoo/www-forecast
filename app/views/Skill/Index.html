@@ -7,37 +7,39 @@
 
   {{template "flash.html" .}}
 
+    {{if .fs}}
 
-    <div class="card mb-3">
-        <div class="card-body">
-          <h2>Your Brier Score</h2>
-          <p class="card-text"><span class="text-muted">Your Brier score is {{template "brierscore.html" .}} across the following <strong>{{.fs}}</strong> concluded forecasts.</span></p>
+      <div class="card mb-3">
+          <div class="card-body">
+            <h2>Your Brier Score</h2>
+            <p class="card-text"><span class="text-muted">Your Brier score is {{template "brierscore.html" .}} across the following <strong>{{.fs}}</strong> concluded forecasts.</span></p>
+          </div>
+
+       </div>
+
+      {{range .questions}}
+
+        <div class="card">
+          <div class="item-header">
+            <small class="text-muted">{{.Type}}</small>
+          </div>
+          <div class="item-body">
+            <a class="question-link" href="/view/{{.URL}}"><h4>{{.Title}}</h4></a>
+          </div>
+          <div class="item-footer">
+            {{if .Date}}
+              <small class="text-muted">Created on {{.Date}}.{{if (gt (len .Records) 1)}} {{decrement (len .Records)}} records.{{end}}{{if .BrierScore}} {{template "brierscore.html" .}}{{end}}</small>
+            {{end}}
+          </div>
         </div>
-
-     </div>
-
-
+        <br />
+      {{end}}
 
 
-
-    {{range .questions}}
-
-      <div class="card">
-        <div class="item-header">
-          <small class="text-muted">{{.Type}}</small>
-        </div>
-        <div class="item-body">
-          <a class="question-link" href="/view/{{.URL}}"><h4>{{.Title}}</h4></a>
-        </div>
-        <div class="item-footer">
-          {{if .Date}}
-            <small class="text-muted">Created on {{.Date}}.{{if (gt (len .Records) 1)}} {{decrement (len .Records)}} records.{{end}}{{if .BrierScore}} {{template "brierscore.html" .}}{{end}}</small>
-          {{end}}
-        </div>
-      </div>
-      <br />
+    {{else}}
+      <div>You haven't forecasted yet.</div>
     {{end}}
-    
+
 
     <!-- "Learn More" modal -->
     <div class="modal fade" id="openHelp" tabindex="-1" role="dialog" aria-labelledby="openHelpLabel" aria-hidden="true">
