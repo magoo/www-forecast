@@ -25,14 +25,16 @@ type Question struct {
 }
 
 type Answer struct {
-	Id          string `dynamodbav:"id"`      // The question this answers
-	OwnerID     string `dynamodbav:"ownerid"` // Owner of the question, is moderator.
-	Hd          string `dynamodbav:"hd"`
-	Date        string `dynamodbav:"date"`
-	UserAlias   string `dynamodbav:"useralias"` // The users fake name
-	URL         string `dynamodbav:"url"`
-	Title       string `dynamodbav:"title"`
-	Description string `dynamodbav:"description"`
+	Id          string  `dynamodbav:"id"`      // The question this answers
+	OwnerID     string  `dynamodbav:"ownerid"` // Owner of the question, is moderator.
+	Hd          string  `dynamodbav:"hd"`
+	Date        string  `dynamodbav:"date"`
+	UserAlias   string  `dynamodbav:"useralias"` // The users fake name
+	URL         string  `dynamodbav:"url"`
+	Title       string  `dynamodbav:"title"`
+	Description string  `dynamodbav:"description"`
+	BrierScore  float64 `dynamodbav:"brierscore"`
+	Concluded   bool    `dynamodbav:"concluded"`
 }
 
 func GetQuestion(id string) (q Question) {
@@ -71,10 +73,10 @@ func ListQuestions(user string) (s []Question) {
 
 }
 
-func ListAnswers(user string) (s []Question) {
+func ListAnswers(user string) (s []Answer) {
 	result := GetPrimaryIndexItem(user, "ownerid", "ownerid-index", answerTable)
 
-	s = []Question{}
+	s = []Answer{}
 
 	err := dynamodbattribute.UnmarshalListOfMaps(result.Items, &s)
 
@@ -83,6 +85,23 @@ func ListAnswers(user string) (s []Question) {
 	}
 
 	return s
+
+}
+
+func ListConcludedAnswers(user string) (cs []Answer) {
+
+	s := ListAnswers(user)
+
+	//Concluded Questions
+	cs = []Answer{}
+
+	for _, v := range s {
+		if v.Concluded {
+			cs = append(cs, v)
+		}
+	}
+
+	return cs
 
 }
 

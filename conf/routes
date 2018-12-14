@@ -56,7 +56,7 @@ POST    /view/rank/:rid/record                  Rank.Record
 POST    /sort                                   Sort.Create
 
 # View page for "My Brier"
-GET     /my                                     My.Index
+GET     /skill                                  Skill.Index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
