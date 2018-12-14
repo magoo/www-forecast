@@ -17,6 +17,7 @@ func init() {
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Range{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Rank{})
 	revel.InterceptFunc(checkUser, revel.BEFORE, &Sort{})
+	revel.InterceptFunc(checkUser, revel.BEFORE, &Skill{})
 
 	//revel.OnAppStart(models.DbConnect)
 
