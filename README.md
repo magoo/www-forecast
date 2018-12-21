@@ -1,4 +1,6 @@
 # e6e
+e6e is a forecasting tool for small groups. Currently Alpha, run at your own risk.
+
 This is a Revel web application with a DynamoDB backend, requiring Google developer credentials.
 
 ## Development workflow
@@ -31,6 +33,10 @@ go get -u github.com/revel/cmd/revel
 
 ### 4. Verify the install works.
 Enter the `$GOPATH/src/www-forecast` directory and `revel run`. The server should start locally. It won't work quite yet as we haven't setup AWS and Google credentials, but this is a good point to stop and troubleshoot any issues with Go or Revel.
+
+### 4. Generate the app secret
+
+Required: Use `go run scripts/generatesecret.go`, store the value in the environment as `E6E_SESSION_SECRET`. This is used for signed cookies.
 
 ### 5. AWS IAM Account
 Create an IAM programmatic user account with permission to modify DynamoDB.
@@ -75,10 +81,10 @@ There are a number of environment variables that can change how the application 
 ### E6E_CONFIG_PATHS
 To specify a custom revel config you can add a comma separated list of directories containing app.conf files that revel will check. For more info see https://revel.github.io/manual/appconf.html#external_app.conf
 
-### E6E_QUESTIONS_TABLE_NAME 
+### E6E_QUESTIONS_TABLE_NAME
 To override the default dynamodb table name for use in custom deployments use this variable. The default is `questions-tf`
 
-### E6E_ANSWERS_TABLE_NAME 
+### E6E_ANSWERS_TABLE_NAME
 To override the default dynamodb table name for use in custom deployments use this variable. The default is `answers-tf`
 
 ### E6E_GOOGLE_CLIENT
@@ -86,6 +92,3 @@ This is the Oauth client id for logging into the application with Google.
 
 ### E6E_GOOGLE_SECRET
 This is the Oauth client secret for logging into the application with Google.
-
-
-
