@@ -78,6 +78,9 @@ This is currently a docker container (`Dockerfile` included) that is pushed to F
 ## Configuration
 There are a number of environment variables that can change how the application functions.
 
+### E6E_AWS_ENV
+Your specific AWS region.
+
 ### E6E_CONFIG_PATHS
 To specify a custom revel config you can add a comma separated list of directories containing app.conf files that revel will check. For more info see https://revel.github.io/manual/appconf.html#external_app.conf
 
