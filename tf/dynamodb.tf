@@ -45,14 +45,6 @@ resource "aws_dynamodb_table" "answers" {
   }
 
   global_secondary_index {
-    name               = "id-index"
-    hash_key           = "id"
-    write_capacity     = 1
-    read_capacity      = 1
-    projection_type    = "ALL"
-  }
-
-  global_secondary_index {
     name               = "ownerid-index"
     hash_key           = "ownerid"
     write_capacity     = 1

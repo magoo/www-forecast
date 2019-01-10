@@ -162,7 +162,7 @@ func DeleteRankSorts(rid string) {
 func ViewRankResults (rid string) (s []Sort) {
   //Need to do a HD check here to prevent IDOR.
 
-    result := GetPrimaryIndexItem(rid, "id", "id-index", "answers-tf")
+    result := GetPrimaryItem(rid, "id", "answers-tf")
 
     s = []Sort{}
 

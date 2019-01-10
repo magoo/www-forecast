@@ -43,7 +43,7 @@ func CreateForecast(u string, f []float64, sid string, hd string) {
 func ViewScenarioResults(sid string) (c []Forecast) {
 	//Need to do a HD check here to prevent IDOR.
 
-	result := GetPrimaryIndexItem(sid, "id", "id-index", answerTable)
+	result := GetPrimaryItem(sid, "id", answerTable)
 
 	c = []Forecast{}
 
