@@ -3,5 +3,7 @@ language: go
 services:
   - docker
 
-script:
+before_install:
   - docker build -t e6e .
+
+script: make
