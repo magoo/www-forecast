@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/magoo/www-forecast/app/models"
+
 	"github.com/revel/revel"
 )
 

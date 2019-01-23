@@ -1,9 +1,11 @@
 package controllers
 
 import (
-	"github.com/revel/revel"
-	"github.com/magoo/www-forecast/app/models"
 	"fmt"
+
+	"github.com/magoo/www-forecast/app/models"
+
+	"github.com/revel/revel"
 )
 
 type Auth struct {
@@ -13,7 +15,7 @@ type Auth struct {
 func (c Auth) Create(googleIdToken string) revel.Result {
 	ti, hd, err := models.VerifyIdToken(googleIdToken)
 
-	if (err != nil){
+	if err != nil {
 		c.Flash.Error("Could not verify token from Google.")
 		fmt.Println("Can't verify hd claim from Google: " + err.Error())
 		return c.Render()
@@ -27,7 +29,7 @@ func (c Auth) Create(googleIdToken string) revel.Result {
 	// Cheap and simple privacy for the time being.
 	// We change empty strings to "public" because dynamo doesn't like empty
 	// strings downstream.
-	if (hd == "") {
+	if hd == "" {
 		c.Session["hd"] = "public"
 	} else {
 		c.Session["hd"] = hd
@@ -39,7 +41,7 @@ func (c Auth) Create(googleIdToken string) revel.Result {
 
 func (c Auth) Delete() revel.Result {
 	c.Session["user"] = ""
-	c.Session["hd"]		= ""
+	c.Session["hd"] = ""
 	c.Flash.Success("Logged Out.")
 
 	res := JSONResponse{Code: "ok"}

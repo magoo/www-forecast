@@ -10,19 +10,18 @@ RUN curl $DEP_URL -L -o $GOPATH/bin/dep && echo "$DEP_HASH $GOPATH/bin/dep" | sh
 
 RUN go get -u github.com/revel/cmd/revel
 
-WORKDIR $GOPATH/src/www-forecast
+WORKDIR $GOPATH/src/github.com/magoo/www-forecast
 
 COPY Gopkg.toml Gopkg.lock ./
 
 RUN dep ensure --vendor-only
 
-COPY . $GOPATH/src/www-forecast
+COPY . $GOPATH/src/github.com/magoo/www-forecast
 
-RUN revel build www-forecast $GOPATH/bin/www-forecast prod
+RUN revel build github.com/magoo/www-forecast $GOPATH/bin/www-forecast prod
 
 RUN chmod +x $GOPATH/bin/www-forecast
 
 RUN rm -rf $GOPATH/src
 
 CMD $GOPATH/bin/www-forecast/run.sh
-
