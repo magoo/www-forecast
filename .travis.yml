@@ -1,0 +1,7 @@
+language: go
+
+services:
+  - docker
+
+after_success:
+  - docker build -t e6e
