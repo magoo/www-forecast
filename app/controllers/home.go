@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"github.com/magoo/www-forecast/app/models"
 	"github.com/revel/revel"
-	"www-forecast/app/models"
 )
 
 type Home struct {
@@ -13,15 +13,14 @@ func (c Home) Index() revel.Result {
 	return c.Render()
 }
 
-
 func (c Home) List() revel.Result {
 
-	if (c.Session["user"] == "") {
+	if c.Session["user"] == "" {
 		c.Flash.Error("Please log in.")
 		return c.Redirect(Home.Index)
 	}
 
-	if (c.Session["redirect"] != "") {
+	if c.Session["redirect"] != "" {
 
 		redirect := c.Session["redirect"]
 		delete(c.Session, "redirect") // Removed item from session
@@ -35,18 +34,17 @@ func (c Home) List() revel.Result {
 
 	empty := true
 
-	if (len(qs) > 0) {
+	if len(qs) > 0 {
 
 		empty = false
 
 	}
 
-//Eventually show recent answers
-//	as := models.ListAnswers(c.Session["user"])
-//	if (len(as) > 0) {
-//		empty = false
-//	}
-
+	//Eventually show recent answers
+	//	as := models.ListAnswers(c.Session["user"])
+	//	if (len(as) > 0) {
+	//		empty = false
+	//	}
 
 	return c.Render(qs, empty)
 }

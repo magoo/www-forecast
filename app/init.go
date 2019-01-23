@@ -3,7 +3,7 @@ package app
 import (
 	"os"
 	"strings"
-	"www-forecast/app/models"
+	"github.com/magoo/www-forecast/app/models"
 
 	"github.com/magoo/revel-csrf"
 	"github.com/revel/revel"

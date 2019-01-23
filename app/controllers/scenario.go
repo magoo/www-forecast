@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strconv"
 	"time"
-	"www-forecast/app/models"
+	"github.com/magoo/www-forecast/app/models"
 
 	"github.com/revel/revel"
 )
