@@ -6,4 +6,7 @@ services:
 before_install:
   - docker build -t e6e .
 
+install:
+  - go get -u github.com/revel/cmd/revel
+
 script: make
