@@ -3,7 +3,5 @@ language: go
 services:
   - docker
 
-before_install:
+script:
   - docker build -t e6e .
-
-script: whoami
