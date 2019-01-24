@@ -3,6 +3,6 @@ all:
 
 debug:
 			revel version
-			ls $GOPATH/src
-			ls $GOPATH/github.com/magoo/www-forecast
-			ls $GOPATH/bin
+			ls ${GOPATH}/src
+			ls ${GOPATH}/github.com/magoo/www-forecast
+			ls ${GOPATH}/bin
