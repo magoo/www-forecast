@@ -11,5 +11,6 @@ before_install:
   - dep ensure
 
 script:
-  - make debug
+  #- make debug
+  - make test
   - make
