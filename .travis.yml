@@ -8,4 +8,6 @@ services:
 before_install:
   - go get -u github.com/revel/cmd/revel
 
-script: make
+script:
+  - make debug
+  - make

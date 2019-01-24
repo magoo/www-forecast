@@ -1,5 +1,5 @@
 debug:
-	revel version
+		revel version
 
 all:
-	revel build github.com/magoo/www-forecast bin/www-forecast prod
+			revel build github.com/magoo/www-forecast bin/www-forecast prod
