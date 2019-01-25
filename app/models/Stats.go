@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -21,7 +20,7 @@ func BrierCalc(af []float64, index int) (score float64) {
 		score += math.Pow(float64(outcome)-(v*.01), 2)
 
 	}
-	fmt.Println("Current score: ", score)
+
 	return score
 
 }
