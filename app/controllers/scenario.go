@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strconv"
 	"time"
+
 	"github.com/magoo/www-forecast/app/models"
 
 	"github.com/revel/revel"
@@ -125,11 +126,14 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 	//s.Results = af
 	s.ResultIndex = resultIndex
 
-	if s.Question.BrierScore == 0 {
-		s.Question.BrierScore = bs
-	} else {
-		s.Question.BrierScore = (bs + s.Question.BrierScore) / 2
-	}
+	//This is rolling brier score code. Removing.
+	//if s.Question.BrierScore == 0 {
+	//	s.Question.BrierScore = bs
+	//} else {
+	//	s.Question.BrierScore = (bs + s.Question.BrierScore) / 2
+	//}
+
+	s.Question.BrierScore = bs
 
 	err := models.WriteQuestion(s)
 
