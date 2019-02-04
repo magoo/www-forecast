@@ -25,6 +25,7 @@ var answerTable = GetTableName("E6E_ANSWERS_TABLE_NAME", "answers-tf")
 
 var calibrationQuestionTable = GetTableName("E6E_CALIBRATION_QUESTIONS_TABLE_NAME", "calibration-questions-tf")
 var calibrationResultTable = GetTableName("E6E_CALIBRATION_RESULTS_TABLE_NAME", "calibration-results-tf")
+var calibrationSessionTable = GetTableName("E6E_CALIBRATION_SESSIONS_TABLE_NAME", "calibration-sessions-tf")
 
 var Svc = dynamodb.New(sess)
 
@@ -84,6 +85,19 @@ func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string
 
 	}
 	return
+}
+
+func GetAllItems(table string) (result *dynamodb.ScanOutput) {
+	input := &dynamodb.ScanInput{
+		TableName:              aws.String(table),
+	}
+
+	result, err := Svc.Scan(input)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	return result
 }
 
 func GetPrimaryIndexItem(primaryValue string, primary string, index string, table string) (result *dynamodb.QueryOutput) {

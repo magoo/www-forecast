@@ -64,6 +64,17 @@ GET     /favicon.ico                            404
 # Map static resources from the /app/public folder to the /public path
 GET     /public/*filepath                       Static.Serve("public")
 
+# CRUD for calibration training
+GET     /calibration                   Calibration.Index
+# Start a session
+POST    /calibration/session           Calibration.Create
+# Update a session (by submitting some answers)
+POST    /view/calibration/:sid/answers     Calibration.SaveAnswers
+# do we want to have POSTs for submitting quiz results to redirect to GETs? seems like good practice.
+GET     /view/calibration/:sid/next-questions   Calibration.NextQuestions
+#GET     /view/calibration/:sid/review      Calibration.Review
+
+
 # Catch all, this will route any request into the controller path
 #
 #                    **** WARNING ****

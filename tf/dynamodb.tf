@@ -98,3 +98,15 @@ resource "aws_dynamodb_table" "calibration-results" {
     projection_type    = "ALL"
   }
 }
+
+resource "aws_dynamodb_table" "calibration-sessions" {
+  name = "calibration-sessions-tf"
+  read_capacity = 1
+  write_capacity = 1
+  hash_key = "id"
+
+  attribute {
+    name = "id"
+    type = "S"
+  }
+}

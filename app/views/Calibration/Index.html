@@ -1,0 +1,26 @@
+{{set . "title" "Train your calibration!"}}
+{{set . "description" "<description>"}}
+{{set . "longdescription" "<longdescription>"}}
+{{set . "help" false}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+wheeee it's an index
+
+{{template "flash.html" .}}
+
+<form method="post" action="/calibration/session" >
+    <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
+
+
+    <div class="btn-group" role="group" aria-label="...">
+        <button class="btn btn-primary" type="submit">Start training!</button>
+    </div>
+</form>
+
+
+{{template "footer.html" .}}
+
+</body>
+</html>

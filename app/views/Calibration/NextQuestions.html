@@ -1,0 +1,51 @@
+{{set . "title" "Train your calibration!"}}
+{{set . "description" "<description>"}}
+{{set . "longdescription" "<longdescription>"}}
+{{set . "help" false}}
+{{template "header.html" .}}
+{{template "navbar.html" .}}
+{{template "jumbotron.html" .}}
+
+<span>yeeeeaaa let's answer us some questions!</span>
+
+{{template "flash.html" .}}
+
+<form action="/view/calibration/{{.session.Id}}/answers" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
+    Here's a list:
+    {{range $index, $element := .questions}}
+        <div class="card">
+            {{$index}}. {{$element.Question}}
+            <div>
+                Answer:
+                <label>
+                    <input type="radio" name="calibration-answer-{{$element.Id}}" value="true"></input>
+                    True
+                </label>
+                <label>
+                    <input type="radio" name="calibration-answer-{{$element.Id}}" value="false"></input>
+                    False
+                </label>
+
+                Confidence:
+                <select name="calibration-confidence-{{$element.Id}}">
+                    <option value="0.6">0.60</option>
+                    <option value="0.7">0.70</option>
+                    <option value="0.8">0.80</option>
+                    <option value="0.9">0.90</option>
+                    <option value="0.95">0.95</option>
+                    <option value="0.99">0.99</option>
+                </select>
+            </div>
+        </div>
+        <br />
+    {{end}}
+    (done with list)
+    <button type="submit">Submit</button>
+</form>
+
+
+{{template "footer.html" .}}
+
+</body>
+</html>
