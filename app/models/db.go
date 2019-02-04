@@ -23,6 +23,9 @@ var questionTable = GetTableName("E6E_QUESTIONS_TABLE_NAME", "questions-tf")
 
 var answerTable = GetTableName("E6E_ANSWERS_TABLE_NAME", "answers-tf") 
 
+var calibrationQuestionTable = GetTableName("E6E_CALIBRATION_QUESTIONS_TABLE_NAME", "calibration-questions-tf")
+var calibrationResultTable = GetTableName("E6E_CALIBRATION_RESULTS_TABLE_NAME", "calibration-results-tf")
+
 var Svc = dynamodb.New(sess)
 
 func GetTableName(envvar, fallback string) string {
