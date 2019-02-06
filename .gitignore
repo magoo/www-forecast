@@ -6,18 +6,12 @@ routes/
 
 *.backup
 
-*.tfstate
-
-*.backup
-
 tf/terraform.tfstate
 
 tf/terraform.tfstate.backup
 
-*.backup
-
-*.tfstate
-
 *.DS_Store
 
 vendor/
+
+env.sh
