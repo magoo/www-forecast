@@ -41,7 +41,7 @@ func (c Calibration) SaveAnswers(sid string) revel.Result {
 	result := models.GetCalibrationResult(session.ResultsId)
 	fmt.Println(result)
 	if len(result.Answers) == 0 {
-		result.Answers = make([]models.CalibrationAnswer, len(session.Questions)) // TODO: un-magicify this number
+		result.Answers = make([]models.CalibrationAnswer, len(session.Questions))
 	}
 
 	for formKey, formValue := range c.Params.Form {

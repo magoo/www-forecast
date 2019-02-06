@@ -1,6 +1,9 @@
-var pageData = getPageData();
-
 function prepGraphData() {
+    var pageData = getPageData();
+    if (!pageData.answers) {
+        throw Error("There are no answers in the pageData!", JSON.stringify(pageData))
+    }
+
     // each answer has [correct?, confidence]
     var answers = pageData.answers;
 
@@ -14,7 +17,6 @@ function prepGraphData() {
 
     // Tally up the answers/outcomes
     answers.forEach(function (answer) {
-        console.log(JSON.stringify(buckets), answer.Confidence)
         bucket = buckets.find(function(b){ return b.confidence == answer.Confidence })
         if (answer.Outcome == true) {
             bucket.numCorrect += 1
@@ -75,8 +77,6 @@ function drawGraph(data) {
     var line = d3.line()
         .x(d => x(d.confidence))
         .y(d => y(d.fractionCorrect))
-
-    console.log(JSON.stringify(data))
 
     svg.append("path")
         .datum(data)
