@@ -8,29 +8,30 @@ import (
 
 type CalibrationQuestion struct {
 	Id            string   `dynamodbav:"id"`      // Uniquely identify the question
-	OwnerID       string   `dynamodbav:"ownerid"` // Owner of the question, is moderator.
+	//OwnerID       string   `dynamodbav:"ownerid"` // Owner of the question, is moderator.
 	//Date          string   `dynamodbav:"date"`
 	//Hd            string   `dynamodbav:"hd"` // Owning organization (for larger group visibility)
-	Question      string   `dynamodbav:"description"`
+	Description      string   `dynamodbav:"description"`
 	//Concluded     bool     `dynamodbav:"concluded"`         // Has this scenario shut down?
 	//ConcludedTime string   `dynamodbav:"concludetime"`      // If so, when?
 	//Records       []string `dynamodbav:"records,stringset"` // Audit records on the scenario.
 	//URL           string   `dynamodbav:"url"`
+	CorrectAnswer bool `dynamodbav:"correctanswer"`
 	Type          string   `dynamodbav:"type"`
 }
 
 type CalibrationAnswer struct {
-	Outcome    bool    `dynamodbav:"outcome"`
+	Outcome    bool    `dynamodbav:"outcome"` // Whether their answer was correct
 	Confidence float64 `dynamodbav:"confidence"`
 }
 
-type CalibrationResults struct {
+type CalibrationResult struct {
 	Id        string              `dynamodbav:"id"`      // The question this answers
-	OwnerID   string              `dynamodbav:"ownerid"` // Owner of the question, is moderator.
-	Hd        string              `dynamodbav:"hd"`
+	//OwnerID   string              `dynamodbav:"ownerid"` // The user that did this calibration session
+	//Hd        string              `dynamodbav:"hd"`
 	Date      string              `dynamodbav:"date"`
-	UserAlias string              `dynamodbav:"useralias"` // The user's fake name
-	URL       string              `dynamodbav:"url"`
+	//UserAlias string              `dynamodbav:"useralias"` // The user's fake name
+	//URL       string              `dynamodbav:"url"`
 	Answers   []CalibrationAnswer `dynamodbav:"answers"`
 }
 
@@ -38,6 +39,7 @@ type CalibrationSession struct {
 	Id                   string                `dynamodbav:"id"`                // ID for the session
 	Questions            []CalibrationQuestion `dynamodbav:"questions"`         // List of questions used for the session
 	CurrentQuestionIndex int8                  `dynamodvav:"currentbatchindex"` // Index of the next question to be served from the array of questions
+	ResultsId            string                `dynamodbav:"results"`
 }
 
 func GetCalibrationSession(sid string) (calibration_session CalibrationSession) {
@@ -56,56 +58,67 @@ func GetCalibrationSession(sid string) (calibration_session CalibrationSession) 
 
 }
 
-
-
 func CreateCalibrationSession() (eid string) {
-
-	//t := time.Now()
-	//
-	//euuid := uuid.New()
-	//item := Estimate{
-	//	Question: Question{
-	//		Id:          euuid.String(),
-	//		Date:        t.Format("2006-01-02"),
-	//		OwnerID:     owner,
-	//		Hd:          hd,
-	//		Title:       title,
-	//		Description: description,
-	//		Records:     []string{t.Format("2006-01-02") + ": Created."},
-	//		URL:         "estimate/" + euuid.String(),
-	//		Type:        "Estimate",
-	//	},
-	//	Unit: unit,
-	//}
-	//
-	//err := PutItem(item, questionTable)
-	//
-	//if err != nil {
-	//	fmt.Println("Error writing to db.")
-	//} else {
-	//	fmt.Println("Successfully added.")
-	//}
-	//
-	//return euuid.String()
-
 	euuid := uuid.New()
 
 	// Get all calibration questions TODO: Move to another function
 
 	session := CalibrationSession{
 		Id: euuid.String(),
+		// TODO: Add userID (need to figure out where to get it from)
 		Questions: ListCalibrationQuestions(),
+		ResultsId: CreateCalibrationResult(),
 	}
 
 	err := PutItem(session, calibrationSessionTable)
 
 	if err != nil {
-		fmt.Println("Error writing to db.")
+		panic(fmt.Sprintf("Error writing to db."))
 	} else {
 		fmt.Println("Successfully added.")
 	}
 
 	return euuid.String()
+}
+
+func CreateCalibrationResult() (eid string) {
+	euuid := uuid.New()
+
+	// Get all calibration questions TODO: Move to another function
+
+	results := CalibrationResult{
+		Id: euuid.String(),
+	}
+
+	err := PutItem(results, calibrationResultTable)
+
+	if err != nil {
+		panic(fmt.Sprintf("Error writing to db."))
+	} else {
+		fmt.Println("Successfully added.")
+	}
+
+	return euuid.String()
+}
+
+func GetCalibrationResult(id string) (q CalibrationResult) {
+
+	result := GetPrimaryItem(id, "id", calibrationResultTable)
+
+	q = CalibrationResult{}
+
+	err := dynamodbattribute.UnmarshalMap(result.Item, &q)
+
+	if err != nil {
+		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+	}
+
+	if q.Id == "" {
+		fmt.Println("Could not find that question.")
+		return
+	}
+
+	return q
 }
 
 func GetCalibrationQuestion(id string) (q CalibrationQuestion) {
