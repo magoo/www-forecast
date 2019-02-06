@@ -6,19 +6,31 @@
 {{template "navbar.html" .}}
 {{template "jumbotron.html" .}}
 
-here come them results!
+<script src="/public/js/d3/d3.min.js"></script>
+
+<script>
+    function getPageData () {
+        return JSON.parse({{ .pageData }})
+    }
+</script>
 
 {{template "flash.html" .}}
 
+here come them results!
 
-{{range $index, $brierScore := .brierScores}}
-    <div class="card">
-        {{$index}}. {{$brierScore}}
-    </div>
-    <br />
-{{end}}
+<div id="confidence-graph"></div>
+
+{{/*{{range $index, $brierScore := .brierScores}}*/}}
+    {{/*<div class="card">*/}}
+        {{/*{{$index}}. {{$brierScore}}*/}}
+    {{/*</div>*/}}
+    {{/*<br />*/}}
+{{/*{{end}}*/}}
 
 
+<script>
+    {{template "Calibration/Review.js"}}
+</script>
 
 {{template "footer.html" .}}
 

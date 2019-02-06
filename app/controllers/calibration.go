@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/magoo/www-forecast/app/models"
 	"github.com/revel/revel"
@@ -20,7 +21,7 @@ func (c Calibration) Index() revel.Result {
 func (c Calibration) Create() revel.Result {
 
 	fmt.Println("Making a new session")
-	sid := models.CreateCalibrationSession()
+	sid := models.CreateCalibrationSession(c.Session["user"])
 	models.CreateEstimate("a", "a", "a", "a", "a")
 
 	c.Flash.Success(sid)
@@ -36,20 +37,6 @@ func (c Calibration) NextQuestions(sid string) revel.Result {
 
 func (c Calibration) SaveAnswers(sid string) revel.Result {
 	session := models.GetCalibrationSession(sid)
-	//numQuestions := len(session.Questions)
-	//for questionI := 0; questionI < numQuestions; questionI++ {
-	//	question := session.Questions[questionI]
-	//	answer := c.Params.Form.Get("calibration-answer-" + question.Id)
-	//
-	//	fmt.Println("Question in POST:", question.Description)
-	//	if answer != "" {
-	//		fmt.Println("Answer in POST:", answer)
-	//		models.GetCalibrationResult(session.ResultsId)
-	//	} else {
-	//		fmt.Println("Answer in POST:", "NONE")
-	//	}
-	//}
-
 
 	result := models.GetCalibrationResult(session.ResultsId)
 	fmt.Println(result)
@@ -104,7 +91,20 @@ func (c Calibration) Review(sid string) revel.Result {
 
 	fmt.Println("brier scores", brierScores)
 
-	return c.Render(brierScores)
+	rawPageData := make(map[string]interface{})
+	rawPageData["brierScores"] = brierScores
+	rawPageData["answers"] = result.Answers
+
+	//jsonAnswers, _ := json.Marshal(result.Answers)
+	//fmt.Println("answers", string(jsonAnswers))
+
+	jsonBytesPageData, _ := json.Marshal(rawPageData)
+	
+	pageData := string(jsonBytesPageData)
+
+	fmt.Println(pageData)
+
+	return c.Render(pageData)
 }
 
 func brierScore(answer models.CalibrationAnswer) float64 {
