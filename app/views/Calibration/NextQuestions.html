@@ -13,13 +13,15 @@
 <form action="/view/calibration/{{.session.Id}}/answers" method="POST">
     <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
     Here's a list:
+    {{$currentQuestionIndex := .currentQuestionIndex}}
     {{range $index, $question := .questions}}
+        {{$index = add $index 1}} {{/* for 1-indexing the questions */}}
         <div class="card">
-            {{$index}}. {{$question.Description}}
+            {{add $index $currentQuestionIndex}}. {{$question.Description}}
             <div>
                 Answer:
                 <label>
-                    <input type="radio" name="calibration-answer-{{$question.Id}}" value="true"></input>
+                    <input type="radio" name="calibration-answer-{{$question.Id}}" value="true" checked></input>
                     True
                 </label>
                 <label>
@@ -29,12 +31,12 @@
 
                 Confidence:
                 <select name="calibration-confidence-{{$question.Id}}">
+                    <option value="0.5">0.50</option>
                     <option value="0.6">0.60</option>
                     <option value="0.7">0.70</option>
                     <option value="0.8">0.80</option>
                     <option value="0.9">0.90</option>
-                    <option value="0.95">0.95</option>
-                    <option value="0.99">0.99</option>
+                    <option value="1.0">1.00</option>
                 </select>
             </div>
         </div>

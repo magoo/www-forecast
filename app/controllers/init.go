@@ -27,6 +27,9 @@ func init() {
 	revel.TemplateFuncs["decrement"] = func(a int) int {
 		return a - 1
 	}
+	revel.TemplateFuncs["add"] = func(a, b int) int {
+		return a + b
+	}
 
 }
 

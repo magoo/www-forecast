@@ -2,8 +2,11 @@ package models
 
 import (
 	"fmt"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/google/uuid"
+	"strconv"
 )
 
 type CalibrationQuestion struct {
@@ -39,8 +42,8 @@ type CalibrationSession struct {
 	Id                   string                `dynamodbav:"id"`                // ID for the session
 	OwnerID              string                `dynamodbav:"ownerid"`           // The user that did this calibration session
 	Questions            []CalibrationQuestion `dynamodbav:"questions"`         // List of questions used for the session
-	CurrentQuestionIndex int8                  `dynamodvav:"currentbatchindex"` // Index of the next question to be served from the array of questions
-	ResultsId            string                `dynamodbav:"resultsId"`
+	CurrentQuestionIndex int                   `dynamodbav:"currentquestionindex"` // Index of the next question to be served from the array of questions
+	ResultsId            string                `dynamodbav:"resultsid"`
 }
 
 func GetCalibrationSession(sid string) (calibration_session CalibrationSession) {
@@ -58,13 +61,14 @@ func GetCalibrationSession(sid string) (calibration_session CalibrationSession) 
 	return calibration_session
 }
 
-func CreateCalibrationSession(ownerId string) (id string) {
+func CreateCalibrationSession(ownerId string, numberOfQuestions int) (id string) {
 	uuid := uuid.New()
 
 	session := CalibrationSession{
 		Id:        uuid.String(),
 		OwnerID:   ownerId,
-		Questions: ListCalibrationQuestions(),
+		Questions: ListCalibrationQuestions(numberOfQuestions),
+		CurrentQuestionIndex: 0,
 		ResultsId: CreateCalibrationResult(ownerId),
 	}
 
@@ -77,6 +81,33 @@ func CreateCalibrationSession(ownerId string) (id string) {
 	}
 
 	return uuid.String()
+}
+
+func UpdateCalibrationSession(id string, currentQuestionIndex int, user string) {
+	//Primary key for update query
+	key := map[string]*dynamodb.AttributeValue{
+		"id": {
+			S: aws.String(id),
+		},
+	}
+
+	expressionattrvalues := map[string]*dynamodb.AttributeValue{
+		":qidx": {
+			N: aws.String(strconv.Itoa(currentQuestionIndex)),
+		},
+		":user": {
+			S: aws.String(user),
+		},
+	}
+
+	updateexpression := "SET currentquestionindex = :qidx"
+	conditionexpression := "ownerid = :user"
+
+	err := UpdateItem(key, updateexpression, expressionattrvalues, calibrationSessionTable, conditionexpression)
+	if err != nil {
+		panic(err)
+	}
+	return
 }
 
 func CreateCalibrationResult(ownerId string) (id string) {
@@ -137,7 +168,7 @@ func GetCalibrationQuestion(id string) (q CalibrationQuestion) {
 	return q
 }
 
-func ListCalibrationQuestions() (s []CalibrationQuestion) {
+func ListCalibrationQuestions(numberOfQuestions int) (s []CalibrationQuestion) {
 	result := GetAllItems(calibrationQuestionTable)
 
 	s = []CalibrationQuestion{}
@@ -146,6 +177,11 @@ func ListCalibrationQuestions() (s []CalibrationQuestion) {
 
 	if err != nil {
 		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+	}
+
+	// TODO: Do random sampling to pick the list
+	if len(s) > numberOfQuestions {
+		return s[0:numberOfQuestions]
 	}
 
 	return s
