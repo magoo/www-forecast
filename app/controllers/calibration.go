@@ -18,9 +18,10 @@ func (c Calibration) Index() revel.Result {
 	return c.Render()
 }
 
-// TODO: Change these to (30, 5) for production
-var sessionSize = 5
-var batchSize = 2
+// The number of questions to use for a whole calibration training session
+var sessionSize = 30
+// The number of questions to show at once before moving on to the next
+var batchSize = 5
 
 func (c Calibration) Create() revel.Result {
 
