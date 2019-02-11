@@ -6,7 +6,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/google/uuid"
+	"math/rand"
 	"strconv"
+	"time"
 )
 
 type CalibrationQuestion struct {
@@ -105,7 +107,7 @@ func UpdateCalibrationSession(id string, currentQuestionIndex int, user string) 
 
 	err := UpdateItem(key, updateexpression, expressionattrvalues, calibrationSessionTable, conditionexpression)
 	if err != nil {
-		panic(err)
+		panic(fmt.Sprintf("Failed to UpdateCalibrationSession, %v", err))
 	}
 	return
 }
@@ -168,23 +170,29 @@ func GetCalibrationQuestion(id string) (q CalibrationQuestion) {
 	return q
 }
 
-func ListCalibrationQuestions(numberOfQuestions int) (s []CalibrationQuestion) {
+func ListCalibrationQuestions(numberOfQuestions int) (batchOfQuestions []CalibrationQuestion) {
 	result := GetAllItems(calibrationQuestionTable)
 
-	s = []CalibrationQuestion{}
+	allCalibrationQuestions := []CalibrationQuestion{}
 
-	err := dynamodbattribute.UnmarshalListOfMaps(result.Items, &s)
-
+	err := dynamodbattribute.UnmarshalListOfMaps(result.Items, &allCalibrationQuestions)
 	if err != nil {
 		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 	}
 
-	// TODO: Do random sampling to pick the list
-	if len(s) > numberOfQuestions {
-		return s[0:numberOfQuestions]
+	rand.Seed(time.Now().UnixNano())
+	shuffledIndexes := rand.Perm(len(allCalibrationQuestions))
+
+	batchSize := numberOfQuestions;
+	if batchSize > len(allCalibrationQuestions) {
+		batchSize = len(allCalibrationQuestions)
+	}
+	batchOfQuestions = make([]CalibrationQuestion, batchSize)
+	for i := 0; i < batchSize; i ++ {
+		batchOfQuestions[i] = allCalibrationQuestions[shuffledIndexes[i]]
 	}
 
-	return s
+	return batchOfQuestions
 }
 
 func WriteCalibrationResult(item interface{}) (err error) {

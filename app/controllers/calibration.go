@@ -78,15 +78,13 @@ func (c Calibration) SaveAnswers(sid string) revel.Result {
 			if formValue[0] == "true" {
 				normalizedConfidence, err = strconv.ParseFloat(c.Params.Form.Get("calibration-confidence-" + questionId), 64)
 				if err != nil {
-					fmt.Println("Got an error parsing the confidence value")
-					panic(err)
+					panic(fmt.Sprintf("Got an error parsing the confidence value, %v", err))
 				}
 			} else {
 				normalizedConfidence, err = strconv.ParseFloat(c.Params.Form.Get("calibration-confidence-" + questionId), 64)
 				normalizedConfidence = 1.0 - normalizedConfidence
 				if err != nil {
-					fmt.Println("Got an error parsing the confidence value")
-					panic(err)
+					panic(fmt.Sprintf("Got an error parsing the confidence value, %v", err))
 				}
 			}
 
