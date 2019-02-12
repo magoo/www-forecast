@@ -43,7 +43,7 @@ func (c Calibration) NextQuestions(sid string) revel.Result {
 	nextBatchSize := getNextBatchSize(session)
 
 	// Slice out the questions for this batch
-	questions := session.Questions[currentQuestionIndex : currentQuestionIndex + nextBatchSize]
+	questions := session.Questions[currentQuestionIndex : currentQuestionIndex+nextBatchSize]
 
 	return c.Render(session, questions, currentQuestionIndex)
 }
@@ -69,29 +69,16 @@ func (c Calibration) SaveAnswers(sid string) revel.Result {
 			}
 
 			// Normalize the response to be 0-100% confidence of True, for better graphing
-			originalAnswer := (formValue[0] == "true")
-			normalizedAnswer := true
+			originalAnswer := formValue[0] == "true"
 			var err error
-			originalConfidence, err := strconv.ParseFloat(c.Params.Form.Get("calibration-confidence-" + questionId), 64)
+			originalConfidence, err := strconv.ParseFloat(c.Params.Form.Get("calibration-confidence-"+questionId), 64)
 			if err != nil {
 				panic(fmt.Sprintf("Got an error parsing the confidence value, %v", err))
 			}
-			var normalizedConfidence float64
-			if formValue[0] == "true" {
-				normalizedConfidence = originalConfidence
-			} else {
-				normalizedConfidence = 1.0 - originalConfidence
-			}
 
-			normalizedOutcome := normalizedAnswer == session.Questions[questionIndex].CorrectAnswer
 			originalOutcome := originalAnswer == session.Questions[questionIndex].CorrectAnswer
 
-			normalizedConfidence = normalizedConfidence //nocommit
-			normalizedOutcome = normalizedOutcome //nocommit
-
-			result.Answers[questionIndex] = models.CalibrationAnswer {
-				//Outcome:    normalizedOutcome,
-				//Confidence: normalizedConfidence,
+			result.Answers[questionIndex] = models.CalibrationAnswer{
 				Answer:     originalAnswer,
 				Outcome:    originalOutcome,
 				Confidence: originalConfidence,
@@ -107,7 +94,7 @@ func (c Calibration) SaveAnswers(sid string) revel.Result {
 	// Update the CurrentQuestionIndex of the session
 	nextBatchSize := getNextBatchSize(session)
 	models.UpdateCalibrationSession(session.Id, session.CurrentQuestionIndex+nextBatchSize, c.Session["user"])
-	session.CurrentQuestionIndex = session.CurrentQuestionIndex+nextBatchSize
+	session.CurrentQuestionIndex = session.CurrentQuestionIndex + nextBatchSize
 
 	if session.CurrentQuestionIndex < len(session.Questions) {
 		return c.Redirect(Calibration.NextQuestions, sid)
@@ -230,7 +217,6 @@ func (c Calibration) Review(sid string) revel.Result {
 		fractionHighCorrect = 0
 	}
 
-
 	return c.Render(
 		pageData,
 		percentMeanConfidence,
@@ -258,6 +244,6 @@ func brierScore(answer models.CalibrationAnswer) float64 {
 	} else {
 		outcomeNum = 0
 	}
-	score := math.Pow(outcomeNum - answer.Confidence, 2) + math.Pow((1 -outcomeNum) - (1 - answer.Confidence), 2)
+	score := math.Pow(outcomeNum-answer.Confidence, 2) + math.Pow((1-outcomeNum)-(1-answer.Confidence), 2)
 	return score
 }

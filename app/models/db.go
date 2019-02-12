@@ -19,9 +19,9 @@ var sess, _ = session.NewSession(&aws.Config{
 //Set this environment variable if you need a table prefix in DynamoDB.
 var tablePrefix = GetTablePrefix()
 
-var questionTable = GetTableName("E6E_QUESTIONS_TABLE_NAME", "questions-tf") 
+var questionTable = GetTableName("E6E_QUESTIONS_TABLE_NAME", "questions-tf")
 
-var answerTable = GetTableName("E6E_ANSWERS_TABLE_NAME", "answers-tf") 
+var answerTable = GetTableName("E6E_ANSWERS_TABLE_NAME", "answers-tf")
 
 var calibrationQuestionTable = GetTableName("E6E_CALIBRATION_QUESTIONS_TABLE_NAME", "calibration-questions-tf")
 var calibrationResultTable = GetTableName("E6E_CALIBRATION_RESULTS_TABLE_NAME", "calibration-results-tf")
@@ -65,10 +65,10 @@ func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string
 
 	input := &dynamodb.UpdateItemInput{
 		ExpressionAttributeValues: expressionattrvalues,
-		Key:                 key,
-		TableName:           aws.String(table),
-		UpdateExpression:    aws.String(updateexpression),
-		ConditionExpression: aws.String(conditionexpression),
+		Key:                       key,
+		TableName:                 aws.String(table),
+		UpdateExpression:          aws.String(updateexpression),
+		ConditionExpression:       aws.String(conditionexpression),
 	}
 
 	if err != nil {
@@ -89,7 +89,7 @@ func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string
 
 func GetAllItems(table string) (result *dynamodb.ScanOutput) {
 	input := &dynamodb.ScanInput{
-		TableName:              aws.String(table),
+		TableName: aws.String(table),
 	}
 
 	result, err := Svc.Scan(input)

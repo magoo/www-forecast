@@ -12,15 +12,8 @@ import (
 )
 
 type CalibrationQuestion struct {
-	Id string `dynamodbav:"id"` // Uniquely identify the question
-	//OwnerID       string   `dynamodbav:"ownerid"` // Owner of the question, is moderator.
-	//Date          string   `dynamodbav:"date"`
-	//Hd            string   `dynamodbav:"hd"` // Owning organization (for larger group visibility)
-	Description string `dynamodbav:"description"`
-	//Concluded     bool     `dynamodbav:"concluded"`         // Has this scenario shut down?
-	//ConcludedTime string   `dynamodbav:"concludetime"`      // If so, when?
-	//Records       []string `dynamodbav:"records,stringset"` // Audit records on the scenario.
-	//URL           string   `dynamodbav:"url"`
+	Id            string `dynamodbav:"id"` // Uniquely identify the question
+	Description   string `dynamodbav:"description"`
 	CorrectAnswer bool   `dynamodbav:"correctanswer"`
 	Type          string `dynamodbav:"type"`
 }
@@ -32,25 +25,21 @@ type CalibrationAnswer struct {
 }
 
 type CalibrationResult struct {
-	Id      string `dynamodbav:"id"`      // The question this answers
-	OwnerID string `dynamodbav:"ownerid"` // The user that did this calibration session
-	//Hd        string              `dynamodbav:"hd"`
-	Date string `dynamodbav:"date"`
-	//UserAlias string              `dynamodbav:"useralias"` // The user's fake name
-	//URL       string              `dynamodbav:"url"`
+	Id      string              `dynamodbav:"id"`      // The question this answers
+	OwnerID string              `dynamodbav:"ownerid"` // The user that did this calibration session
+	Date    string              `dynamodbav:"date"`
 	Answers []CalibrationAnswer `dynamodbav:"answers"`
 }
 
 type CalibrationSession struct {
-	Id                   string                `dynamodbav:"id"`                // ID for the session
-	OwnerID              string                `dynamodbav:"ownerid"`           // The user that did this calibration session
-	Questions            []CalibrationQuestion `dynamodbav:"questions"`         // List of questions used for the session
+	Id                   string                `dynamodbav:"id"`                   // ID for the session
+	OwnerID              string                `dynamodbav:"ownerid"`              // The user that did this calibration session
+	Questions            []CalibrationQuestion `dynamodbav:"questions"`            // List of questions used for the session
 	CurrentQuestionIndex int                   `dynamodbav:"currentquestionindex"` // Index of the next question to be served from the array of questions
 	ResultsId            string                `dynamodbav:"resultsid"`
 }
 
 func GetCalibrationSession(sid string) (calibration_session CalibrationSession) {
-
 	result := GetPrimaryItem(sid, "id", calibrationSessionTable)
 
 	calibration_session = CalibrationSession{}
@@ -68,11 +57,11 @@ func CreateCalibrationSession(ownerId string, numberOfQuestions int) (id string)
 	uuid := uuid.New()
 
 	session := CalibrationSession{
-		Id:        uuid.String(),
-		OwnerID:   ownerId,
-		Questions: ListCalibrationQuestions(numberOfQuestions),
+		Id:                   uuid.String(),
+		OwnerID:              ownerId,
+		Questions:            ListCalibrationQuestions(numberOfQuestions),
 		CurrentQuestionIndex: 0,
-		ResultsId: CreateCalibrationResult(ownerId),
+		ResultsId:            CreateCalibrationResult(ownerId),
 	}
 
 	err := PutItem(session, calibrationSessionTable)
@@ -115,10 +104,12 @@ func UpdateCalibrationSession(id string, currentQuestionIndex int, user string) 
 
 func CreateCalibrationResult(ownerId string) (id string) {
 	uuid := uuid.New()
+	t := time.Now()
 
 	results := CalibrationResult{
 		Id:      uuid.String(),
 		OwnerID: ownerId,
+		Date:    t.Format("2006-01-02"),
 	}
 
 	err := PutItem(results, calibrationResultTable)
@@ -133,7 +124,6 @@ func CreateCalibrationResult(ownerId string) (id string) {
 }
 
 func GetCalibrationResult(id string) (q CalibrationResult) {
-
 	result := GetPrimaryItem(id, "id", calibrationResultTable)
 
 	q = CalibrationResult{}
