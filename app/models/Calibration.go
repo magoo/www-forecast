@@ -26,6 +26,7 @@ type CalibrationQuestion struct {
 }
 
 type CalibrationAnswer struct {
+	Answer     bool    `dynamodbav:"answer"`  // The true/false answer they provided
 	Outcome    bool    `dynamodbav:"outcome"` // Whether their answer was correct
 	Confidence float64 `dynamodbav:"confidence"`
 }

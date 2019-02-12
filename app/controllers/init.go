@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/revel/revel"
 )
 
@@ -29,6 +30,9 @@ func init() {
 	}
 	revel.TemplateFuncs["add"] = func(a, b int) int {
 		return a + b
+	}
+	revel.TemplateFuncs["sprintf"] = func(format string, val interface{}) string {
+		return fmt.Sprintf(format, val)
 	}
 
 }

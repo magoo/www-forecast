@@ -15,8 +15,14 @@ function prepGraphData() {
         }
     });
 
-    // Tally up the answers/outcomes
     answers.forEach(function (answer) {
+        // Normalize values so false answers become inverted confidence of a true answer instead
+        if (!answer.Answer) {
+            answer.Answer = !answer.Answer;
+            answer.Confidence = 1.0 - answer.Confidence;
+        }
+
+        // Tally up the answers/outcomes
         answer.Confidence = Math.round(answer.Confidence * 100) / 100; // Fix floating point precision errors
         var bucket = buckets.find(function(b){ return b.confidence === answer.Confidence })
         if (!bucket) { debugger }
@@ -110,7 +116,7 @@ function drawGraph(data) {
         { confidence: 0.8, fractionCorrect: 0.8 },
         { confidence: 0.9, fractionCorrect: 0.9 },
         { confidence: 1.0, fractionCorrect: 1.0 },
-    ]
+    ];
 
     svg.append("path")
         .datum(idealData)
@@ -121,15 +127,6 @@ function drawGraph(data) {
         .attr("stroke-linecap", "round")
         .style("stroke-dasharray", ("3, 3"))
         .attr("d", line);
-
-    svg.selectAll("dot-ideal")
-        .data(idealData)
-        .enter().append("circle")
-        .attr("stroke", "steelblue")
-        .attr("fill", "steelblue")
-        .attr("r", 1.5)
-        .attr("cx", function(d) { return x(d.confidence )})
-        .attr("cy", function(d) { return y(d.fractionCorrect )})
 }
 
 $(function(){

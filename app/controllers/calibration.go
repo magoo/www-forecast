@@ -24,11 +24,8 @@ var sessionSize = 30
 var batchSize = 5
 
 func (c Calibration) Create() revel.Result {
-
 	fmt.Println("Making a new session")
 	sid := models.CreateCalibrationSession(c.Session["user"], sessionSize)
-
-	c.Flash.Success(sid)
 
 	return c.Redirect(Calibration.NextQuestions, sid)
 }
@@ -63,7 +60,6 @@ func (c Calibration) SaveAnswers(sid string) revel.Result {
 	for formKey, formValue := range c.Params.Form {
 		if strings.HasPrefix(formKey, "calibration-answer-") {
 			questionId := strings.Replace(formKey, "calibration-answer-", "", 1)
-			//question := models.GetCalibrationQuestion(questionId)
 
 			var questionIndex int
 			for questionIndex = 0; questionIndex < len(session.Questions); questionIndex++ {
@@ -73,31 +69,33 @@ func (c Calibration) SaveAnswers(sid string) revel.Result {
 			}
 
 			// Normalize the response to be 0-100% confidence of True, for better graphing
+			originalAnswer := (formValue[0] == "true")
 			normalizedAnswer := true
 			var err error
+			originalConfidence, err := strconv.ParseFloat(c.Params.Form.Get("calibration-confidence-" + questionId), 64)
+			if err != nil {
+				panic(fmt.Sprintf("Got an error parsing the confidence value, %v", err))
+			}
 			var normalizedConfidence float64
 			if formValue[0] == "true" {
-				normalizedConfidence, err = strconv.ParseFloat(c.Params.Form.Get("calibration-confidence-" + questionId), 64)
-				if err != nil {
-					panic(fmt.Sprintf("Got an error parsing the confidence value, %v", err))
-				}
+				normalizedConfidence = originalConfidence
 			} else {
-				normalizedConfidence, err = strconv.ParseFloat(c.Params.Form.Get("calibration-confidence-" + questionId), 64)
-				normalizedConfidence = 1.0 - normalizedConfidence
-				if err != nil {
-					panic(fmt.Sprintf("Got an error parsing the confidence value, %v", err))
-				}
+				normalizedConfidence = 1.0 - originalConfidence
 			}
 
 			normalizedOutcome := normalizedAnswer == session.Questions[questionIndex].CorrectAnswer
-			//confidence, _ := strconv.ParseFloat(c.Params.Form.Get("calibration-confidence-" + questionId), 64)
+			originalOutcome := originalAnswer == session.Questions[questionIndex].CorrectAnswer
+
+			normalizedConfidence = normalizedConfidence //nocommit
+			normalizedOutcome = normalizedOutcome //nocommit
 
 			result.Answers[questionIndex] = models.CalibrationAnswer {
-				Outcome:    normalizedOutcome,
-				Confidence: normalizedConfidence,
+				//Outcome:    normalizedOutcome,
+				//Confidence: normalizedConfidence,
+				Answer:     originalAnswer,
+				Outcome:    originalOutcome,
+				Confidence: originalConfidence,
 			}
-
-			fmt.Println("brier score:", brierScore(result.Answers[questionIndex]))
 		}
 	}
 
@@ -132,6 +130,8 @@ func (c Calibration) Review(sid string) revel.Result {
 	session := models.GetCalibrationSession(sid)
 	result := models.GetCalibrationResult(session.ResultsId)
 
+	numQuestions := len(result.Answers)
+
 	brierScores := make([]float64, len(result.Answers))
 	fmt.Println("num answers:", len(result.Answers))
 	for questionIndex := 0; questionIndex < len(result.Answers); questionIndex++ {
@@ -146,12 +146,109 @@ func (c Calibration) Review(sid string) revel.Result {
 	rawPageData["answers"] = result.Answers
 
 	jsonBytesPageData, _ := json.Marshal(rawPageData)
-	
+
 	pageData := string(jsonBytesPageData)
 
 	fmt.Println(pageData)
 
-	return c.Render(pageData)
+	// Calculate mean confidence
+	var totalConfidence float64
+	for i := 0; i < len(result.Answers); i++ {
+		totalConfidence += result.Answers[i].Confidence
+	}
+	meanConfidence := totalConfidence / float64(len(result.Answers))
+	percentMeanConfidence := meanConfidence * 100
+
+	// Calculate percent correct
+	var totalCorrect int
+	for i := 0; i < len(result.Answers); i++ {
+		if result.Answers[i].Outcome {
+			totalCorrect += 1
+		}
+	}
+	fractionCorrect := float64(totalCorrect) / float64(len(result.Answers))
+	percentFractionCorrect := fractionCorrect * 100
+
+	// Calculate mean confidence on correct answers
+	var totalConfidenceOnCorrect float64
+	for i := 0; i < len(result.Answers); i++ {
+		if result.Answers[i].Outcome {
+			totalConfidenceOnCorrect += result.Answers[i].Confidence
+		}
+	}
+	meanConfidenceOnCorrect := totalConfidenceOnCorrect / float64(totalCorrect)
+	percentMeanConfidenceOnCorrect := meanConfidenceOnCorrect * 100
+
+	// Calculate mean confidence on incorrect answers
+	var totalConfidenceOnIncorrect float64
+	for i := 0; i < len(result.Answers); i++ {
+		if !result.Answers[i].Outcome {
+			totalConfidenceOnIncorrect += result.Answers[i].Confidence
+		}
+	}
+	meanConfidenceOnIncorrect := totalConfidenceOnIncorrect / float64(totalCorrect)
+	percentMeanConfidenceOnIncorrect := meanConfidenceOnIncorrect * 100
+
+	// Calculate total low, medium, and high confidence answers
+	var totalLowAnswered int
+	var totalMedAnswered int
+	var totalHighAnswered int
+	var totalLowCorrect int
+	var totalMedCorrect int
+	var totalHighCorrect int
+	for i := 0; i < len(result.Answers); i++ {
+		answer := result.Answers[i]
+		if answer.Confidence == 0.5 || answer.Confidence == 0.6 {
+			totalLowAnswered ++
+			if answer.Outcome {
+				totalLowCorrect ++
+			}
+		}
+		if answer.Confidence == 0.7 || answer.Confidence == 0.8 {
+			totalMedAnswered ++
+			if answer.Outcome {
+				totalMedCorrect ++
+			}
+		}
+		if answer.Confidence == 0.9 || answer.Confidence == 1.0 {
+			totalHighAnswered ++
+			if answer.Outcome {
+				totalHighCorrect ++
+			}
+		}
+	}
+	fractionLowCorrect := float64(totalLowCorrect) / float64(totalLowAnswered)
+	if math.IsNaN(fractionLowCorrect) {
+		fractionLowCorrect = 0
+	}
+	fractionMedCorrect := float64(totalMedCorrect) / float64(totalMedAnswered)
+	if math.IsNaN(fractionMedCorrect) {
+		fractionMedCorrect = 0
+	}
+	fractionHighCorrect := float64(totalHighCorrect) / float64(totalHighAnswered)
+	if math.IsNaN(fractionHighCorrect) {
+		fractionHighCorrect = 0
+	}
+
+
+	return c.Render(
+		pageData,
+		percentMeanConfidence,
+		percentFractionCorrect,
+		percentMeanConfidenceOnCorrect,
+		percentMeanConfidenceOnIncorrect,
+		numQuestions,
+		totalCorrect,
+		totalLowAnswered,
+		totalMedAnswered,
+		totalHighAnswered,
+		totalLowCorrect,
+		totalMedCorrect,
+		totalHighCorrect,
+		fractionLowCorrect,
+		fractionMedCorrect,
+		fractionHighCorrect,
+	)
 }
 
 func brierScore(answer models.CalibrationAnswer) float64 {
@@ -161,6 +258,6 @@ func brierScore(answer models.CalibrationAnswer) float64 {
 	} else {
 		outcomeNum = 0
 	}
-	score := math.Pow(outcomeNum- answer.Confidence, 2) + math.Pow((1 -outcomeNum) - (1 - answer.Confidence), 2)
+	score := math.Pow(outcomeNum - answer.Confidence, 2) + math.Pow((1 -outcomeNum) - (1 - answer.Confidence), 2)
 	return score
 }

@@ -16,17 +16,22 @@
 
 {{template "flash.html" .}}
 
-here come them results!
+<div id="score-info">
+    <h2>Calibration Score</h2>
+    Mean confidence: {{sprintf "%2.2f%%" .percentMeanConfidence}}<br>
+    Actual percent correct: {{sprintf "%2.2f%%" .percentFractionCorrect}}<br>
+    Mean confidence on correct answers: {{sprintf "%2.2f%%" .percentMeanConfidenceOnCorrect}}<br>
+    Mean confidence on incorrect answers: {{sprintf "%2.2f%%" .percentMeanConfidenceOnIncorrect}}<br>
+    <h2>Quiz Score</h2>
+    {{.totalCorrect}} correct out of {{.numQuestions}} answered<br>
+    {{.totalLowCorrect}} correct out of {{.totalLowAnswered}} answered with low (50% or 60%) confidence ({{sprintf "%2.2f%%" .fractionLowCorrect}})<br>
+    {{.totalMedCorrect}} correct out of {{.totalMedAnswered}} answered with medium (70% or 80%) confidence ({{sprintf "%2.2f%%" .fractionMedCorrect}})<br>
+    {{.totalHighCorrect}} correct out of {{.totalHighAnswered}} answered with high (90% or 100%) confidence ({{sprintf "%2.2f%%" .fractionHighCorrect}})<br>
+</div>
 
-<div id="confidence-graph"></div>
-
-{{/*{{range $index, $brierScore := .brierScores}}*/}}
-    {{/*<div class="card">*/}}
-        {{/*{{$index}}. {{$brierScore}}*/}}
-    {{/*</div>*/}}
-    {{/*<br />*/}}
-{{/*{{end}}*/}}
-
+<div id="confidence-graph">
+    <h2>Calibration Graph</h2>
+</div>
 
 <script>
     {{template "Calibration/Review.js"}}
