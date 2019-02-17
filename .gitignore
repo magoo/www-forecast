@@ -3,21 +3,13 @@ tmp/
 routes/
 
 *.tfstate
-
 *.backup
-
-*.tfstate
-
-*.backup
-
 tf/terraform.tfstate
-
 tf/terraform.tfstate.backup
-
-*.backup
-
-*.tfstate
+tf/.terraform
 
 *.DS_Store
 
 vendor/
+
+.env
