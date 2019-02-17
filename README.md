@@ -28,7 +28,7 @@ Dependencies before getting started:
 ### 1. Go & GOPATH
 Currently developing with `go1.11.1`. Golang is picky on having a structured `$GOPATH`.
 
-Clone this repo into `$GOPATH/src/www-forecast`.
+Clone this repo into: (`$GOPATH/src/github.com/magoo/www-forecast`)
 
 ### 2. Dep
 Install the [dep package manager for go](https://github.com/golang/dep), brew install dep and ensure dep.

@@ -5,7 +5,8 @@ import (
 	"regexp"
 	"strconv"
 	"time"
-	"www-forecast/app/models"
+
+	"github.com/magoo/www-forecast/app/models"
 
 	"github.com/revel/revel"
 )
@@ -109,12 +110,14 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 	//e.AvgMaximum = emax
 	//e.Actual = resultValue
 
-	if e.Question.BrierScore == 0 {
-		e.Question.BrierScore = bs
+	//if e.Question.BrierScore == 0 {
+	//	e.Question.BrierScore = bs
+	//
+	//} else {
+	//	e.Question.BrierScore = (bs + e.Question.BrierScore) / 2
+	//}
 
-	} else {
-		e.Question.BrierScore = (bs + e.Question.BrierScore) / 2
-	}
+	e.Question.BrierScore = bs
 
 	//err := models.PutItem(e, questionTable)
 	err := models.WriteQuestion(e)
