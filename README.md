@@ -60,7 +60,6 @@ export AWS_ACCESS_KEY= (AWS access Key)
 ### 6. DynamoDB
 Install terraform. The `tf` folder contains a terraform configuration to create the DynamoDB tables needed to operate.
 
-`
 `terraform apply` within the `tf/` directory to set up tables.
 
 > You can use the `E6E_TABLE_PREFIX` environment variable to point the app at a specific set of tables, but you'll have to modify the terraform script to name these tables with your chosen prefix.
