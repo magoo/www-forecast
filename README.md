@@ -3,6 +3,16 @@ e6e is a forecasting tool for small groups. Currently Alpha, run at your own ris
 
 This is a Revel web application with a DynamoDB backend, requiring Google developer credentials.
 
+## Detailed Documentation
+
+See the `docs` folder for:
+- `data-structures.md` - API Blueprint MSON schema (this will be expanded as benefits demand)
+- `domain-model-overview.svg`- basic, high-level entity relationships (needs to evolve with the domain model in code)
+- `wireframes.pdf` - simple export from moqups.com project (which has additional commentary on the codebase outside of the PDF's page canvas)
+
+The `features` folder contains BDD feature files that still need to be fleshed out and automated, but at least provides high-level feature specs/expectations.
+
+
 ## Development workflow
 Dependencies before getting started:
 
