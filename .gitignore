@@ -3,15 +3,13 @@ tmp/
 routes/
 
 *.tfstate
-
 *.backup
-
 tf/terraform.tfstate
-
 tf/terraform.tfstate.backup
+tf/.terraform
 
 *.DS_Store
 
 vendor/
 
-env.sh
+.env
