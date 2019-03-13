@@ -9,38 +9,55 @@
 
 <form action="/view/calibration/{{.session.Id}}/answers" method="POST">
     <input type="hidden" name="csrf_token" value="{{ .csrf_token }}" />
-    Here's a list:
     {{$currentQuestionIndex := .currentQuestionIndex}}
     {{range $index, $question := .questions}}
         {{$index = add $index 1}} {{/* for 1-indexing the questions */}}
         <div class="card">
-            {{add $index $currentQuestionIndex}}. {{$question.Description}}
-            <div>
-                Answer:
-                <label>
-                    <input type="radio" name="calibration-answer-{{$question.Id}}" value="true" checked></input>
-                    True
-                </label>
-                <label>
-                    <input type="radio" name="calibration-answer-{{$question.Id}}" value="false"></input>
-                    False
-                </label>
-
-                Confidence:
-                <select name="calibration-confidence-{{$question.Id}}">
-                    <option value="0.5">0.50</option>
-                    <option value="0.6">0.60</option>
-                    <option value="0.7">0.70</option>
-                    <option value="0.8">0.80</option>
-                    <option value="0.9">0.90</option>
-                    <option value="1.0">1.00</option>
-                </select>
+            <div class="item-header">
+                {{add $index $currentQuestionIndex}}. {{$question.Description}}
+            </div>
+            <div class="item-body row">
+                <div class="form-group col-sm-2">
+                    <label>Answer:</label>
+                    <br>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-outline-secondary active">
+                            <input type="radio" name="calibration-answer-{{$question.Id}}" value="true" autocomplete="off" checked> True
+                        </label>
+                        <label class="btn btn-outline-secondary">
+                            <input type="radio" name="calibration-answer-{{$question.Id}}" value="false" autocomplete="off"> False
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label>Confidence:</label>
+                    <br>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-outline-secondary active">
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.50" autocomplete="off" checked> 50%
+                        </label>
+                        <label class="btn btn-outline-secondary">
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.60" autocomplete="off"> 60%
+                        </label>
+                        <label class="btn btn-outline-secondary">
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.70" autocomplete="off"> 70%
+                        </label>
+                        <label class="btn btn-outline-secondary">
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.80" autocomplete="off"> 80%
+                        </label>
+                        <label class="btn btn-outline-secondary">
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.90" autocomplete="off"> 90%
+                        </label>
+                        <label class="btn btn-outline-secondary">
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="1.00" autocomplete="off"> 100%
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
         <br />
     {{end}}
-    (done with list)
-    <button type="submit">Submit</button>
+    <button class="btn btn-primary" type="submit">Submit</button>
 </form>
 
 

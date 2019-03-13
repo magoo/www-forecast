@@ -216,6 +216,10 @@ func (c Calibration) Review(sid string) revel.Result {
 	if math.IsNaN(fractionHighCorrect) {
 		fractionHighCorrect = 0
 	}
+	percentLowCorrect := fractionLowCorrect * 100;
+	percentMedCorrect := fractionMedCorrect * 100;
+	percentHighCorrect := fractionHighCorrect * 100;
+
 
 	return c.Render(
 		pageData,
@@ -234,6 +238,9 @@ func (c Calibration) Review(sid string) revel.Result {
 		fractionLowCorrect,
 		fractionMedCorrect,
 		fractionHighCorrect,
+		percentLowCorrect,
+		percentMedCorrect,
+		percentHighCorrect,
 	)
 }
 
