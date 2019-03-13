@@ -21,11 +21,11 @@
                     <label>Answer:</label>
                     <br>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-outline-secondary active">
-                            <input type="radio" name="calibration-answer-{{$question.Id}}" value="true" autocomplete="off" checked> True
+                        <label class="btn btn-outline-secondary">
+                            <input type="radio" name="calibration-answer-{{$question.Id}}" value="true" autocomplete="off" required> True
                         </label>
                         <label class="btn btn-outline-secondary">
-                            <input type="radio" name="calibration-answer-{{$question.Id}}" value="false" autocomplete="off"> False
+                            <input type="radio" name="calibration-answer-{{$question.Id}}" value="false" autocomplete="off" required> False
                         </label>
                     </div>
                 </div>
@@ -33,23 +33,23 @@
                     <label>Confidence:</label>
                     <br>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-outline-secondary active">
-                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.50" autocomplete="off" checked> 50%
+                        <label class="btn btn-outline-secondary">
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.50" autocomplete="off" required> 50%
                         </label>
                         <label class="btn btn-outline-secondary">
-                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.60" autocomplete="off"> 60%
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.60" autocomplete="off" required> 60%
                         </label>
                         <label class="btn btn-outline-secondary">
-                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.70" autocomplete="off"> 70%
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.70" autocomplete="off" required> 70%
                         </label>
                         <label class="btn btn-outline-secondary">
-                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.80" autocomplete="off"> 80%
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.80" autocomplete="off" required> 80%
                         </label>
                         <label class="btn btn-outline-secondary">
-                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.90" autocomplete="off"> 90%
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="0.90" autocomplete="off" required> 90%
                         </label>
                         <label class="btn btn-outline-secondary">
-                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="1.00" autocomplete="off"> 100%
+                            <input type="radio" name="calibration-confidence-{{$question.Id}}" value="1.00" autocomplete="off" required> 100%
                         </label>
                     </div>
                 </div>
