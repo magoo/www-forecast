@@ -13,9 +13,12 @@ import (
 
 type CalibrationQuestion struct {
 	Id            string `dynamodbav:"id"` // Uniquely identify the question
+	DateUploaded  string `dynamodbav:"date"`
 	Description   string `dynamodbav:"description"`
 	CorrectAnswer bool   `dynamodbav:"correctanswer"`
-	Type          string `dynamodbav:"type"`
+	AnswerDetail  string `dynamodbav:"answerdetail"`
+	AnswerSource  string `dynamodbav:"answersource"`
+	Difficulty    string `dynamodbav:"difficulty"`
 }
 
 type CalibrationAnswer struct {
@@ -142,6 +145,76 @@ func GetCalibrationResult(id string) (q CalibrationResult) {
 	return q
 }
 
+func UpdateCalibrationQuestion(id string, description string, correctAnswer bool, answerDetail string, answerSource string, difficulty string) {
+	//Key for the table
+	key := map[string]*dynamodb.AttributeValue {
+		"id": {
+			S: aws.String(id),
+		},
+	}
+
+	//Make our list of "expressions"
+	expressionattrvalues:= map[string]*dynamodb.AttributeValue {
+		//":date": {
+		//
+		//},
+		":description": {
+			S: aws.String(description),
+		},
+		":correctanswer": {
+			S: aws.String(strconv.FormatBool(correctAnswer)),
+		},
+		":answerdetail": {
+			S: aws.String(answerDetail),
+		},
+		":answersource": {
+			S: aws.String(answerSource),
+		},
+		":difficulty": {
+			S: aws.String(difficulty),
+		},
+	}
+
+	fmt.Println(expressionattrvalues)
+
+	//Case issue. Options has mixed case in other tables, should fix on production launch. See #24
+	updateexpression := "SET description = :description, correctanswer = :correctanswer, answerdetail = :answerdetail, answersource = :answersource, difficulty = :difficulty"
+
+	//Enforce moderator
+	//conditionexpression := "ownerid = :user"
+	conditionexpression := ""
+
+	err := UpdateItem(key, updateexpression, expressionattrvalues, questionTable, conditionexpression)
+	if err != nil {
+		fmt.Println("Error updating calibration question:", err)
+	}
+
+	fmt.Println("Updated CalibrationQuestion.")
+}
+
+
+func CreateCalibrationQuestion(id string, description string, correctAnswer bool, answerDetail string, answerSource string, difficulty string) {
+	t := time.Now()
+
+	results := CalibrationQuestion{
+		Id:            id,
+		DateUploaded:  t.Format("2006-01-02"),
+		Description:   description,
+		CorrectAnswer: correctAnswer,
+		AnswerDetail:  answerDetail,
+		AnswerSource:  answerSource,
+		Difficulty:    difficulty, // TODO: Enforce that it's one of the accepted values
+	}
+
+	err := PutItem(results, calibrationQuestionTable)
+
+	if err != nil {
+		panic(fmt.Sprintf("Error writing to db."))
+	} else {
+		fmt.Println("Successfully added.")
+	}
+}
+
 func GetCalibrationQuestion(id string) (q CalibrationQuestion) {
 	result := GetPrimaryItem(id, "id", calibrationQuestionTable)
 
@@ -159,6 +232,19 @@ func GetCalibrationQuestion(id string) (q CalibrationQuestion) {
 	}
 
 	return q
+}
+
+func GetAllCalibrationQuestions() (allCalibrationQuestions []CalibrationQuestion) {
+	result := GetAllItems(calibrationQuestionTable)
+
+	//allCalibrationQuestions := []CalibrationQuestion{}
+
+	err := dynamodbattribute.UnmarshalListOfMaps(result.Items, &allCalibrationQuestions)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+	}
+
+	return allCalibrationQuestions
 }
 
 func ListCalibrationQuestions(numberOfQuestions int) (batchOfQuestions []CalibrationQuestion) {

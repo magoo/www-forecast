@@ -63,19 +63,35 @@ func PutItem(item interface{}, table string) (err error) {
 
 func UpdateItem(key map[string]*dynamodb.AttributeValue, updateexpression string, expressionattrvalues map[string]*dynamodb.AttributeValue, table string, conditionexpression string) (err error) {
 
+	//var input *dynamodb.UpdateItemInput
 	input := &dynamodb.UpdateItemInput{
 		ExpressionAttributeValues: expressionattrvalues,
 		Key:                       key,
 		TableName:                 aws.String(table),
 		UpdateExpression:          aws.String(updateexpression),
-		ConditionExpression:       aws.String(conditionexpression),
+	}
+	if conditionexpression == "" {
+		input = &dynamodb.UpdateItemInput{
+			ExpressionAttributeValues: expressionattrvalues,
+			Key:                       key,
+			TableName:                 aws.String(table),
+			UpdateExpression:          aws.String(updateexpression),
+		}
+	} else {
+		input = &dynamodb.UpdateItemInput{
+			ExpressionAttributeValues: expressionattrvalues,
+			Key:                       key,
+			TableName:                 aws.String(table),
+			UpdateExpression:          aws.String(updateexpression),
+			ConditionExpression:       aws.String(conditionexpression),
+		}
 	}
 
-	if err != nil {
-		fmt.Println("Got error calling MarshalMap: ")
-		fmt.Println(err.Error())
-		os.Exit(1)
-	}
+	//if err != nil {
+	//	fmt.Println("Got error calling MarshalMap: ")
+	//	fmt.Println(err.Error())
+	//	os.Exit(1)
+	//}
 
 	_, err = Svc.UpdateItem(input)
 
