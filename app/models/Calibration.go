@@ -184,7 +184,7 @@ func UpdateCalibrationQuestion(id string, description string, correctAnswer bool
 	//conditionexpression := "ownerid = :user"
 	conditionexpression := ""
 
-	err := UpdateItem(key, updateexpression, expressionattrvalues, questionTable, conditionexpression)
+	err := UpdateItem(key, updateexpression, expressionattrvalues, calibrationQuestionTable, conditionexpression)
 	if err != nil {
 		fmt.Println("Error updating calibration question:", err)
 	}
