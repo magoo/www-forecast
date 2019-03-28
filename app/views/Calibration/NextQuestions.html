@@ -9,41 +9,12 @@
 
 <script>
 $(function(){
-    // TODO: Finish fixing keyboard controls for the fancy UI selects
     $("input[type=radio]").focusin(function(event){
         setTimeout(function(){
             var $el = $(event.target);
             var name = $el.attr('name');
-            // debugger
-            // console.log($("input[type=radio][name=" + name +"]"));
-            // console.log($("input.active[type=radio][name=" + name +"]"));
             $("input[type=radio][name=" + name +"]").prop('checked', false);
             $(".active input[type=radio][name=" + name +"]").prop('checked', true);
-            // $el.prop('checked', true);
-            // console.log(arguments);
-            // debugger
-            console.log("in")
-            console.log($("input[name=calibration-confidence-11]:checked").val());
-            console.log($("input[name=calibration-confidence-6]:checked").val());
-            console.log($("input[name=calibration-confidence-13]:checked").val());
-        }, 0);
-    });
-    $("input[type=radio]").focusout(function(event){
-        setTimeout(function() {
-            var $el = $(event.target);
-            var name = $el.attr('name');
-            // console.log($("input[type=radio][name=" + name +"]"));
-            // console.log($("input.active[type=radio][name=" + name +"]"));
-            // $("input[type=radio][name=" + name + "]").prop('checked', false);
-            // $("input.active[type=radio][name=" + name + "]").prop('checked', true);
-            // $el.prop('checked', false);
-            // console.log(arguments);
-            // debugger
-            // console.log($("input[name=calibration-confidence-7]:checked").val());
-            console.log("out")
-            console.log($("input[name=calibration-confidence-11]:checked").val());
-            console.log($("input[name=calibration-confidence-6]:checked").val());
-            console.log($("input[name=calibration-confidence-13]:checked").val());
         }, 0);
     });
 })
