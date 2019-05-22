@@ -14,6 +14,7 @@ GET     /alpha                                  Home.Alpha
 # Authentication routes
 POST    /auth                                   Auth.Create
 DELETE  /auth                                   Auth.Delete
+GET     /github/callback                        GithubAuth.Callback
 
 # CRUD for Scenarios
 GET     /scenario                               Scenario.Index

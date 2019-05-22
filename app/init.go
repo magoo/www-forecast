@@ -1,12 +1,21 @@
 package app
 
 import (
-	"os"
-	"strings"
+	"fmt"
 	"github.com/magoo/www-forecast/app/models"
+	"net/http"
+	"os"
+	"strconv"
+	"strings"
 
 	"github.com/magoo/revel-csrf"
 	"github.com/revel/revel"
+
+	"github.com/dghubble/gologin"
+	"github.com/dghubble/gologin/github"
+	"github.com/dghubble/sessions"
+	"golang.org/x/oauth2"
+	githubOAuth2 "golang.org/x/oauth2/github"
 )
 
 var (
@@ -17,7 +26,93 @@ var (
 	BuildTime string
 )
 
+const (
+	sessionName    = "r10n-github-app"
+	sessionSecret  = "example cookie signing secret"
+	sessionUserKey = "githubID"
+)
+
+// GithubOauthConfig configures the main ServeMux.
+type GithubOauthConfig struct {
+	GithubClientID     string
+	GithubClientSecret string
+}
+
+// TODO: Continue from here
+//  https://github.com/dghubble/gologin/blob/master/examples/github/main.go
+//  https://revel.github.io/manual/faq.html#how_do_i_integrate_existing_http.handlers_with_revel_?
+//  https://godoc.org/github.com/revel/revel#AddInitEventHandler
+func installHandlers() {
+	revel.AddInitEventHandler(func(event revel.Event, value interface{}) (response revel.EventResponse) {
+		if event==revel.ENGINE_STARTED {
+			var (
+				serveMux     = http.NewServeMux()
+				revelHandler = revel.CurrentEngine.(*revel.GoHttpServer).Server.Handler
+			)
+
+			// TODO: Clean up redundant config variables, maybe get from revel config
+			config := &GithubOauthConfig{
+				GithubClientID:     os.Getenv("GITHUB_CLIENT_ID"),
+				GithubClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
+			}
+
+			oauth2Config := &oauth2.Config{
+				ClientID:     config.GithubClientID,
+				ClientSecret: config.GithubClientSecret,
+				RedirectURL:  "http://localhost:9000/github/callback",
+				Endpoint:     githubOAuth2.Endpoint,
+			}
+
+			// (from docs) state param cookies require HTTPS by default; disable for localhost development
+			stateConfig := gologin.DebugOnlyCookieConfig // TODO: Figure out what this is supposed to have for production
+			// The login handler might not be necessary with the client doing the request?
+			serveMux.Handle("/github/login", github.StateHandler(stateConfig, github.LoginHandler(oauth2Config, nil)))
+			//serveMux.Handle("/github/callback", github.StateHandler(stateConfig, github.CallbackHandler(oauth2Config, issueSession(), nil)))
+
+			serveMux.Handle("/",     revelHandler) // Should this be "*" or something?
+			//serveMux.Handle("/path", myHandler)
+			revel.CurrentEngine.(*revel.GoHttpServer).Server.Handler = serveMux
+		}
+		return
+	})
+}
+
+// sessionStore encodes and decodes session data stored in signed cookies
+var sessionStore = sessions.NewCookieStore([]byte(sessionSecret), nil)
+
+// issueSession issues a cookie session after successful Github login
+func issueSession() http.Handler {
+	fn := func(w http.ResponseWriter, req *http.Request) {
+		ctx := req.Context()
+		fmt.Println("context:", ctx)
+		githubUser, err := github.UserFromContext(ctx)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// 2. Implement a success handler to issue some form of session
+		session := sessionStore.New(sessionName)
+		session.Values[sessionUserKey] = *githubUser.ID
+
+		// TODO: Figure out how to use Revel Controller session variables for c.Session["user"] = user.Id
+
+		fmt.Println("github user:", *githubUser)
+
+		//email := ""
+		//if githubUser.Email != nil {
+		//	email = *githubUser.Email
+		//}
+
+		models.SaveUser("test@example.com", strconv.FormatInt(*githubUser.ID, 10), "github")
+
+		session.Save(w)
+		http.Redirect(w, req, "/list", http.StatusFound) // TODO: Make this URL something that we want
+	}
+	return http.HandlerFunc(fn)
+}
+
 func init() {
+	revel.OnAppStart(installHandlers)
 	// Filters is the default set of global filters.
 	revel.Filters = []revel.Filter{
 		revel.PanicFilter,             // Recover from panics and display an error page instead.

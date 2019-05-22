@@ -27,6 +27,8 @@ var calibrationQuestionTable = GetTableName("E6E_CALIBRATION_QUESTIONS_TABLE_NAM
 var calibrationResultTable = GetTableName("E6E_CALIBRATION_RESULTS_TABLE_NAME", "calibration-results-tf")
 var calibrationSessionTable = GetTableName("E6E_CALIBRATION_SESSIONS_TABLE_NAME", "calibration-sessions-tf")
 
+var userTable = GetTableName("E6E_USERS_TABLE_NAME", "users-tf")
+
 var Svc = dynamodb.New(sess)
 
 func GetTableName(envvar, fallback string) string {
