@@ -53,3 +53,7 @@ func (c Home) List() revel.Result {
 func (c Home) Alpha() revel.Result {
 	return c.Render()
 }
+
+func (c Home) Policy() revel.Result {
+	return c.Render()
+}
