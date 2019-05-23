@@ -10,6 +10,7 @@ module:testrunner
 GET     /                                       Home.Index
 GET     /list                                   Home.List
 GET     /alpha                                  Home.Alpha
+GET     /policy                                 Home.Policy
 
 # Authentication routes
 POST    /auth                                   Auth.Create

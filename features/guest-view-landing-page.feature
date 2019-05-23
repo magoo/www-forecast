@@ -1,6 +1,8 @@
 Feature: Guest, View Landing Page
-	To learn about the app
+	To learn about e6e
 	A guest
 	Can view the landing page
 
-	Scenario: Happy Path
+	Scenario: Visit
+		When a guest visits the domain
+		Then they are presented information about the application
