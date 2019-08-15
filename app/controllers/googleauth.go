@@ -8,11 +8,11 @@ import (
 	"github.com/revel/revel"
 )
 
-type Auth struct {
+type GoogleAuth struct {
 	*revel.Controller
 }
 
-func (c Auth) Create(googleIdToken string) revel.Result {
+func (c GoogleAuth) Create(googleIdToken string) revel.Result {
 	ti, hd, err := models.VerifyIdToken(googleIdToken)
 
 	if err != nil {
@@ -23,7 +23,7 @@ func (c Auth) Create(googleIdToken string) revel.Result {
 
 	user, needs_creating := models.GetUserByOAuth(ti.UserId, "google")
 	if needs_creating {
-		models.SaveUser(ti.Email, ti.UserId, "google")
+		models.CreateUser(ti.Email, ti.UserId, "google")
 		user, _ = models.GetUserByOAuth(ti.UserId, "google")
 	}
 
@@ -45,7 +45,7 @@ func (c Auth) Create(googleIdToken string) revel.Result {
 	return c.RenderJSON(res)
 }
 
-func (c Auth) Delete() revel.Result {
+func (c GoogleAuth) Delete() revel.Result {
 	c.Session["user"] = ""
 	c.Session["hd"] = ""
 	c.Flash.Success("Logged Out.")

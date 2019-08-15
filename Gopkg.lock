@@ -43,6 +43,64 @@
   version = "v1.15.62"
 
 [[projects]]
+  digest = "1:c1100fc71e23b6a32b2c68a5202a848fd13811d5a10b12edb8019c3667d1cd9a"
+  name = "github.com/cenkalti/backoff"
+  packages = ["."]
+  pruneopts = "T"
+  revision = "4b4cebaf850ec58f1bb1fec5bdebdf8501c2bc3f"
+  version = "v3.0.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:3c57e55080f72335a8914ba91bea30968fdbdb5bf3d177d082a9045445723d08"
+  name = "github.com/dghubble/go-twitter"
+  packages = ["twitter"]
+  pruneopts = "T"
+  revision = "39e5462e111ffe165c62a88e2c25e1c1d1085bdb"
+
+[[projects]]
+  digest = "1:1d723998c48a5cb1d837ec72183ecfa5c7dc486a0eaa0711fa9126db089decb7"
+  name = "github.com/dghubble/gologin"
+  packages = [
+    ".",
+    "github",
+    "internal",
+    "oauth1",
+    "oauth2",
+    "twitter",
+  ]
+  pruneopts = "T"
+  revision = "b583eae78663394885200708baf607a22b74fadf"
+  version = "v2.1.0"
+
+[[projects]]
+  digest = "1:c57423920d82314e2f0abbfdb11ec6a29ef10e783349e287f012f9fdf5d07370"
+  name = "github.com/dghubble/oauth1"
+  packages = [
+    ".",
+    "twitter",
+  ]
+  pruneopts = "T"
+  revision = "19d7291ba290f420ccea50e076322aca95f27fcd"
+  version = "v0.6.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:0df76277442a380a2770410bdf8b1dde64988ba033093ff32eec22ebc4c5c2be"
+  name = "github.com/dghubble/sessions"
+  packages = ["."]
+  pruneopts = "T"
+  revision = "9807726e891d9b288c45ada01f4eb13b2d319991"
+
+[[projects]]
+  digest = "1:e8523b6bf996413666e34bb57354766610c1131f1288fd09b4516ddbf827ae02"
+  name = "github.com/dghubble/sling"
+  packages = ["."]
+  pruneopts = "T"
+  revision = "5a2946623f885d0cfcd7085b039baec12ad53fdd"
+  version = "v1.3.0"
+
+[[projects]]
   digest = "1:737600611200b7066942318948256cde82f62c2cafa0045c483f1c7c5fc0ad2b"
   name = "github.com/docker/docker"
   packages = [
@@ -54,12 +112,44 @@
   version = "v1.13.1"
 
 [[projects]]
+  digest = "1:c06028bbc52478d997bbc08facb0c315aabc2295094d7bf8833756aa9aa25504"
+  name = "github.com/golang/protobuf"
+  packages = ["proto"]
+  pruneopts = "T"
+  revision = "b5d812f8a3706043e23a9cd5babf2e5423744d30"
+  version = "v1.3.1"
+
+[[projects]]
+  digest = "1:2bed1c08d256942351af631bd6766d934e32969f47268fd66df68d8301f12bfe"
+  name = "github.com/google/go-github"
+  packages = ["github"]
+  pruneopts = "T"
+  revision = "8bcc0479b1703906d4203dbffbb59d656783db5a"
+  version = "v26.0.2"
+
+[[projects]]
+  digest = "1:a98aaa0376806017a5d6f88cb8c3b8206943bd16585f58b394ac62d6e8abbc73"
+  name = "github.com/google/go-querystring"
+  packages = ["query"]
+  pruneopts = "T"
+  revision = "44c6ddd0a2342c386950e880b658017258da92fc"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:8f8811f9be822914c3a25c6a071e93beb4c805d7b026cbf298bc577bc1cc945b"
   name = "github.com/google/uuid"
   packages = ["."]
   pruneopts = "T"
   revision = "064e2069ce9c359c118179501254f67d7d37ba24"
   version = "0.2"
+
+[[projects]]
+  digest = "1:3b5918c233248a223d7215e6bd91e2dedb8c2503485e04a2218756f97953cb47"
+  name = "github.com/gorilla/securecookie"
+  packages = ["."]
+  pruneopts = "T"
+  revision = "e59506cc896acb7f7bf732d4fdf5e25f7ccd8983"
+  version = "v1.1.1"
 
 [[projects]]
   digest = "1:55d1a44ee5e75217224af913201bb5fdb0afe4769fc4853f32a35572c199cf29"
@@ -119,7 +209,13 @@
 [[projects]]
   digest = "1:04a343093f76d611b8eb5f5fd3d577b894d2907edbe5be8f661f5a65c8dabb78"
   name = "github.com/revel/modules"
-  packages = ["."]
+  packages = [
+    ".",
+    "static/app/controllers",
+    "static/app/model",
+    "testrunner/app",
+    "testrunner/app/controllers",
+  ]
   pruneopts = "T"
   revision = "6403ed92ef388a1ec746c08db8456397fc0b8f89"
   version = "v0.20.1"
@@ -166,6 +262,18 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:5c4903dc027aa1eb2d6f1e5c85754f353eff2f99874e987dbeccda17e58e84b8"
+  name = "golang.org/x/oauth2"
+  packages = [
+    ".",
+    "github",
+    "internal",
+  ]
+  pruneopts = "T"
+  revision = "0f29369cfe4552d0e4bcddc57cc75f4d7e672a33"
+
+[[projects]]
+  branch = "master"
   digest = "1:d6d9bf31934efd450aeb0a07061dce8a0e84bc80e4aae05841dd588325832a40"
   name = "golang.org/x/sys"
   packages = ["unix"]
@@ -184,6 +292,22 @@
   ]
   pruneopts = "T"
   revision = "a2651947f503a1793446d4058bb073a6fdf99e53"
+
+[[projects]]
+  digest = "1:04b9a99f5ff102323281698000a18c2daabde66baea55fe74941d6c82ed715a8"
+  name = "google.golang.org/appengine"
+  packages = [
+    "internal",
+    "internal/base",
+    "internal/datastore",
+    "internal/log",
+    "internal/remote_api",
+    "internal/urlfetch",
+    "urlfetch",
+  ]
+  pruneopts = "T"
+  revision = "b2f4a3cf3c67576a2ee09e1fe62656a5086ce880"
+  version = "v1.6.1"
 
 [[projects]]
   digest = "1:7fc160b460a6fc506b37fcca68332464c3f2cd57b6e3f111f26c5bbfd2d5518e"
@@ -217,12 +341,24 @@
     "github.com/aws/aws-sdk-go/aws/session",
     "github.com/aws/aws-sdk-go/service/dynamodb",
     "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute",
+    "github.com/dghubble/gologin",
+    "github.com/dghubble/gologin/github",
+    "github.com/dghubble/gologin/twitter",
+    "github.com/dghubble/oauth1",
+    "github.com/dghubble/oauth1/twitter",
+    "github.com/dghubble/sessions",
     "github.com/docker/docker/pkg/namesgenerator",
+    "github.com/google/go-github/github",
     "github.com/google/uuid",
     "github.com/magoo/revel-csrf",
     "github.com/revel/modules",
+    "github.com/revel/modules/static/app/controllers",
+    "github.com/revel/modules/testrunner/app",
+    "github.com/revel/modules/testrunner/app/controllers",
     "github.com/revel/revel",
     "github.com/revel/revel/testing",
+    "golang.org/x/oauth2",
+    "golang.org/x/oauth2/github",
     "google.golang.org/api/oauth2/v2",
   ]
   solver-name = "gps-cdcl"

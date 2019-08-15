@@ -141,6 +141,24 @@ func GetPrimaryItem(primaryValue string, primary string, table string) (result *
 	return
 }
 
+func GetItem(primaryValue string, primary string, table string) (result *dynamodb.GetItemOutput) {
+	input := &dynamodb.GetItemInput{
+		Key: map[string]*dynamodb.AttributeValue{
+			primary: {
+				S: aws.String(primaryValue),
+			},
+		},
+		TableName: aws.String(table),
+	}
+
+	result, err := Svc.GetItem(input)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	return
+}
+
 func GetCompositeKeyItem(primaryValue string, sortValue string, primary string, sort string, table string) (result *dynamodb.GetItemOutput) {
 
 	input := &dynamodb.GetItemInput{

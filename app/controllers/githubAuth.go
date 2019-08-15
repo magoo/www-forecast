@@ -5,21 +5,22 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/magoo/www-forecast/app/models"
-	"github.com/revel/revel"
-	"github.com/dghubble/gologin"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/dghubble/gologin"
+	"github.com/magoo/www-forecast/app/models"
+	"github.com/revel/revel"
 
 	"github.com/google/go-github/github"
 
 	"strconv"
 
+	"os"
+
 	"golang.org/x/oauth2"
 	githubOAuth2 "golang.org/x/oauth2/github"
-	"os"
 )
-
 
 type GithubAuth struct {
 	*revel.Controller
@@ -69,10 +70,10 @@ func (c GithubAuth) Callback() revel.Result {
 	fmt.Println("Email response body:")
 	fmt.Println(string([]byte(body)))
 
-	type UserEmails []struct{
-		Email string `json:"email"`
-		Primary bool `json:"primary"`
-		Verified bool `json:"verified"`
+	type UserEmails []struct {
+		Email      string `json:"email"`
+		Primary    bool   `json:"primary"`
+		Verified   bool   `json:"verified"`
 		Visibility string `json:"visibility"`
 	}
 	var userEmails UserEmails
@@ -89,10 +90,11 @@ func (c GithubAuth) Callback() revel.Result {
 
 	//// See if this user already exists in the database
 	oAuthId := strconv.FormatInt(*githubUser.ID, 10)
+        fmt.Println(oAuthId)
 	user, needs_creating := models.GetUserByOAuth(oAuthId, "github")
 	if needs_creating {
 		// Save the email address and provider in the DB
-		models.SaveUser(primaryEmail, oAuthId, "github")
+		models.CreateUser(primaryEmail, oAuthId, "github")
 		user, _ = models.GetUserByOAuth(oAuthId, "github")
 		fmt.Println("Saving user to DB: " + user.Email)
 	} else {
@@ -100,7 +102,7 @@ func (c GithubAuth) Callback() revel.Result {
 	}
 
 	// Set the user ID on the user session
-	c.Session["user"] = user.Id
+	c.Session["user"] = user.OauthProvider + ":" + user.OauthID
 	return c.Redirect(Home.List)
 }
 
@@ -123,8 +125,8 @@ func parseCallback(req *revel.Request) (authCode, state string, err error) {
 	authCode = req.Form.Get("code")
 	state = req.Form.Get("state")
 	if authCode == "" || state == "" {
-		fmt.Println("authCode", authCode)// revertme
-		fmt.Println("state", state)// revertme
+		fmt.Println("authCode", authCode) // revertme
+		fmt.Println("state", state)       // revertme
 		return "", "", errors.New("oauth2: Request missing code or state")
 	}
 	return authCode, state, nil
@@ -139,7 +141,7 @@ func GetToken(config *oauth2.Config, req *revel.Request, ctx context.Context, ow
 	}
 	if state != ownerState || state == "" {
 		fmt.Println("oauth2 state parameter:", state) // revertme
-		fmt.Println("ownerState:", ownerState) // revertme
+		fmt.Println("ownerState:", ownerState)        // revertme
 		fmt.Println("State and ownerstate don't match:", state, ownerState)
 		return nil
 	}

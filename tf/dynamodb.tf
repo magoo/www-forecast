@@ -1,6 +1,7 @@
 provider "aws" {
   profile             = "e6e-dev"
   region              = "us-west-2"
+  version = "~> 2.7"
 }
 
 resource "aws_dynamodb_table" "questions" {
@@ -115,15 +116,16 @@ resource "aws_dynamodb_table" "users" {
   name = "users-tf"
   read_capacity = 1
   write_capacity = 1
-  hash_key = "id"
+  hash_key = "oauthid"
+  range_key = "oauthprovider"
 
   attribute {
-    name = "id"
+    name = "oauthid"
     type = "S"
   }
 
   attribute {
-    name = "oauthid"
+    name = "oauthprovider"
     type = "S"
   }
 

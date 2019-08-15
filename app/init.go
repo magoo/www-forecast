@@ -2,20 +2,24 @@ package app
 
 import (
 	"fmt"
-	"github.com/magoo/www-forecast/app/models"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 
-	"github.com/magoo/revel-csrf"
+	"github.com/magoo/www-forecast/app/models"
+
+	csrf "github.com/magoo/revel-csrf"
 	"github.com/revel/revel"
 
 	"github.com/dghubble/gologin"
 	"github.com/dghubble/gologin/github"
+
+	"github.com/dghubble/gologin/twitter"
+	"github.com/dghubble/oauth1"
+	twitterOAuth1 "github.com/dghubble/oauth1/twitter"
 	"github.com/dghubble/sessions"
 	"golang.org/x/oauth2"
-	githubOAuth2 "golang.org/x/oauth2/github"
 )
 
 var (
@@ -44,32 +48,43 @@ type GithubOauthConfig struct {
 //  https://godoc.org/github.com/revel/revel#AddInitEventHandler
 func installHandlers() {
 	revel.AddInitEventHandler(func(event revel.Event, value interface{}) (response revel.EventResponse) {
-		if event==revel.ENGINE_STARTED {
+		if event == revel.ENGINE_STARTED {
 			var (
 				serveMux     = http.NewServeMux()
 				revelHandler = revel.CurrentEngine.(*revel.GoHttpServer).Server.Handler
 			)
 
 			// TODO: Clean up redundant config variables, maybe get from revel config
-			config := &GithubOauthConfig{
+			githubConfig := &GithubOauthConfig{
 				GithubClientID:     os.Getenv("GITHUB_CLIENT_ID"),
 				GithubClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
 			}
+			twitterConfig := &oauth1.Config{
+				ConsumerKey:    os.Getenv("TWITTER_CLIENT_ID"),
+				ConsumerSecret: os.Getenv("TWITTER_CLIENT_SECRET"),
+				CallbackURL:    "http://localhost:9000/twitter/callback",
+				Endpoint:       twitterOAuth1.AuthorizeEndpoint,
+			}
+			endpoint := oauth2.Endpoint{
+				AuthURL:  "https://github.com/login/oauth/authorize?scope=user:email",
+				TokenURL: "https://github.com/login/oauth/access_token",
+			}
 
-			oauth2Config := &oauth2.Config{
-				ClientID:     config.GithubClientID,
-				ClientSecret: config.GithubClientSecret,
+			githubOauth2Config := &oauth2.Config{
+				ClientID:     githubConfig.GithubClientID,
+				ClientSecret: githubConfig.GithubClientSecret,
 				RedirectURL:  "http://localhost:9000/github/callback",
-				Endpoint:     githubOAuth2.Endpoint,
+				Endpoint:     endpoint,
 			}
 
 			// (from docs) state param cookies require HTTPS by default; disable for localhost development
-			stateConfig := gologin.DebugOnlyCookieConfig // TODO: Figure out what this is supposed to have for production
+			stateConfig := gologin.DebugOnlyCookieConfig // TODO: in prod this should be DefaultCookieConfig
 			// The login handler might not be necessary with the client doing the request?
-			serveMux.Handle("/github/login", github.StateHandler(stateConfig, github.LoginHandler(oauth2Config, nil)))
+			serveMux.Handle("/github/login", github.StateHandler(stateConfig, github.LoginHandler(githubOauth2Config, nil)))
 			//serveMux.Handle("/github/callback", github.StateHandler(stateConfig, github.CallbackHandler(oauth2Config, issueSession(), nil)))
+			serveMux.Handle("/twitter/login", github.StateHandler(stateConfig, twitter.LoginHandler(twitterConfig, nil)))
 
-			serveMux.Handle("/",     revelHandler) // Should this be "*" or something?
+			serveMux.Handle("/", revelHandler) // Should this be "*" or something?
 			//serveMux.Handle("/path", myHandler)
 			revel.CurrentEngine.(*revel.GoHttpServer).Server.Handler = serveMux
 		}
@@ -103,7 +118,7 @@ func issueSession() http.Handler {
 		//	email = *githubUser.Email
 		//}
 
-		models.SaveUser("test@example.com", strconv.FormatInt(*githubUser.ID, 10), "github")
+		models.CreateUser("test@example.com", strconv.FormatInt(*githubUser.ID, 10), "github")
 
 		session.Save(w)
 		http.Redirect(w, req, "/list", http.StatusFound) // TODO: Make this URL something that we want
