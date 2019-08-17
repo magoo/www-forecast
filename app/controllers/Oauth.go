@@ -8,7 +8,7 @@ type Oauth struct {
 	*revel.Controller
 }
 
-func Delete(c Oauth) revel.Result {
+func (c Oauth) Delete() revel.Result {
 	c.Session["user"] = ""
 	c.Session["hd"] = ""
 	c.Flash.Success("Logged Out.")

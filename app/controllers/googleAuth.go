@@ -27,7 +27,7 @@ func (c GoogleAuth) Create(googleIdToken string) revel.Result {
 		user, _ = models.GetUserByOAuth(ti.UserId, "google")
 	}
 
-	c.Session["user"] = user.Id
+	c.Session["user"] = "google:" + user.OauthID
 
 	// Set the hosted domain. This is eventually a core privacy barrier.
 	// If not a gsuite customer, it's public.

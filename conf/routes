@@ -14,7 +14,7 @@ GET     /alpha                                  Home.Alpha
 # Authentication routes
 # login routes are handled in init.go
 POST    /google/callback                        GoogleAuth.Create
-# DELETE  /auth                                   Oauth.Delete
+DELETE  /auth                                   Oauth.Delete
 GET     /github/callback                        GithubAuth.Callback
 GET     /twitter/callback                       TwitterAuth.Callback
 

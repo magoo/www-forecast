@@ -10,7 +10,7 @@ import (
 )
 
 type User struct {
-	Id             string `dynamodbav:"id"`
+	// Id             string `dynamodbav:"id"`
 	OauthProvider  string `dynamodbav:"oauthprovider"`
 	OauthID        string `dynamodbav:"oauthid"`
 	FirstLoginDate string `dynamodbav:"firstlogindate"`
