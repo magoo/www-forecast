@@ -65,6 +65,7 @@ func installHandlers() {
 				CallbackURL:    "http://localhost:9000/twitter/callback",
 				Endpoint:       twitterOAuth1.AuthorizeEndpoint,
 			}
+
 			endpoint := oauth2.Endpoint{
 				AuthURL:  "https://github.com/login/oauth/authorize?scope=user:email",
 				TokenURL: "https://github.com/login/oauth/access_token",
@@ -80,9 +81,8 @@ func installHandlers() {
 			// (from docs) state param cookies require HTTPS by default; disable for localhost development
 			stateConfig := gologin.DebugOnlyCookieConfig // TODO: in prod this should be DefaultCookieConfig
 			// The login handler might not be necessary with the client doing the request?
-			serveMux.Handle("/github/login", github.StateHandler(stateConfig, github.LoginHandler(githubOauth2Config, nil)))
-			//serveMux.Handle("/github/callback", github.StateHandler(stateConfig, github.CallbackHandler(oauth2Config, issueSession(), nil)))
-			serveMux.Handle("/twitter/login", github.StateHandler(stateConfig, twitter.LoginHandler(twitterConfig, nil)))
+			serveMux.Handle("/github/login", github.StateHandler(stateConfig, github.LoginHandler(githubOauth2Config, LoggingErrorHandler)))
+			serveMux.Handle("/twitter/login", twitter.LoginHandler(twitterConfig, LoggingErrorHandler))
 
 			serveMux.Handle("/", revelHandler) // Should this be "*" or something?
 			//serveMux.Handle("/path", myHandler)
@@ -91,6 +91,20 @@ func installHandlers() {
 		return
 	})
 }
+
+func errorLogger(w http.ResponseWriter, req *http.Request) {
+	ctx := req.Context()
+	err := gologin.ErrorFromContext(ctx)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(req)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+}
+
+var LoggingErrorHandler = http.HandlerFunc(errorLogger)
 
 // sessionStore encodes and decodes session data stored in signed cookies
 var sessionStore = sessions.NewCookieStore([]byte(sessionSecret), nil)

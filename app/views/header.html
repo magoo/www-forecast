@@ -56,7 +56,7 @@
         signInButton.addClass("disabled");
         signInButton.text("Signing in...")
         $.ajax({
-          url: "/auth",
+          url: "/google/callback",
           data: {
             googleIdToken: id_token
           },
