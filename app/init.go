@@ -80,15 +80,13 @@ func installHandlers() {
 
 			// (from docs) state param cookies require HTTPS by default; disable for localhost development
 			stateConfig := gologin.DebugOnlyCookieConfig // TODO: in prod this should be DefaultCookieConfig
-			// The login handler might not be necessary with the client doing the request?
 			serveMux.Handle("/github/login", github.StateHandler(stateConfig, github.LoginHandler(githubOauth2Config, LoggingErrorHandler)))
 			serveMux.Handle("/twitter/login", twitter.LoginHandler(twitterConfig, LoggingErrorHandler))
 
 			serveMux.Handle("/", revelHandler) // Should this be "*" or something?
-			//serveMux.Handle("/path", myHandler)
 			revel.CurrentEngine.(*revel.GoHttpServer).Server.Handler = serveMux
 		}
-		return
+		return 0
 	})
 }
 

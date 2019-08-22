@@ -17,6 +17,8 @@ POST    /google/callback                        GoogleAuth.Create
 DELETE  /auth                                   Oauth.Delete
 GET     /github/callback                        GithubAuth.Callback
 GET     /twitter/callback                       TwitterAuth.Callback
+GET     /azure/login                            AzureAuth.Login
+GET     /azure/callback                         AzureAuth.Callback
 
 # CRUD for Scenarios
 GET     /scenario                               Scenario.Index
