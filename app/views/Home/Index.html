@@ -26,10 +26,22 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
-            <a href="/github/login">github login</a><br>
-            <a href="/twitter/login">twitter login</a><br>
-            <a href="/azure/login">o365 login</a><br>
+              <div id="customBtn" class="btn btn-block btn-social btn-google" data-onsuccess="onSignIn">
+                  <span class="fab fa-google"></span>
+                  Sign in with Google
+              </div>
+            <a class="btn btn-block btn-social btn-github" href="/github/login">
+                <span class="fab fa-github"></span>
+                Sign in with Github
+            </a>
+            <a class="btn btn-block btn-social btn-twitter" href="/twitter/login">
+                <span class="fab fa-twitter"></span>
+                Sign in with Twitter
+            </a>
+            <a class="btn btn-block btn-social btn-microsoft" href="/azure/login">
+                <span class="fab fa-microsoft"></span>
+                Sign in with Microsoft/Office365
+            </a>
           </div>
           <div class="modal-footer" id="loginmodalbox">
             <a href="/list" id="sign-in" class="disabled btn btn-secondary">Sign in to continue</a>
