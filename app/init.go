@@ -7,19 +7,20 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/magoo/www-forecast/app/controllers"
 	"github.com/magoo/www-forecast/app/models"
+	"golang.org/x/oauth2"
 
 	csrf "github.com/magoo/revel-csrf"
 	"github.com/revel/revel"
 
 	"github.com/dghubble/gologin"
 	"github.com/dghubble/gologin/github"
-
-	"github.com/dghubble/gologin/twitter"
 	"github.com/dghubble/oauth1"
 	twitterOAuth1 "github.com/dghubble/oauth1/twitter"
+
+	"github.com/dghubble/gologin/twitter"
 	"github.com/dghubble/sessions"
-	"golang.org/x/oauth2"
 )
 
 var (
@@ -42,10 +43,6 @@ type GithubOauthConfig struct {
 	GithubClientSecret string
 }
 
-// TODO: Continue from here
-//  https://github.com/dghubble/gologin/blob/master/examples/github/main.go
-//  https://revel.github.io/manual/faq.html#how_do_i_integrate_existing_http.handlers_with_revel_?
-//  https://godoc.org/github.com/revel/revel#AddInitEventHandler
 func installHandlers() {
 	revel.AddInitEventHandler(func(event revel.Event, value interface{}) (response revel.EventResponse) {
 		if event == revel.ENGINE_STARTED {
@@ -54,34 +51,29 @@ func installHandlers() {
 				revelHandler = revel.CurrentEngine.(*revel.GoHttpServer).Server.Handler
 			)
 
-			// TODO: Clean up redundant config variables, maybe get from revel config
-			githubConfig := &GithubOauthConfig{
-				GithubClientID:     os.Getenv("GITHUB_CLIENT_ID"),
-				GithubClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
+			// (from docs) state param cookies require HTTPS by default; disable for localhost development
+			var cookieConfig gologin.CookieConfig
+			if revel.Config.BoolDefault("mode.dev", false) {
+				cookieConfig = gologin.DebugOnlyCookieConfig
+			} else {
+				cookieConfig = gologin.DefaultCookieConfig
 			}
-			twitterConfig := &oauth1.Config{
+
+			GithubOauth2Config := &oauth2.Config{
+				ClientID:     controllers.GithubConfig.GithubClientID,
+				ClientSecret: controllers.GithubConfig.GithubClientSecret,
+				RedirectURL:  revel.Config.StringDefault("e6eDomain", "https://localhost:9000") + "/github/callback",
+				Endpoint:     controllers.GithubEndpoint,
+			}
+			TwitterConfig := &oauth1.Config{
 				ConsumerKey:    os.Getenv("TWITTER_CLIENT_ID"),
 				ConsumerSecret: os.Getenv("TWITTER_CLIENT_SECRET"),
-				CallbackURL:    "http://localhost:9000/twitter/callback",
+				CallbackURL:    revel.Config.StringDefault("e6eDomain", "https://localhost:9000") + "/twitter/callback",
 				Endpoint:       twitterOAuth1.AuthorizeEndpoint,
 			}
 
-			endpoint := oauth2.Endpoint{
-				AuthURL:  "https://github.com/login/oauth/authorize?scope=user:email",
-				TokenURL: "https://github.com/login/oauth/access_token",
-			}
-
-			githubOauth2Config := &oauth2.Config{
-				ClientID:     githubConfig.GithubClientID,
-				ClientSecret: githubConfig.GithubClientSecret,
-				RedirectURL:  "http://localhost:9000/github/callback",
-				Endpoint:     endpoint,
-			}
-
-			// (from docs) state param cookies require HTTPS by default; disable for localhost development
-			stateConfig := gologin.DebugOnlyCookieConfig // TODO: in prod this should be DefaultCookieConfig
-			serveMux.Handle("/github/login", github.StateHandler(stateConfig, github.LoginHandler(githubOauth2Config, LoggingErrorHandler)))
-			serveMux.Handle("/twitter/login", twitter.LoginHandler(twitterConfig, LoggingErrorHandler))
+			serveMux.Handle("/github/login", github.StateHandler(cookieConfig, github.LoginHandler(GithubOauth2Config, LoggingErrorHandler)))
+			serveMux.Handle("/twitter/login", twitter.LoginHandler(TwitterConfig, LoggingErrorHandler))
 
 			serveMux.Handle("/", revelHandler) // Should this be "*" or something?
 			revel.CurrentEngine.(*revel.GoHttpServer).Server.Handler = serveMux
@@ -245,11 +237,3 @@ var AuthFilter = func(c *revel.Controller, fc []revel.Filter) {
 
 	fc[0](c, fc[1:]) // Execute the next filter stage.
 }
-
-//func ExampleStartupScript() {
-//	// revel.DevMod and revel.RunMode work here
-//	// Use this script to check for dev mode and set dev/prod startup scripts here!
-//	if revel.DevMode == true {
-//		// Dev mode
-//	}
-//}

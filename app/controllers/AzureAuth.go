@@ -38,10 +38,17 @@ type AzureOauthConfig struct {
 	AzureClientSecret string
 }
 
-var Endpoint = oauth2.Endpoint{
-	AuthURL:  "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-	TokenURL: "https://login.microsoftonline.com/common/oauth2/v2.0/token",
-}
+var (
+	azureEndpoint = oauth2.Endpoint{
+		AuthURL:  "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+		TokenURL: "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+	}
+	config = &AzureOauthConfig{
+		AzureClientID:     os.Getenv("AZURE_CLIENT_ID"),
+		AzureObjectID:     os.Getenv("AZURE_OBJECT_ID"),
+		AzureClientSecret: os.Getenv("AZURE_CLIENT_SECRET"),
+	}
+)
 
 var (
 	ErrUnableToGetAzureUser = errors.New("azure: unable to get Azure User")
@@ -55,22 +62,12 @@ func randomState() string {
 }
 
 func (c AzureAuth) Login() revel.Result {
-	config := &AzureOauthConfig{
-		AzureClientID:     os.Getenv("AZURE_CLIENT_ID"),
-		AzureObjectID:     os.Getenv("AZURE_OBJECT_ID"),
-		AzureClientSecret: os.Getenv("AZURE_CLIENT_SECRET"),
+	var cookieConfig gologin.CookieConfig
+	if revel.Config.BoolDefault("mode.dev", false) {
+		cookieConfig = gologin.DebugOnlyCookieConfig
+	} else {
+		cookieConfig = gologin.DefaultCookieConfig
 	}
-	oauth2Config := &oauth2.Config{
-		ClientID:     config.AzureClientID,
-		ClientSecret: config.AzureClientSecret,
-		RedirectURL:  "http://localhost:9000/azure/callback",
-		Endpoint:     Endpoint,
-		Scopes: []string{
-			"https://graph.microsoft.com/User.Read",
-		},
-	}
-
-	cookieConfig := gologin.DebugOnlyCookieConfig
 
 	ctx := c.Request.Context()
 	cookie, err := c.Request.Cookie(cookieConfig.Name)
@@ -85,6 +82,15 @@ func (c AzureAuth) Login() revel.Result {
 		c.SetCookie(&http.Cookie{Name: cookieConfig.Name, Value: state})
 		ctx = oauth2Login.WithState(ctx, state)
 	}
+	oauth2Config := &oauth2.Config{
+		ClientID:     config.AzureClientID,
+		ClientSecret: config.AzureClientSecret,
+		RedirectURL:  revel.Config.StringDefault("e6eDomain", "https://localhost:9000") + "/azure/callback",
+		Endpoint:     azureEndpoint,
+		Scopes: []string{
+			"https://graph.microsoft.com/User.Read",
+		},
+	}
 	url := oauth2Config.AuthCodeURL(state)
 	c.Response.ContentType = "application/x-www-form-urlencoded"
 	return c.Redirect(url)
@@ -98,8 +104,6 @@ func GetAzureToken(config *oauth2.Config, req *revel.Request, ctx context.Contex
 		return nil
 	}
 	if state != ownerState || state == "" {
-		fmt.Println("oauth2 state parameter:", state) // revertme
-		fmt.Println("ownerState:", ownerState)        // revertme
 		fmt.Println("State and ownerstate don't match:", state, ownerState)
 		return nil
 	}
@@ -121,8 +125,6 @@ func parseAzureCallback(req *revel.Request) (authCode, state string, err error) 
 	authCode = req.Form.Get("code")
 	state = req.Form.Get("state")
 	if authCode == "" || state == "" {
-		fmt.Println("authCode", authCode) // revertme
-		fmt.Println("state", state)       // revertme
 		return "", "", errors.New("oauth2: Request missing code or state")
 	}
 	return authCode, state, nil
@@ -144,20 +146,18 @@ func (c AzureAuth) Callback() revel.Result {
 	// TODO: Include MIT license with this code taken from the library
 	// TODO: Dry out with init.go
 	cookieConfig := gologin.DebugOnlyCookieConfig
-	config := &AzureOauthConfig{
-		AzureClientID:     os.Getenv("AZURE_CLIENT_ID"),
-		AzureObjectID:     os.Getenv("AZURE_OBJECT_ID"),
-		AzureClientSecret: os.Getenv("AZURE_CLIENT_SECRET"),
-	}
+	//// Get the OAuth state value from the cookie
+	ownerState := GetAzureOAuthState(cookieConfig, req, ctx)
+
 	oauth2Config := &oauth2.Config{
 		ClientID:     config.AzureClientID,
 		ClientSecret: config.AzureClientSecret,
-		RedirectURL:  "http://localhost:9000/azure/callback",
-		Endpoint:     Endpoint,
+		RedirectURL:  revel.Config.StringDefault("e6eDomain", "https://localhost:9000") + "/azure/callback",
+		Endpoint:     azureEndpoint,
+		Scopes: []string{
+			"https://graph.microsoft.com/User.Read",
+		},
 	}
-	//// Get the OAuth state value from the cookie
-	ownerState := GetAzureOAuthState(cookieConfig, req, ctx)
-	fmt.Println("ownerState:", ownerState)
 
 	//// Compare the state value and get the Auth token from the authorization code
 	token := GetAzureToken(oauth2Config, req, ctx, ownerState)
@@ -170,8 +170,9 @@ func (c AzureAuth) Callback() revel.Result {
 
 	//// See if this user already exists in the database
 	oAuthId := azureUser.Id
-	fmt.Println(oAuthId)
 	user, needs_creating := models.GetUserByOAuth(oAuthId, "azure")
+
+	// Azure users don't always have emails, but their principal names will exist and be emails in at least some of these cases
 	email := ""
 	if azureUser.Mail != "" {
 		email = azureUser.Mail
@@ -195,17 +196,16 @@ func (c AzureAuth) Callback() revel.Result {
 func GetAzureUser(config *oauth2.Config, ctx context.Context, token *oauth2.Token) (*AzureUser, error) {
 	httpClient := config.Client(ctx, token)
 
+	// Microsoft graph endpoint that gives information about the user we're authenticating with
 	userReq, _ := http.NewRequest("GET", "https://graph.microsoft.com/v1.0/me", nil)
 
 	resp, err := httpClient.Do(userReq)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("user resp", resp)
 	user := new(AzureUser)
 	body, _ := ioutil.ReadAll(resp.Body)
 	_ = json.Unmarshal([]byte(body), &user)
-	fmt.Println("mail", user.Mail, "id", user.Id)
 
 	return user, nil
 }

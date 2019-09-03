@@ -19,7 +19,6 @@ import (
 	"os"
 
 	"golang.org/x/oauth2"
-	githubOAuth2 "golang.org/x/oauth2/github"
 )
 
 type GithubAuth struct {
@@ -32,43 +31,55 @@ type GithubOauthConfig struct {
 	GithubClientSecret string
 }
 
+var (
+	GithubConfig = &GithubOauthConfig{
+		GithubClientID:     os.Getenv("GITHUB_CLIENT_ID"),
+		GithubClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
+	}
+
+	GithubEndpoint = oauth2.Endpoint{
+		AuthURL:  "https://github.com/login/oauth/authorize?scope=user:email",
+		TokenURL: "https://github.com/login/oauth/access_token",
+	}
+)
+
 func (c GithubAuth) Callback() revel.Result {
+	GithubOauth2Config := &oauth2.Config{
+		ClientID:     GithubConfig.GithubClientID,
+		ClientSecret: GithubConfig.GithubClientSecret,
+		RedirectURL:  revel.Config.StringDefault("e6eDomain", "https://localhost:9000") + "/github/callback",
+		Endpoint:     GithubEndpoint,
+	}
+
 	ctx := c.Request.Context()
 
 	req := c.Request
 	// TODO: Include MIT license with this code taken from the library
-	// TODO: Dry out with init.go
-	cookieConfig := gologin.DebugOnlyCookieConfig
-	config := &GithubOauthConfig{
-		GithubClientID:     os.Getenv("GITHUB_CLIENT_ID"),
-		GithubClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
+	var cookieConfig gologin.CookieConfig
+	if revel.Config.BoolDefault("mode.dev", false) {
+		cookieConfig = gologin.DebugOnlyCookieConfig
+	} else {
+		cookieConfig = gologin.DefaultCookieConfig
 	}
-	oauth2Config := &oauth2.Config{
-		ClientID:     config.GithubClientID,
-		ClientSecret: config.GithubClientSecret,
-		RedirectURL:  "http://localhost:9000/github/callback",
-		Endpoint:     githubOAuth2.Endpoint,
-	}
+
 	//// Get the OAuth state value from the cookie
 	ownerState := GetOAuthState(cookieConfig, req, ctx)
 
 	//// Compare the state value and get the Auth token from the authorization code
-	token := GetToken(oauth2Config, req, ctx, ownerState)
+	token := GetToken(GithubOauth2Config, req, ctx, ownerState)
 
-	githubUser := GetGithubUser(oauth2Config, req, ctx, token)
+	githubUser := GetGithubUser(GithubOauth2Config, req, ctx, token)
 
 	//// Get primary email address for github account from API
 	emailReq, err := http.NewRequest("GET", "https://api.github.com/user/emails", nil)
 
-	httpClient := oauth2Config.Client(ctx, token)
+	httpClient := GithubOauth2Config.Client(ctx, token)
 	resp, err := httpClient.Do(emailReq)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("Email response body:")
-	fmt.Println(string([]byte(body)))
 
 	type UserEmails []struct {
 		Email      string `json:"email"`
@@ -85,12 +96,9 @@ func (c GithubAuth) Callback() revel.Result {
 			primaryEmail = n.Email
 		}
 	}
-	fmt.Println("Primary email: ")
-	fmt.Println(primaryEmail)
 
 	//// See if this user already exists in the database
 	oAuthId := strconv.FormatInt(*githubUser.ID, 10)
-        fmt.Println(oAuthId)
 	user, needs_creating := models.GetUserByOAuth(oAuthId, "github")
 	if needs_creating {
 		// Save the email address and provider in the DB
@@ -102,7 +110,7 @@ func (c GithubAuth) Callback() revel.Result {
 	}
 
 	// Set the user ID on the user session
-	c.Session["user"] = user.OauthProvider + ":" + user.OauthID
+	c.Session["user"] = "github:" + user.OauthID
 	return c.Redirect(Home.List)
 }
 
