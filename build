@@ -1,0 +1,5 @@
+docker build -t scrty .
+docker tag scrty:latest 832911230879.dkr.ecr.us-east-1.amazonaws.com/scrty:latest
+aws --profile magoo ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 832911230879.dkr.ecr.us-east-1.amazonaws.com
+docker push 832911230879.dkr.ecr.us-east-1.amazonaws.com/scrty:latest
+aws --profile magoo ecs update-service --region us-east-1 --force-new-deployment --service e6e-service-prod --cluster e6e-cluster-prod

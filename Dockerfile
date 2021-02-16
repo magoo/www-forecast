@@ -6,8 +6,6 @@ RUN go get -u github.com/revel/cmd/revel
 
 WORKDIR $GOPATH/src/github.com/magoo/www-forecast
 
-COPY Gopkg.toml Gopkg.lock ./
-
 COPY . $GOPATH/src/github.com/magoo/www-forecast
 
 RUN revel build github.com/magoo/www-forecast $GOPATH/bin/www-forecast prod
