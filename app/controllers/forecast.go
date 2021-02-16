@@ -25,7 +25,7 @@ func (c Forecast) Create(value []float64, sid string) revel.Result {
 		return c.Redirect("/view/scenario/%s", sid)
 	}
 
-	models.CreateForecast(c.Session["user"], value, sid, c.Session["hd"])
+	models.CreateForecast(c.Session["user"].(string), value, sid, c.Session["hd"].(string))
 	//fmt.Println(options[0])
 	return c.Redirect("/view/scenario/%s/results", sid)
 }

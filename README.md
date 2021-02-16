@@ -31,7 +31,8 @@ Currently developing with `go1.11.1`. Golang is picky on having a structured `$G
 Clone this repo into: (`$GOPATH/src/github.com/magoo/www-forecast`)
 
 ### 2. Dep
-Install the [dep package manager for go](https://github.com/golang/dep), brew install dep and ensure dep.
+~~Install the [dep package manager for go](https://github.com/golang/dep), brew install dep and ensure dep.~~
+This is replaced with go modules (or trying to be, in this branch.)
 
 
 ### 3. Set up Revel
@@ -42,7 +43,7 @@ go get -u github.com/revel/cmd/revel
 ```
 
 ### 4. Verify the install works.
-Enter the `$GOPATH/src/www-forecast` directory and `revel run`. The server should start locally. It won't work quite yet as we haven't setup AWS and Google credentials, but this is a good point to stop and troubleshoot any issues with Go or Revel.
+Enter the `$GOPATH/src/www-forecast` directory and (`revel -X-v run`). The server should start locally. It won't work quite yet as we haven't setup AWS and Google credentials, but this is a good point to stop and troubleshoot any issues with Go or Revel.
 
 ### 4. Generate the app secret
 

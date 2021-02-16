@@ -36,7 +36,7 @@ func (c Scenario) Create(title string, description string, options []string) rev
 		return c.Redirect(Scenario.Create)
 	}
 
-	sid := models.CreateScenario(title, description, options, c.Session["hd"], c.Session["user"])
+	sid := models.CreateScenario(title, description, options, c.Session["hd"].(string), c.Session["user"].(string))
 	//fmt.Println(options[0])
 
 	c.Flash.Out["createdurl"] = revel.Config.StringDefault("e6eDomain", "https://www.e6e.io") + "/view/scenario/" + sid
@@ -53,7 +53,7 @@ func (c Scenario) Delete(id string) revel.Result {
 		return c.Redirect(Scenario.Create)
 	}
 
-	models.DeleteScenario(id, c.Session["user"])
+	models.DeleteScenario(id, c.Session["user"].(string))
 
 	res := JSONResponse{Code: "ok"}
 
@@ -73,7 +73,7 @@ func (c Scenario) View(sid string) revel.Result {
 	}
 
 	f := models.ViewScenario(sid)
-	u := c.Session["user"]
+	u := c.Session["user"].(string)
 	myForecast := models.ViewUserScenarioResults(u, sid)
 
 	return c.Render(f, u, myForecast)
@@ -81,7 +81,7 @@ func (c Scenario) View(sid string) revel.Result {
 
 func (c Scenario) Update(sid string, title string, description string, options []string) revel.Result {
 
-	models.UpdateScenario(sid, title, description, options, c.Session["user"])
+	models.UpdateScenario(sid, title, description, options, c.Session["user"].(string))
 	c.Flash.Success("Updated.")
 
 	return c.Redirect("/view/scenario/%s", sid)
@@ -104,7 +104,7 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 
 	s := models.ViewScenario(sid)
 
-	if s.Question.OwnerID != c.Session["user"] {
+	if s.Question.OwnerID != c.Session["user"].(string) {
 		c.Flash.Error("Cannot conclude scenario you do not own.")
 		return c.Redirect(Home.List)
 	}
@@ -141,7 +141,7 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 		fmt.Println("Error writing question.")
 	}
 
-	u := c.Session["user"]
+	u := c.Session["user"].(string)
 
 	err = s.AddRecord(u)
 
@@ -155,7 +155,7 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 		fmt.Println("Error concluding individual forecasts.")
 	}
 
-	err = s.Question.WriteRecord("Concluded. Brier Score is updated to "+strconv.FormatFloat(s.Question.BrierScore, 'f', -1, 64), c.Session["user"])
+	err = s.Question.WriteRecord("Concluded. Brier Score is updated to "+strconv.FormatFloat(s.Question.BrierScore, 'f', -1, 64), c.Session["user"].(string))
 
 	if err != nil {
 		fmt.Println("Error concluding scenario.")
@@ -178,7 +178,7 @@ func (c Scenario) AddRecord(sid string) revel.Result {
 	}
 
 	s := models.ViewScenario(sid)
-	u := c.Session["user"]
+	u := c.Session["user"].(string)
 	err := s.AddRecord(u)
 
 	if err != nil {

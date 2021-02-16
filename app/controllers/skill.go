@@ -13,7 +13,7 @@ type Skill struct {
 
 func (c Skill) Index() revel.Result {
 
-	answers := models.ListConcludedAnswers(c.Session["user"])
+	answers := models.ListConcludedAnswers(c.Session["user"].(string))
 
 	var average float64 = 0
 

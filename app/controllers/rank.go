@@ -17,7 +17,7 @@ func (c Rank) Index() revel.Result {
 
 func (c Rank) Create(title string, description string, options []string) revel.Result {
 
-    rid := models.CreateRank(title, description, options, c.Session["hd"], c.Session["user"])
+    rid := models.CreateRank(title, description, options, c.Session["hd"].(string), c.Session["user"].(string))
 
 		c.Flash.Out["createdurl"] = revel.Config.StringDefault("e6eDomain", "https://www.e6e.io") + "/view/rank/" + rid
 
@@ -26,7 +26,7 @@ func (c Rank) Create(title string, description string, options []string) revel.R
 
 func (c Rank) Update(rid string, title string, description string, options []string) revel.Result {
 
-	models.UpdateRank(rid, title, description, options, c.Session["user"])
+	models.UpdateRank(rid, title, description, options, c.Session["user"].(string))
 
 	c.Flash.Success("Updated rank.")
 	return c.Redirect("/view/rank/%s", rid)
@@ -44,7 +44,7 @@ func (c Rank) Record(rid string) revel.Result {
 	}
 
 	r := models.GetRank(rid)
-	u :=  c.Session["user"]
+	u :=  c.Session["user"].(string)
 	err := r.AddRecord(u)
 
 	if err != nil {
@@ -64,7 +64,7 @@ func (c Rank) Delete(id string) revel.Result {
 		}
 
 
-		models.DeleteRank(id, c.Session["user"])
+		models.DeleteRank(id, c.Session["user"].(string))
 
 		res := JSONResponse{Code: "ok"}
 
@@ -84,7 +84,7 @@ func (c Rank) View(rid string) revel.Result {
 		}
 
 		r := models.GetRank(rid)
-		u :=  c.Session["user"]
+		u :=  c.Session["user"].(string)
 
 		return c.Render(r, u)
 }

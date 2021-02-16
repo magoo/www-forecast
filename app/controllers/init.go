@@ -2,12 +2,12 @@ package controllers
 
 import (
 	"github.com/revel/revel"
+	"fmt"
 )
 
 func init() {
 
 	revel.InterceptFunc(enforceHSTS, revel.BEFORE, &Home{})
-
 	//Main auth. In all controllers, make sure the user is logged in.
 	//Every controller with sensitive content should be here.
 	//Better yet, whitelisting these controllers would be better.
@@ -43,10 +43,12 @@ func enforceHSTS(c *revel.Controller) revel.Result {
 
 // Check for session token
 func checkUser(c *revel.Controller) revel.Result {
+	fmt.Println("CHECKING USER")
+	revel.AppLog.Debug("AccessLog", "user", c.Session["user"].(string), "ip", c.ClientIP, "path", c.Request.URL.Path)
 
-	revel.AppLog.Debug("AccessLog", "user", c.Session["user"], "ip", c.ClientIP, "path", c.Request.URL.Path)
+	user := c.Session["user"].(string)
+	fmt.Println("USER: ", user)
 
-	user := c.Session["user"]
 
 	c.Validation.Required(user).Message("Must be logged in.")
 
