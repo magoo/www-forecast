@@ -2,6 +2,8 @@ FROM golang:1.15.8
 
 EXPOSE 9000
 
+ENV GO111MODULE=on
+
 RUN go get -u github.com/revel/cmd/revel
 
 WORKDIR $GOPATH/src/github.com/magoo/www-forecast
