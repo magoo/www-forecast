@@ -1,8 +1,18 @@
   <div class="card mb-3">
     <div class="card-body">
       <h2>{{.Title}}</h2>
-      <p class="card-text" data-markdown="{{.Description}}"></p>
+      <p class="card-text" id="markdown-description"></p>
+      <script>
+        var converter = new showdown.Converter(),
+        text      = '{{.Description}}',
+        html      = converter.makeHtml(text);
+        document.getElementById("markdown-description").innerHTML = html;
+      </script>
+
     </div>
+    
+
+
     {{if .BrierScore }}
       <div class="card-footer">
         <span class="text-muted">This question has a forecast score of {{template "brierscore.html" .}}</span>
