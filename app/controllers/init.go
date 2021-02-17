@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/revel/revel"
+
 )
 
 func init() {
@@ -44,15 +45,19 @@ func enforceHSTS(c *revel.Controller) revel.Result {
 // Check for session token
 func checkUser(c *revel.Controller) revel.Result {
 
-	revel.AppLog.Debug("AccessLog", "user", c.Session["user"], "ip", c.ClientIP, "path", c.Request.URL.Path)
+	if c.Session["user"] != nil {
+		revel.AppLog.Debug("AccessLog", "user", c.Session["user"].(string), "ip", c.ClientIP, "path", c.Request.URL.Path)
+		user := c.Session["user"].(string)
+		c.Validation.Required(user).Message("Must be logged in.")
+		if c.Validation.HasErrors(){
 
-	user := c.Session["user"]
-
-	c.Validation.Required(user).Message("Must be logged in.")
-
-	if c.Validation.HasErrors() {
-
-		//Redirect from unauthenticated link.
+			//Redirect from unauthenticated link.
+			c.Session["redirect"] = c.Request.URL.Path
+			c.Flash.Error("Please login. You'll be redirected to the URL you were trying to visit.")
+	
+			return c.Redirect(Home.Index)
+		}	
+	} else {
 		c.Session["redirect"] = c.Request.URL.Path
 		c.Flash.Error("Please login. You'll be redirected to the URL you were trying to visit.")
 

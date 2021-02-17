@@ -188,7 +188,7 @@ func DeleteCompositeIndexItem(primaryValue string, sortValue string, primary str
 	_, err := Svc.DeleteItem(deleteRequest)
 
 	if err != nil {
-		fmt.Println("Got error calling DeleteItem")
+		fmt.Println("Got error calling DeleteCompositeIndexItem", primaryValue , sortValue , primary , sort , table )
 		fmt.Println(err.Error())
 	}
 
@@ -212,7 +212,7 @@ func DeletePrimaryItem(primaryValue string, primary string, table string, attrna
 	_, err := Svc.DeleteItem(deleteRequest)
 
 	if err != nil {
-		fmt.Println("Got error calling DeleteItem")
+		fmt.Println("Got error calling DeletePrimaryItem", primaryValue , primary , table , attrname , attrvalue )
 		fmt.Println(err.Error())
 	}
 

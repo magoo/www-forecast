@@ -5,7 +5,7 @@ import (
 	"strings"
 	"github.com/magoo/www-forecast/app/models"
 
-	"github.com/magoo/revel-csrf"
+	"github.com/cbonello/revel-csrf"
 	"github.com/revel/revel"
 )
 

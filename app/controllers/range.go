@@ -23,7 +23,7 @@ func (c Range) Create(minimum float64, maximum float64, eid string) revel.Result
 			return c.Redirect("/view/estimate/%s", eid )
 		}
 
-		models.CreateRange(c.Session["user"], minimum, maximum, eid, c.Session["hd"])
+		models.CreateRange(c.Session["user"].(string), minimum, maximum, eid, c.Session["hd"].(string))
 		//fmt.Println(options[0])
 		c.Flash.Success("Range submitted.")
 		fmt.Println("redirecting to: ", eid)

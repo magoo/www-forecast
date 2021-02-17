@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/magoo/www-forecast/app/models"
-
 	"github.com/revel/revel"
+	
 )
 
 type Home struct {
@@ -15,23 +15,21 @@ func (c Home) Index() revel.Result {
 }
 
 func (c Home) List() revel.Result {
-
-	if c.Session["user"] == "" {
+	
+	if (c.Session["user"] == nil) || (c.Session["user"].(string) == "") {
 		c.Flash.Error("Please log in.")
 		return c.Redirect(Home.Index)
 	}
-
-	if c.Session["redirect"] != "" {
-
+	
+	if c.Session["redirect"] != nil {
 		redirect := c.Session["redirect"]
-		delete(c.Session, "redirect") // Removed item from session
+		delete(c.Session, "redirect") // Removed item from session	
 		return c.Redirect(redirect)
 	}
-
 	//The interceptor in init() should enforce that we have this.
 	//This protects us just in case, enforcing literally anything in the "hd" field.
 	//fmt.Println("App controller is launching")
-	qs := models.ListQuestions(c.Session["user"])
+	qs := models.ListQuestions(c.Session["user"].(string))
 
 	empty := true
 

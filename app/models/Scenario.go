@@ -86,7 +86,7 @@ func UpdateScenario(sid string, title string, description string, options []stri
 		},
 	}
 
-	updateexpression := "SET title = :t, description = :d, Options = :o"
+	updateexpression := "SET title = :t, description = :d, options = :o"
 	conditionexpression := "ownerid = :user"
 
 	UpdateItem(key, updateexpression, expressionattrvalues, questionTable, conditionexpression)

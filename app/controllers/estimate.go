@@ -21,7 +21,7 @@ func (c Estimate) Index() revel.Result {
 
 func (c Estimate) Create(title string, description string, unit string) revel.Result {
 
-	eid := models.CreateEstimate(title, description, unit, c.Session["hd"], c.Session["user"])
+	eid := models.CreateEstimate(title, description, unit, c.Session["hd"].(string), c.Session["user"].(string))
 
 	c.Flash.Out["createdurl"] = revel.Config.StringDefault("e6eDomain", "https://www.e6e.io") + "/view/estimate/" + eid
 
@@ -59,7 +59,7 @@ func (c Estimate) Record(eid string) revel.Result {
 
 	e := models.GetEstimate(eid)
 	u := c.Session["user"]
-	err := e.AddRecord(u)
+	err := e.AddRecord(u.(string))
 
 	if err != nil {
 		c.Flash.Error("Nothing to record.")
@@ -127,14 +127,14 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 	}
 
 	u := c.Session["user"]
-	err = e.AddRecord(u)
+	err = e.AddRecord(u.(string))
 
 	if err != nil {
 		fmt.Println("Error writing record to question.")
 		return c.Redirect("/view/estimate/%s", eid)
 	}
 
-	err = e.Question.WriteRecord("Concluded. Brier Score is updated to "+strconv.FormatFloat(e.Question.BrierScore, 'f', -1, 64), c.Session["user"])
+	err = e.Question.WriteRecord("Concluded. Brier Score is updated to "+strconv.FormatFloat(e.Question.BrierScore, 'f', -1, 64), c.Session["user"].(string))
 
 	// models.DeleteQuestionAnswers(eid)
 
@@ -153,7 +153,7 @@ func (c Estimate) Conclude(eid string, resultValue float64) revel.Result {
 
 func (c Estimate) Update(eid string, title string, description string, unit string) revel.Result {
 
-	models.UpdateEstimate(eid, title, description, unit, c.Session["user"])
+	models.UpdateEstimate(eid, title, description, unit, c.Session["user"].(string))
 
 	//Show success and redirect to the estimate w/ changes
 	c.Flash.Success("Updated.")
@@ -170,7 +170,7 @@ func (c Estimate) Delete(id string) revel.Result {
 		return c.Redirect(Home.List)
 	}
 
-	models.DeleteEstimate(id, c.Session["user"])
+	models.DeleteEstimate(id, c.Session["user"].(string))
 
 	res := JSONResponse{Code: "ok"}
 

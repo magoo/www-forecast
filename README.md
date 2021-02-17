@@ -31,7 +31,8 @@ Currently developing with `go1.11.1`. Golang is picky on having a structured `$G
 Clone this repo into: (`$GOPATH/src/github.com/magoo/www-forecast`)
 
 ### 2. Dep
-Install the [dep package manager for go](https://github.com/golang/dep), brew install dep and ensure dep.
+~~Install the [dep package manager for go](https://github.com/golang/dep), brew install dep and ensure dep.~~
+This is replaced with go modules (or trying to be, in this branch.)
 
 
 ### 3. Set up Revel
@@ -42,7 +43,7 @@ go get -u github.com/revel/cmd/revel
 ```
 
 ### 4. Verify the install works.
-Enter the `$GOPATH/src/www-forecast` directory and `revel run`. The server should start locally. It won't work quite yet as we haven't setup AWS and Google credentials, but this is a good point to stop and troubleshoot any issues with Go or Revel.
+Enter the `$GOPATH/src/www-forecast` directory and (`revel -X-v run`). The server should start locally. It won't work quite yet as we haven't setup AWS and Google credentials, but this is a good point to stop and troubleshoot any issues with Go or Revel.
 
 ### 4. Generate the app secret
 
@@ -78,12 +79,13 @@ export E6E_GOOGLE_SECRET= (Google Secret)
 ## e6e.io Production
 This is currently a docker container (`Dockerfile` included) that is pushed to Fargate (An AWS service). The Fargate configuration is manual and not yet documented. Currently, roles and environment are configured in production.
 
-1. `docker build -t scrty .`
-2. `docker tag scrty:latest 832911230879.dkr.ecr.us-east-1.amazonaws.com/scrty:latest`
-3. `aws ecr get-login --no-include-email --region us-east-1` (change profile if needed)
-4. (copy code from #3)
-5. `docker push 832911230879.dkr.ecr.us-east-1.amazonaws.com/scrty:latest`
-6. `aws ecs update-service --region us-east-1 --force-new-deployment --service e6e-service-prod --cluster e6e-cluster-prod` (change profile if needed)
+`./build`
+
+`docker build -t scrty .`
+`docker tag scrty:latest 832911230879.dkr.ecr.us-east-1.amazonaws.com/scrty:latest`
+`aws --profile magoo ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 832911230879.dkr.ecr.us-east-1.amazonaws.com`
+`docker push 832911230879.dkr.ecr.us-east-1.amazonaws.com/scrty:latest`
+`aws --profile magoo ecs update-service --region us-east-1 --force-new-deployment --service e6e-service-prod --cluster e6e-cluster-prod` 
 
 ## Configuration
 There are a number of environment variables that can change how the application functions.

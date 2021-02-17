@@ -23,7 +23,7 @@ func (c Sort) Create(options []int, rid string) revel.Result {
 			return c.Redirect("/view/rank/%s", rid )
 		}
 
-		models.CreateSort(c.Session["user"], options, rid, c.Session["hd"])
+		models.CreateSort(c.Session["user"].(string), options, rid, c.Session["hd"].(string))
 		//fmt.Println(options[0])
 		c.Flash.Success("Sort submitted.")
 		fmt.Println("redirecting to: ", rid)
