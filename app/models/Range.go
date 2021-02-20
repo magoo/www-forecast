@@ -46,7 +46,7 @@ func CreateRange (u string, min float64, max float64, eid string, hd string) {
 func ViewEstimateResults (eid string) (rs []Range) {
   //Need to do a HD check here to prevent IDOR.
 
-    result := GetPrimaryIndexItem(eid, "id", "id-index", answerTable)
+    result := GetPrimaryItem(eid, "id", answerTable)
 
     rs = []Range{}
 

@@ -144,7 +144,7 @@ func (q Question) WriteRecord(message string, user string) (err error) {
 func ViewQuestionAnswers(id string) (as []Answer) {
 	//Need to do a HD check here to prevent IDOR.
 
-	result := GetPrimaryIndexItem(id, "id", "id-index", answerTable)
+	result := GetPrimaryItem(id, "id", answerTable)
 
 	as = []Answer{}
 
