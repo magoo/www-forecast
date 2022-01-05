@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/google/uuid"
+	"github.com/montanaflynn/stats"
 )
 
 type Scenario struct {
@@ -17,6 +18,14 @@ type Scenario struct {
 	Options     []string `dynamodbav:"options"`
 	Results     []int    `dynamodbav:"results"`
 	ResultIndex int      `dynamodbav:"resultindex"`
+}
+
+type ResultData struct {
+	Avg     []float64
+	Stdv    []float64
+	Min		[]float64
+	Max		[]float64
+	Panelists int
 }
 
 func CreateScenario(title string, description string, options []string, hd string, owner string) (sid string) {
@@ -182,6 +191,46 @@ func (s Scenario) GetAverageForecasts() (avg []float64, err error) {
 	}
 
 	return avg, nil
+
+}
+
+
+
+func (s Scenario) CalcResultData() (rd ResultData, err error) {
+
+	sr := ViewScenarioResults(s.Question.Id)
+
+	if len(sr) < 1 {
+		return ResultData{}, errors.New("No results.")
+	}
+
+	rd.Panelists = len(sr[0].Forecasts)
+
+	//Iterating through size of forecast results
+	for i := 0; i < rd.Panelists; i++ {
+
+		// A place to hold forecast results at the current index
+		tmp_rd := []float64{}
+
+		for _, v := range sr {
+			tmp_rd = append(tmp_rd, v.Forecasts[i])
+		}
+
+		// Put the average in our result
+		c, _ := stats.Mean(tmp_rd)
+		rd.Avg 	= append(rd.Avg, c)
+
+		c, _ = stats.StandardDeviation(tmp_rd)
+		rd.Stdv = append(rd.Stdv, c)
+
+		c, _ = stats.Max(tmp_rd)
+		rd.Max 	= append(rd.Max, c)
+
+		c, _ = stats.Min(tmp_rd)
+		rd.Min 	= append(rd.Min, c)
+	}
+
+	return rd, nil
 
 }
 

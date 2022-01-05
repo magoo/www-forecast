@@ -9,19 +9,26 @@
  <div class="card">
    <div class="card-body">
        <h3>Scenario Results</h3>
+
+       
       <table class="table">
         <tr>
           <th class="cell">
             Scenario
           </th>
-          {{range $index, $value := .sr}}
-            <th class="cell">
-              {{ animalFaceEmoji $index }}
-            </th>
-          {{end}}
           <th class="cell">
             Average
           </th>
+
+          <th class="cell">
+            Noise
+          </th>
+          <th class="cell">
+            Min
+          </th>
+          <th class="cell">
+            Max
+          </th>  
         </tr>
 
         {{range $index, $option := .s.Options }}
@@ -30,20 +37,27 @@
             <th class="cell">
               {{$option}}
             </th>
-
-            {{range $.sr}}
-            <td class="cell">
-              {{index .Forecasts $index}}
-            </td>
-            {{end}}
-
             <th class="averageresult">
-              {{index $.avg $index | printf "%.2f" }}
+              {{index $.rd.Avg $index | printf "%.2f" }}
             </th>
+
+            <td class="cell">
+              {{index $.rd.Stdv $index | printf "%.2f" }}
+            </td>
+            <td class="cell">
+              {{index $.rd.Min $index | printf "%.2f" }}
+            </td>
+            <td class="cell">
+              {{index $.rd.Max $index | printf "%.2f" }}
+            </td>
         </tr>
         {{end}}
+
+        
       </table>
+      <small class="form-text text-muted">Panelists: {{ $.rd.Panelists }} </small>
     </div>
+    
   </div>
 
 {{template "footer.html" .}}

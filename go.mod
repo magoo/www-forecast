@@ -14,6 +14,7 @@ require (
 	github.com/google/uuid v0.0.0-20161128191214-064e2069ce9c
 	github.com/inconshreveable/log15 v0.0.0-20201112154412-8562bdadbbac // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
+	github.com/montanaflynn/stats v0.6.6 // indirect
 	github.com/myesui/uuid v1.0.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/revel/cmd v1.0.3 // indirect

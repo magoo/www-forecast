@@ -116,10 +116,10 @@ func (c Scenario) Conclude(sid string, resultIndex int) revel.Result {
 		return c.Redirect("/view/scenario/%s", sid)
 	}
 
-	af, _ := s.GetAverageForecasts()
+	rd, _ := s.CalcResultData()
 
 	//Calculate Brier Score
-	bs := models.BrierCalc(af, resultIndex)
+	bs := models.BrierCalc(rd.Avg, resultIndex)
 
 	s.Question.Concluded = true
 	s.Question.ConcludedTime = t.String()
@@ -202,17 +202,31 @@ func (c Scenario) Results(sid string) revel.Result {
 		return c.Redirect(Home.List)
 	}
 
-	//This attempts to retrieve the scenario based on the hosted domain, for security.
+	//This attempts to retrieve the scenario. It needs to exist to continue.
 	s := models.ViewScenario(sid)
 
 	// We use the SID from the successful call using the hosted domain, instead of whatever the user gives us.
 	sr := models.ViewScenarioResults(s.Question.Id)
-	if len(sr) > 0 {
-		avg, _ := s.GetAverageForecasts()
-		return c.Render(sr, s, avg)
-	} else {
+
+	// Variable `sr` has an array of scenario results. 
+
+	if len(sr) == 0 {
 		c.Flash.Error("No results yet.")
 		return c.Redirect("/view/scenario/%s", sid)
 	}
+
+	
+	rd, err := s.CalcResultData()
+
+	if err != nil {
+		c.Flash.Error("Error calculating average forecast.")
+	}
+
+	
+
+	return c.Render(sr, s, rd)
+	 
+
+
 
 }
